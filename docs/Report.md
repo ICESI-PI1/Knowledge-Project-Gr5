@@ -27,7 +27,7 @@ Los modelos usados en esta entrega no serán usados directamente en entregas e i
 **Participante(s): Geovanny Quintero Velez.** 
 Se realizo un analisis de los requerimientos y se identificarón las clases que formarian parte del sistema, sus metodos, atributos y interacciones con otras clases. Luego se modelo el diagrama de clases preliminar de tal modo que siguiera la logica del programa y tuviera a su vez calidad. Despues de las reuniones con el monitor y el profesor se ajusto el diagrama de clases para que siguiera de mejor manera el diagrama de bases de datos. Se implementaron los patrones de diseño DAO para modelar el uso de la base de datos y MVC para Modelar las interacciones con la vista.
 
-![Class Diagram](https://ibb.co/dtXSSN1)
+![Class Diagram](https://user-images.githubusercontent.com/94185672/229022157-92002174-f761-472a-940e-8a8f50cd9e24.jpg)
 
 ### 4. AUTENTICACIÓN DJANGO (https://github.com/ICESI-PI1/Knowledge-Project-Gr5/tree/functional-prototype)
 
