@@ -176,4 +176,9 @@ Pantalla - Tus aportes a proyectos:
 Pantalla - Solicitud de nuevo recurso:  
 ![image](https://user-images.githubusercontent.com/93087966/229017126-0217bc78-f1b7-45be-9c1a-e4f3202b6614.png)
 
-El **ENLACE DEL PROTOTIPO** en la página figma es el siguiente: https://www.figma.com/file/of6db2sodg57llu8YE5qOG/Knowledge-Projects?node-id=0%3A1&t=O0WWyTnjPjACx97X-1
+##ENLACES
+Link de repositorio GitHub: https://github.com/ICESI-PI1/Knowledge-Project-Gr5
+Link de Proyecto en Jira: https://3j2gteam.atlassian.net/jira/software/projects/KNOW/boards/2
+Link de Proyecto en FIGMA: https://www.figma.com/file/of6db2sodg57llu8YE5qOG/Knowledge-Projects?node-id=0%3A1&t=O0WWyTnjPjACx97X-1
+
+
