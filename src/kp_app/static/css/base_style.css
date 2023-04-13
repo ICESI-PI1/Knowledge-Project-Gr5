@@ -1,0 +1,140 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #fff;
+}
+
+.form-container {
+  background-color: #ffffff;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.form-container .signup-container {
+  width: 500px;
+  margin: 0 auto;
+}
+
+.form-container .signup-container > h2 {
+  color: #001010;
+  text-align: center;
+  font-size: 3.5rem;
+}
+
+.form-container .signup-container label {
+  color: #001010;
+  display: block;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.form-container .signup-container input.input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border-top: hidden;
+  border-left: hidden;
+  border-right: hidden;
+  border-bottom: solid 1px #aaaaaa;
+}
+
+.form-container .signup-container input.input::placeholder {
+  color: #00101050;
+}
+
+.form-container .signup-container input.input:focus {
+  outline: none;
+  border-bottom: solid 2px #001010;
+}
+
+.form-container .signup-container input.input:focus::placeholder {
+  opacity: 0;
+}
+
+.form-container .signup-container .options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  padding: 15px 0;
+  width: 40%;
+  font-weight: bolder;
+  display: block;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn.btn-signup {
+  background-color: #001010;
+  color: #98ce00;
+}
+
+.btn.btn-signup:hover {
+  background-color: #202424;
+}
+
+.btn.btn-cancel {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+
+.btn.btn-cancel:hover {
+  background-color: #ff2222;
+}
+
+.form-container .welcome-screen-container {
+  background-color: #001010;
+  width: 50%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.form-container .welcome-screen-container > h2 {
+  color: #98ce00;
+  width: 50%;
+  text-align: center;
+  font-size: 3rem;
+}
+
+.form-container .welcome-screen-container > p {
+  color: #ffffff;
+  text-align: center;
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 1366px) {
+  .form-container .signup-container {
+    width: 400px;
+    margin: 0 auto;
+  }
+
+  .form-container .welcome-screen-container {
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .form-container .signup-container {
+    width: 400px;
+    margin: 0 auto;
+  }
+
+  .form-container .welcome-screen-container {
+    display: none;
+  }
+}
