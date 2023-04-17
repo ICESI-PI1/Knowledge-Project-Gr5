@@ -1,3 +1,53 @@
 from django.contrib import admin
+from .models import (
+    Announcement,
+    Binnacle,
+    Category,
+    Company,
+    Donation,
+    Project,
+    Requirement,
+    Resource,
+    ResourcesBag,
+    Role,
+    User,
+    UserRole,
+)
 
 # Register your models here.
+admin.site.register(
+    Announcement,
+)
+admin.site.register(
+    Binnacle,
+)
+admin.site.register(
+    Category,
+)
+admin.site.register(
+    Donation,
+)
+admin.site.register(
+    Company,
+)
+admin.site.register(
+    Project,
+)
+admin.site.register(
+    Requirement,
+)
+admin.site.register(
+    Resource,
+)
+admin.site.register(
+    ResourcesBag,
+)
+admin.site.register(
+    User,
+)
+admin.site.register(
+    Role,
+)
+admin.site.register(
+    UserRole,
+)

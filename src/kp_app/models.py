@@ -9,6 +9,9 @@ class UserRole(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE)
     role = models.ForeignKey("Role", on_delete=models.CASCADE)
 
+    def __str___(self):
+        return f"{self.user.cc} - {self.role.name}"
+
 
 class User(models.Model):
     phone_regex = RegexValidator(
@@ -54,7 +57,7 @@ class Role(models.Model):
     users = models.ManyToManyField("User", through="UserRole")
 
     def __str__(self) -> str:
-        return f"{self.id} - Name:  {self.name}"
+        return f"{self.id_role} - Name:  {self.name}"
 
 
 class Company(models.Model):
@@ -76,7 +79,7 @@ class Company(models.Model):
     name = models.CharField(max_length=100, verbose_name="nombre")
     user_cc = models.OneToOneField(
         User,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="company",
     )
 
@@ -89,7 +92,7 @@ class Category(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.id} - Name: {self.name}"
+        return f"{self.id_category} - Name: {self.name}"
 
 
 class Project(models.Model):
@@ -102,7 +105,7 @@ class Project(models.Model):
         (CALL_STATE, "En convocatoria"),
         (FACTORY_STATE, "En factory"),
     )
-
+    name = models.CharField(max_length=30)
     objective = models.TextField()
     results = models.TextField()
     reach = models.TextField()
@@ -111,7 +114,7 @@ class Project(models.Model):
     )
     company_nit = models.ForeignKey("Company", on_delete=models.CASCADE)
     id_project = models.AutoField(primary_key=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.id_project} - Objective: {self.objective}, Company: {self.company_nit.name}"
@@ -121,7 +124,7 @@ class Announcement(models.Model):
     id_announ = models.AutoField(primary_key=True)
     init_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     id_projects = models.ManyToManyField(Project)
     projects_amount = models.PositiveIntegerField()
 
@@ -153,7 +156,7 @@ class Resource(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return f"{self.id_resource} - {self.name}"
 
 
 class Requirement(models.Model):
@@ -212,3 +215,10 @@ class Donation(models.Model):
 
     def __str__(self):
         return f"Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
+
+
+class Binnacle(models.Model):
+    date = models.DateField(primary_key=True)
+    description = models.TextField()
+    project_id = models.ForeignKey('Project', on_delete=models.CASCADE)
+    user_cc = models.ForeignKey('User', on_delete=models.DO_NOTHING)
