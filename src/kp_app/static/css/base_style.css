@@ -1,140 +1,133 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
+  /*
   padding: 0;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #fff;
+  background-color: #fff;*/
 }
 
-.form-container {
-  background-color: #ffffff;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-.form-container .signup-container {
-  width: 500px;
-  margin: 0 auto;
-}
-
-.form-container .signup-container > h2 {
-  color: #001010;
-  text-align: center;
-  font-size: 3.5rem;
-}
-
-.form-container .signup-container label {
-  color: #001010;
-  display: block;
-  font-weight: bold;
-  padding: 5px 0;
-}
-
-.form-container .signup-container input.input {
-  display: block;
-  width: 100%;
+/*---------------------------------------Navbar section----------------------*/
+* {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  list-style: none;
   box-sizing: border-box;
-  padding: 10px;
-  border-top: hidden;
-  border-left: hidden;
-  border-right: hidden;
-  border-bottom: solid 1px #aaaaaa;
 }
-
-.form-container .signup-container input.input::placeholder {
-  color: #00101050;
+nav {
+  position: fixed;
+  background: #fff;
+  height: 100px;
+  width: 100%;
+  border-bottom: 1px solid #00101148;
+  min-width: 490px;
 }
-
-.form-container .signup-container input.input:focus {
-  outline: none;
-  border-bottom: solid 2px #001010;
+label.logo {
+  color: #98ce00;
+  font-size: 2.5rem;
+  line-height: 100px;
+  padding: 0 100px;
+  font-weight: bold;
+  transition: all 0.5s;
 }
-
-.form-container .signup-container input.input:focus::placeholder {
-  opacity: 0;
+nav ul {
+  float: right;
+  margin-right: 20px;
 }
-
-.form-container .signup-container .options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+nav ul li {
+  display: inline-block;
+  line-height: 96.5px;
+  margin: 0 0px;
 }
-
-.btn {
-  border: none;
-  padding: 15px 0;
-  width: 40%;
-  font-weight: bolder;
-  display: block;
-  border-radius: 10px;
+nav ul li a {
+  color: #001011;
+  font-size: 17px;
+  padding: 7px 13px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+li.active {
+  border-bottom: 3px solid #ff7733;
+}
+a.active {
+  color: #ff7733;
+}
+li:hover {
   cursor: pointer;
+  background: #dfdfdf;
+  transition: 0.5s;
+  height: 100px;
+}
+.checkbtn {
+  font-size: 30px;
+  color: #ff7733;
+  float: right;
+  line-height: 80px;
+  margin-right: 40px;
+  cursor: pointer;
+  display: none;
 }
 
-.btn.btn-signup {
-  background-color: #001010;
-  color: #98ce00;
+#check {
+  display: none;
 }
-
-.btn.btn-signup:hover {
-  background-color: #202424;
+@media (max-width: 1068px) {
+  label.logo {
+    font-size: 35px;
+    padding-left: 50px;
+    transition: all 0.5s;
+  }
+  nav ul li a {
+    font-size: 16px;
+  }
 }
-
-.btn.btn-cancel {
-  background-color: #ff0000;
-  color: #ffffff;
-}
-
-.btn.btn-cancel:hover {
-  background-color: #ff2222;
-}
-
-.form-container .welcome-screen-container {
-  background-color: #001010;
-  width: 50%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.form-container .welcome-screen-container > h2 {
-  color: #98ce00;
-  width: 50%;
-  text-align: center;
-  font-size: 3rem;
-}
-
-.form-container .welcome-screen-container > p {
-  color: #ffffff;
-  text-align: center;
-  font-size: 1rem;
-}
-
-@media screen and (max-width: 1366px) {
-  .form-container .signup-container {
-    width: 400px;
+@media (max-width: 968px) {
+  .checkbtn {
+    display: block;
+  }
+  ul {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: #001011;
+    top: 100px;
+    right: -105%;
+    text-align: center;
+    transition: all 0.5s;
     margin: 0 auto;
   }
+  nav ul li {
+    height: 76.5px;
+    display: block;
+    margin: 50px 0;
+    line-height: 30px;
 
-  .form-container .welcome-screen-container {
-    width: 40%;
+  }
+  nav ul li a {
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+  }
+  a:hover {
+    padding-left: 5px;
+    background: none;
+    color: #ff7733;
+    transition: all .3s ease;
+  }
+  li.active,
+  li:hover {
+    cursor: default;
+    background: none;
+    border: none;
+    height: 76.5px;
+  }
+  #check:checked ~ ul {
+    right: -2.3%;
   }
 }
 
-@media screen and (max-width: 900px) {
-  .form-container .signup-container {
-    width: 400px;
-    margin: 0 auto;
-  }
-
-  .form-container .welcome-screen-container {
-    display: none;
-  }
-}
+/*---------------------------------------End Navbar----------------------*/
