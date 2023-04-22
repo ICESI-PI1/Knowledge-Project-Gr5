@@ -11,7 +11,7 @@
     />
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -29,56 +29,60 @@
           <li><a href="#">Recursos</a></li>
         </ul>
       </nav>
+
       <div class="content">
         {% block content %}{% endblock %}
-        <footer class="footer">
-          <div class="container">
-            <div class="footer-row">
-              <div class="footer-links">
-                <h4>Dreams Bank</h4>
+      </div>
+      
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-row">
+            <div class="footer-links">
+              <h4>Dreams Bank</h4>
 
-                <ul>
-                  <li><a href="#">Nosotros</a></li>
-                  <li><a href="#">Otros módulos</a></li>
-                  <li><a href="#">Políticas de privacidad</a></li>
-                  <li><a href="#">Afíliate</a></li>
-                </ul>
-              </div>
-              <div class="footer-links">
-                <h4>Ayuda</h4>
+              <ul>
+                <li><a href="#">Nosotros</a></li>
+                <li><a href="#">Otros módulos</a></li>
+                <li><a href="#">Políticas de privacidad</a></li>
+                <li><a href="#">Afíliate</a></li>
+              </ul>
+            </div>
+            <div class="footer-links">
+              <h4>Ayuda</h4>
 
-                <ul>
-                  <li><a href="#">Preguntas fracuentes</a></li>
-                  <li><a href="#">Soporte técnico</a></li>
-                  <li><a href="#">Código abierto</a></li>
-                  <li><a href="#">Nuestro equipo</a></li>
-                </ul>
-              </div>
+              <ul>
+                <li><a href="#">Preguntas fracuentes</a></li>
+                <li><a href="#">Soporte técnico</a></li>
+                <li><a href="#">Código abierto</a></li>
+                <li><a href="#">Nuestro equipo</a></li>
+              </ul>
+            </div>
 
-              <div class="footer-links">
-                <h4>Más opciones</h4>
+            <div class="footer-links">
+              <h4>Más opciones</h4>
 
-                <ul>
-                  <li><a href="#">Proyectos</a></li>
-                  <li><a href="#">Convocatorias</a></li>
-                  <li><a href="#">Registra tu empresa</a></li>
-                  <li><a href="#">Tu perfil</a></li>
-                </ul>
-              </div>
+              <ul>
+                <li><a href="#">Proyectos</a></li>
+                <li><a href="#">Convocatorias</a></li>
+                <li><a href="#">Registra tu empresa</a></li>
+                <li><a href="#">Tu perfil</a></li>
+              </ul>
+            </div>
 
-              <div class="footer-links">
-                <h4>Síguenos</h4>
-                <div class="social-links">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-linkedin"></i></a>
-                </div>
+            <div class="footer-links">
+              <h4>Síguenos</h4>
+              <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
               </div>
             </div>
           </div>
-        </footer>
-      </div>
+        </div>
+      </footer>
+
+     
     </div>
   </body>
 </html>
