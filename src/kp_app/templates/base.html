@@ -11,19 +11,21 @@
     />
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     {% endblock %}
   </head>
   <body>
     <div class="wrapper">
       <nav>
+        <a class="logout-btn" href="{% url 'logout' %}"">Salir</a>
+    
         <input type="checkbox" id="check" />
         <label for="check" class="checkbtn">
           <i class="fas fa-bars"></i>
         </label>
         <label class="logo">Knowledge Project</label>
         <ul>
-          <li class="active"><a class="active" href="#">Home</a></li>
+          <li class="active"><a class="active" href="/">Home</a></li>
           <li><a href="#">Propuestas</a></li>
           <li><a href="#">Proyectos</a></li>
           <li><a href="#">Recursos</a></li>
