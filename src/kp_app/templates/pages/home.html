@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>{% block title %}Título de la página{% endblock %}</title>
+    {% block head %}
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
+    {% endblock %}
+  </head>
+  <body>
+    <div class="main-title">
+      <h1>Acciones</h1>
+    </div>
+    <div class="options-container">
+      <h2 class="subtitle">¿Qué deseas hacer?</h2>
+      <div class="options-wrapper">
+        <div class="single-option">
+          <img class="option-icon" src="{% static 'img/img-1.png' %}"/>
+          <h2 class="options-h2">Nueva propuesta</h2>
+          <p class="options-p">Propón un nuevo proyecto</p>
+        </div>
+
+        <div class="single-option">
+          <img class="option-icon" src="{% static 'img/img-2.png' %}"/>
+          <h2 class="options-h2">Mis proyectos</h2>
+          <p class="options-p">Consulta el estado de tus proyectos</p>
+        </div>
+
+        <div class="single-option">
+          <img class="option-icon" src="{% static 'img/img-3.png' %}"/>
+          <h2 class="options-h2">Convocatorias</h2>
+          <p class="options-p">Participa en algún proyecto abierto</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+{% endblock %}

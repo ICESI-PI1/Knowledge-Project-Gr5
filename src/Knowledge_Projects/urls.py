@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from kp_app import views
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', views.signout, name="logout"),
-    path('registration/', views.registration, name="registration"),
-    path('', views.home, name='home'),
+    #path('user_list/',login_required(views.UserList.as_view()), name = "user_list"),
+    path('registration/',views.UserRegistration.as_view(), name = "register_user"),
+    path('', login_required(views.HomePageView.as_view()), name = 'home')
 ]
