@@ -86,10 +86,6 @@ DATABASES = {
     }
 }
 
-TEST = {
-    'NAME': 'test_mydatabase'
-}
-
 
 
 

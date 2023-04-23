@@ -21,6 +21,6 @@ from kp_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('logout/', views.signout, name="logout"),
+    #path('logout/', views.signout, name="logout"),
     path('', views.home, name='home'),
 ]

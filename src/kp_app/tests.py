@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase,override_settings
 from .models import *
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -6,8 +6,11 @@ from django.db import DataError
 from django.utils import timezone
 from datetime import datetime, timedelta
 
+
+
 class RoleTestCase(TestCase):
     def setUp(self):
+        
         self.role = Role.objects.create(name="Gerente de Proyecto")
 
     def test_role_creation(self):
