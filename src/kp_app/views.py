@@ -1,93 +1,148 @@
 from django.shortcuts import render
+
 from django.views import View
+
 from django.urls import reverse_lazy
-import models
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from .models import *
+
+from django.views.generic.edit import CreateView, UpdateView, DeleteView,FormView
+
 
 # Create your views here.
+def home(request):
+    return render(request, "base.html")
+"""
 class Login(FormView):
-    template_name
+    pass
+
+class UserBaseView(View):
+    pass
+
+class UserCreateView(UserBaseView,CreateView):
+    pass
+
+class UserUpdateView(ProjectBaseView,UpdateView):
+    pass
+
+class UserDeleteView(UserBaseView,DeleteView):
+    pass
 
 class ProjectBaseView(View):
-    model=Project
+    pass
 
 class ProjectCreateView(ProjectBaseView,CreateView):
-    template_name
-
+    pass
 class ProjectUpdateView(ProjectBaseView,UpdateView):
-    template_name
+    pass
 
 class ProjectDeleteView(ProjectBaseView,DeleteView):
-    template_name
+    pass
 
 class BinnacleBaseView(View):
-    model=Binnacle
+    pass
 
 class BinnacleCreateView(BinnacleBaseView,CreateView):
-    template_name
+    pass
 
 class BinnacleUpdateView(BinnacleBaseView,UpdateView):
-    template_name
+    pass
 
 class BinnacleDeleteView(BinnacleBaseView,DeleteView):
-    template_name
+    pass
 
 class CompanyBaseView(View):
-    model=Company
+    pass
 
 class CompanyCreateView(CompanyBaseView,CreateView):
-    template_name
+
+    pass
 
 class CompanyUpdateView(CompanyBaseView,UpdateView):
-    template_name
+    pass
+
+
 
 class CompanyDeleteView(CompanyBaseView,DeleteView):
-    template_name
+    pass
+
+
 
 class AnnouncementView(View):
-    template_name
+    pass
+
+
 
 class AnnouncementCreateView(CompanyBaseView,CreateView):
-    template_name
+    pass
+
+
 
 class AnnouncementUpdateView(CompanyBaseView,UpdateView):
-    template_name
+    pass
+
+
 
 class AnnouncementDeleteView(CompanyBaseView,DeleteView):
-    template_name
+    pass
+
+
 
 class ResourceBaseView(View):
-    model=Company
+    pass
+
+
 
 class ResourceCreateView(ResourceBaseView,CreateView):
-    template_name
+    pass
+
+
 
 class ResourceUpdateView(ResourceBaseView,UpdateView):
-    template_name
+    pass
+
+
 
 class ResourceDeleteView(ResourceBaseView,DeleteView):
-    template_name
+    pass
+
+
 
 class RequirementBaseView(View):
-    model=Company
+    pass
+
+
 
 class RequirementCreateView(RequirementBaseView,CreateView):
-    template_name
+    pass
+
+
 
 class UpdateView(RequirementBaseView,UpdateView):
-    template_name
+    pass
+
+
 
 class RequirementDeleteView(RequirementBaseView,DeleteView):
-    template_name
+    pass
+
+
 
 class DonationBaseView(View):
-    model=Company
+    pass
+
+
 
 class DonationCreateView(DonationBaseView,CreateView):
-    template_name
+    pass
+
+
 
 class DonationUpdateView(DonationBaseView,UpdateView):
-    template_name
+    pass
+
+
 
 class DonationDeleteView(DonationBaseView,DeleteView):
-    template_name
+    pass
+"""

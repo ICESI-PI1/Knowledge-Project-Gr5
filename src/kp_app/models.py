@@ -9,7 +9,7 @@ class UserRole(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE)
     role = models.ForeignKey("Role", on_delete=models.CASCADE)
 
-    def __str___(self):
+    def __str__(self):
         return f"{self.user.cc} - {self.role.name}"
 
 
@@ -38,13 +38,14 @@ class User(models.Model):
     full_name = models.CharField(max_length=100)
     password = models.CharField(max_length=50)
     photo = models.ImageField(blank=True, null=True)
+
     cc_regex = RegexValidator(
         regex=r"^\d{6,10}$",
         message="La cédula de ciudadanía debe contener entre 6 y 10 dígitos",
     )
     cc = models.CharField(max_length=10, primary_key=True, validators=[cc_regex])
 
-    roles = models.ManyToManyField("Role", through="UserRole")
+    roles = models.ManyToManyField("Role", through="UserRole",null=False)
 
     def __str__(self) -> str:
         return f"{self.full_name} - CC: {self.cc}"
@@ -56,8 +57,8 @@ class Role(models.Model):
 
     users = models.ManyToManyField("User", through="UserRole")
 
-    def __str__(self) -> str:
-        return f"{self.id_role} - Name:  {self.name}"
+    def __str__(self):
+        return f"{self.id_role} - {self.name}"
 
 
 class Company(models.Model):
@@ -81,6 +82,7 @@ class Company(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="company",
+        null=False
     )
 
     def __str__(self) -> str:
@@ -91,7 +93,7 @@ class Category(models.Model):
     id_category = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id_category} - Name: {self.name}"
 
 
@@ -116,7 +118,7 @@ class Project(models.Model):
     id_project = models.AutoField(primary_key=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id_project} - Objective: {self.objective}, Company: {self.company_nit.name}"
 
 
@@ -155,7 +157,7 @@ class Resource(models.Model):
     id_resource = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id_resource} - {self.name}"
 
 
@@ -170,7 +172,7 @@ class Requirement(models.Model):
             "resource_id",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.project_id.name} - {self.resource_id.name} ({self.objective})"
 
 
@@ -185,7 +187,7 @@ class ResourcesBag(models.Model):
             "resource_id",
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.project_id.name} - {self.resource_id.name} ({self.amount})"
 
 
@@ -213,7 +215,7 @@ class Donation(models.Model):
                 "La donación excede la cantidad requerida para el proyecto"
             )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
 
 

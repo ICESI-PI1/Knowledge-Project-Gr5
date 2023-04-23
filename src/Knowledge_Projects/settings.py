@@ -79,8 +79,18 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'Knowledge_Projects.db',
+    },
+    'test':{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'DBTest.db',
     }
 }
+
+TEST = {
+    'NAME': 'test_mydatabase'
+}
+
+
 
 
 # Password validation
