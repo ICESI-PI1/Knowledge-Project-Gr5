@@ -1,6 +1,8 @@
 from django.test import TestCase
 from .models import *
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.db import DataError
 from django.utils import timezone
 from datetime import datetime, timedelta
 
@@ -31,7 +33,7 @@ class UserRoleTestCase(TestCase):
             birth_date=timezone.now().date() - timezone.timedelta(days=365 * 25),
             full_name="John Doe",
             password="password",
-            cc="1234567890"
+            cc="12345678"
         )
         
 
@@ -56,9 +58,12 @@ class UserRoleTestCase(TestCase):
         UserRole.objects.create(user=self.user, role=self.role2)
         self.assertEqual(self.user.roles.count(), 2)
 
-    def test_user_role_string_representation(self):
-        self.role_user = UserRole.objects.create(user=self.user, role=self.role1)
-        self.assertEqual(self.role_user,'1234567890 - Admin')
+    def test_user_role_str_method(self):
+        user_role = UserRole.objects.create(
+            user=self.user,
+            role=self.role1
+        )
+        self.assertEqual(str(user_role), "12345678 - Admin")
 
 class UserTestCase(TestCase):
     
@@ -104,62 +109,62 @@ class UserTestCase(TestCase):
     def test_create_user_with_invalid_phone(self):
         """Test creating a user with an invalid phone number"""
         with self.assertRaises(ValidationError):
-            User.objects.create(
-                phone='1234567890',
+            User.full_clean(User.objects.create(
+                phone='1',
                 email='user4@example.com',
                 birth_date='1998-01-01',
                 full_name='User 4',
                 password='password',
                 cc='2222222222'
-            )
+            ))
 
     def test_create_user_with_invalid_email(self):
         """Test creating a user with an invalid email"""
         with self.assertRaises(ValidationError):
-            User.objects.create(
+           User.full_clean(User.objects.create(
                 phone='+573123456789',
                 email='user5@example',
                 birth_date='1990-01-01',
                 full_name='User 5',
                 password='password',
                 cc='3333333333'
-            )
+            ))
 
     def test_create_user_with_underage_birth_date(self):
         """Test creating a user with an underage birth date"""
         with self.assertRaises(ValidationError):
-            User.objects.create(
+            User.clean(User.objects.create(
                 phone='+573123456789',
                 email='user6@example.com',
-                birth_date=timezone.now().date(),
+                birth_date=datetime.now().date(),
                 full_name='User 6',
                 password='password',
                 cc='4444444444'
-            )
+            ))
 
     def test_create_user_with_invalid_birth_date(self):
         """Test creating a user with an invalid birth date"""
         with self.assertRaises(ValidationError):
-            User.objects.create(
+            User.clean(User.objects.create(
                 phone='+573123456789',
                 email='user7@example.com',
                 birth_date='invalid',
                 full_name='User 7',
                 password='password',
                 cc='5555555555'
-            )
+            ))
 
     def test_create_user_with_invalid_cc(self):
         """Test creating a user with an invalid CC"""
         with self.assertRaises(ValidationError):
-            User.objects.create(
+            User.full_clean(User.objects.create(
                 phone='+573123456789',
                 email='user8@example.com',
                 birth_date='1990-01-01',
                 full_name='User 8',
                 password='password',
                 cc='12345'
-            )
+            ))
 
 
     def test_add_role_to_user(self):
@@ -192,26 +197,26 @@ class CompanyModelTest(TestCase):
 
     def test_create_company_with_invalid_nit(self):
         with self.assertRaises(ValidationError):
-            Company.objects.create(
+            User.full_clean(Company.objects.create(
                 nit="123456",
                 phone="+573123456789",
                 address="Calle 123",
                 name="Test Company",
                 user_cc=self.user1,
-            )
+            ))
 
     def test_create_company_with_invalid_phone(self):
         with self.assertRaises(ValidationError):
-            Company.objects.create(
+            User.full_clean(Company.objects.create(
                 nit="1234567890",
                 phone="1234567890",
                 address="Calle 123",
                 name="Test Company",
                 user_cc=self.user1,
-            )
+            ))
 
     def test_create_company_without_user(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(IntegrityError):
             Company.objects.create(
                 nit="1234567890",
                 phone="1234567890",
@@ -262,7 +267,7 @@ class ProjectModelTestCase(TestCase):
             company_nit=self.company,
             category=self.category,
         )
-        self.assertEqual(project, '1 - Objective: Test objective, Company: Test Company')
+        self.assertEqual(str(project),"1 - Objective: Test objective, Company: Test Company")
 
     def test_project_update(self):
         
@@ -453,7 +458,7 @@ class BinnacleTestCase(TestCase):
 
     def test_create_binnacle(self):
         binnacle = Binnacle.objects.create(
-            date=date.today(),
+            date=timezone.now().date(),
             description="Test description",
             project_id=self.project,
             user_cc=self.user,
@@ -471,37 +476,39 @@ class BinnacleTestCase(TestCase):
 
     def test_create_binnacle_missing_description(self):
         with self.assertRaises(ValidationError):
-            Binnacle.objects.create(
-                date=date.today(),
+            Binnacle.full_clean(Binnacle.objects.create(
+                date=timezone.now().date(),
                 project_id=self.project,
                 user_cc=self.user,
-            )
+            ))
 
     def test_create_binnacle_missing_project_id(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(IntegrityError):
             Binnacle.objects.create(
-                date=date.today(),
+                date=timezone.now().date(),
                 description="Test description",
                 user_cc=self.user,
             )
 
     def test_create_binnacle_missing_user_cc(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(IntegrityError):
             Binnacle.objects.create(
-                date=date.today(),
+                date=timezone.now().date(),
                 description="Test description",
                 project_id=self.project,
             )
 
     def test_create_binnacle_invalid_user_cc(self):
-        with self.assertRaises(ValueError):
-            Binnacle.objects.create(
-                date=date.today(),
+        with self.assertRaises(ValidationError):
+            Binnacle.full_clean(Binnacle.objects.create(
+                date=timezone.now().date(),
                 description="Test description",
                 project_id=self.project,
                 user_cc=User.objects.create(
-                    username="testuser2",
-                    email="testuser2@example.com",
-                    password="testpass"
+                    phone="+573123456789",
+                    email="userex@example.com",
+                    birth_date=timezone.now().date() - timezone.timedelta(days=365 * 25),
+                    full_name="John Doe",
+                    password="password",
                 ),
-            )
+            ))

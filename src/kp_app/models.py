@@ -15,8 +15,8 @@ class UserRole(models.Model):
 
 class User(models.Model):
     phone_regex = RegexValidator(
-        regex=r"^\+57\d{8,10}$",
-        message="El número de teléfono debe ser de formato '+57xxxxxxxxx'",
+        regex=r"^\+573\d{9,9}$",
+        message="El número de teléfono debe ser de formato '+573xxxxxxxxx'",
     )
     phone = models.CharField(validators=[phone_regex], max_length=13, blank=True)
     email = models.EmailField(
@@ -26,15 +26,6 @@ class User(models.Model):
         verbose_name="correo electrónico",
     )
     birth_date = models.DateField()
-
-    def clean(self):
-        try:
-            age = datetime.today().date() - self.birth_date
-            if age < timedelta(days=365 * 18):
-                raise ValidationError("Debes ser mayor de edad para registrarte.")
-        except TypeError:
-            raise ValidationError("Fecha de nacimiento inválida.")
-
     full_name = models.CharField(max_length=100)
     password = models.CharField(max_length=50)
     photo = models.ImageField(blank=True, null=True)
@@ -45,7 +36,16 @@ class User(models.Model):
     )
     cc = models.CharField(max_length=10, primary_key=True, validators=[cc_regex])
 
-    roles = models.ManyToManyField("Role", through="UserRole",null=False)
+    roles = models.ManyToManyField("Role", through="UserRole")
+    def clean(self):
+        super().clean()
+        try:
+            age = datetime.today().date() - self.birth_date
+            if age.days < timedelta(days=365 * 18).days:
+                raise ValidationError("Debes ser mayor de edad para registrarte.")
+            
+        except TypeError:
+            raise ValidationError("Fecha de nacimiento inválida.")
 
     def __str__(self) -> str:
         return f"{self.full_name} - CC: {self.cc}"
@@ -70,7 +70,7 @@ class Company(models.Model):
         max_length=10, primary_key=True, validators=[nit_regex], verbose_name="NIT"
     )
     phone_regex = RegexValidator(
-        regex=r"^\+57\d{8,10}$",
+        regex=r"^\+57\d{10,10}$",
         message="El número de teléfono debe ser de formato '+57xxxxxxxxx'",
     )
     phone = models.CharField(
