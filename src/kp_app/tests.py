@@ -515,3 +515,70 @@ class BinnacleTestCase(TestCase):
                     password="password",
                 ),
             ))
+    class AnnouncementModelTestCase(TestCase):
+        
+        def setUp(self):
+            self.user = User.objects.create(
+            phone="+573123456789",
+            email="user@example.com",
+            birth_date=timezone.now().date() - timezone.timedelta(days=365 * 25),
+            full_name="John Doe",
+            password="password",
+            cc="1234567890"
+            )
+            self.company = Company.objects.create(
+                nit="123456789",
+                phone="+573123456789",
+                address="Cra. 1 #1-1",
+                name="Test Company",
+                user_cc=self.user
+            )
+            self.category1 = Category.objects.create(name="Category 1")
+            self.project = Project.objects.create(
+                name="Test Project",
+                objective="Test objective",
+                results="Test results",
+                reach="Test reach",
+                state="Propuesta",
+                company_nit=self.company,
+                category=self.category1,
+            )
+            
+        def test_init_date_not_before_now(self):
+            announcement = Announcement.objects.create()(init_date=timezone.now(), end_date=timezone.now() + timezone.timedelta(days=5), category=self.category, projects_amount=1)
+            with self.assertRaises(ValidationError):
+                announcement.clean()
+                
+        def test_end_date_after_init_date(self):
+            announcement = Announcement.objects.create(init_date=timezone.now() + timezone.timedelta(days=5), end_date=timezone.now(), category=self.category, projects_amount=1)
+            with self.assertRaises(ValidationError):
+                announcement.clean()
+                
+        def test_duration_between_3_and_30_days(self):
+            announcement = Announcement.objects.create(init_date=timezone.now() + timezone.timedelta(days=5), end_date=timezone.now() + timezone.timedelta(days=1), category=self.category, projects_amount=1)
+            with self.assertRaises(ValidationError):
+                announcement.clean()
+            announcement = Announcement.objects.create(init_date=timezone.now() + timezone.timedelta(days=5), end_date=timezone.now() + timezone.timedelta(days=31), category=self.category, projects_amount=1)
+            with self.assertRaises(ValidationError):
+                announcement.clean()
+            announcement = Announcement.objects.create(init_date=timezone.now() + timezone.timedelta(days=5), end_date=timezone.now() + timezone.timedelta(days=10), category=self.category, projects_amount=1)
+            try:
+                announcement.clean()
+            except ValidationError:
+                self.fail("Duration between 3 and 30 days raised ValidationError unexpectedly!")
+                
+        def test_projects_same_category(self):
+            category2 = Category.objects.create(name='test category 2')
+            project2 = Project.objects.create(name='test project 2', category=category2)
+            announcement = Announcement.objects.create(init_date=timezone.now() + timezone.timedelta(days=5), end_date=timezone.now() + timezone.timedelta(days=10), category=self.category, projects_amount=1)
+            announcement.save()
+            announcement.id_projects.add(self.project)
+            announcement.id_projects.add(project2)
+            with self.assertRaises(ValidationError):
+                announcement.clean()
+            announcement.id_projects.remove(project2)
+            announcement.id_projects.add(self.project)
+            try:
+                announcement.clean()
+            except ValidationError:
+                self.fail("Projects with same category raised ValidationError unexpectedly!")
