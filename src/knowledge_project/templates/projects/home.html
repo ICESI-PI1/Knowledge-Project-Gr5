@@ -12,6 +12,7 @@
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/home_style.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -22,19 +23,19 @@
       <h2 class="subtitle">¿Qué deseas hacer?</h2>
       <div class="options-wrapper">
         <div class="single-option">
-          <img class="option-icon" src="{% static 'img/img-1.png' %}"/>
+          <img class="option-icon" src="{% static 'img/img-1.png' %}" />
           <h2 class="options-h2">Nueva propuesta</h2>
           <p class="options-p">Propón un nuevo proyecto</p>
         </div>
 
         <div class="single-option">
-          <img class="option-icon" src="{% static 'img/img-2.png' %}"/>
+          <img class="option-icon" src="{% static 'img/img-2.png' %}" />
           <h2 class="options-h2">Mis proyectos</h2>
           <p class="options-p">Consulta el estado de tus proyectos</p>
         </div>
 
         <div class="single-option">
-          <img class="option-icon" src="{% static 'img/img-3.png' %}"/>
+          <img class="option-icon" src="{% static 'img/img-3.png' %}" />
           <h2 class="options-h2">Convocatorias</h2>
           <p class="options-p">Participa en algún proyecto abierto</p>
         </div>

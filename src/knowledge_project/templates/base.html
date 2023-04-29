@@ -18,7 +18,7 @@
     <div class="wrapper">
       <nav>
         <a class="logout-btn" href="{% url 'logout' %}">Salir</a>
-    
+
         <input type="checkbox" id="check" />
         <label for="check" class="checkbtn">
           <i class="fas fa-bars"></i>
@@ -27,15 +27,13 @@
         <ul>
           <li class="active"><a class="active" href="/">Home</a></li>
           <li><a href="#">Propuestas</a></li>
-          <li><a href="#">Proyectos</a></li>
+          <li><a href="#">Convocatorias</a></li>
           <li><a href="#">Recursos</a></li>
         </ul>
       </nav>
 
-      <div class="content">
-        {% block content %}{% endblock %}
-      </div>
-      
+      <div class="content">{% block content %}{% endblock %}</div>
+
       <footer class="footer">
         <div class="container">
           <div class="footer-row">
@@ -83,8 +81,6 @@
           </div>
         </div>
       </footer>
-
-     
     </div>
   </body>
 </html>

@@ -11,7 +11,8 @@
     />
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/registration/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/registration/login_style.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -20,8 +21,8 @@
         <div class="login-container">
           <h2>Iniciar Sesión</h2>
           <div class="form-container">
-            <form method="post">
-               {% csrf_token %}
+            <form method="POST">
+              {% csrf_token %}
               <p>
                 <input
                   type="text"
@@ -45,10 +46,9 @@
                 <button type="submit">Ingresar</button>
                 </div>
             </form>
-            
           <div class="support-container">
             <a href="#" id="forgot-pass">¿Olvidaste la contraseña?</a>
-            <a href="#" id="register">¿No tienes una cuenta? Regístrate</a>
+            <a href="/users/registration" id="register">¿No tienes una cuenta? Regístrate</a>
           </div>
         </div>
       </div>
