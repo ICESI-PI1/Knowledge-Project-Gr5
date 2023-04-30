@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+
+
+
+
+
 class UserManager(BaseUserManager):
     def create_user(self, user_cc, password=None, **extra_fields):
         if not user_cc:
@@ -32,4 +37,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.user_cc
+        return self.full_name
+    
+class Role(models.Model):
+    id_role = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return f"{self.id_role} - Name:  {self.name}"
+    
+class UserRole(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+    def __str___(self):
+        return f"{self.user} - Rol:  {self.role}"

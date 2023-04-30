@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/logo.ico' %}"/>
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
@@ -25,10 +26,24 @@
         </label>
         <label class="logo">Knowledge Project</label>
         <ul>
-          <li class="active"><a class="active" href="/">Home</a></li>
-          <li><a href="#">Propuestas</a></li>
-          <li><a href="#">Convocatorias</a></li>
-          <li><a href="#">Recursos</a></li>
+          {% if user_role ==  'page_manager' %}
+          <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
+          <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="#">Usuarios</a></li>
+          <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+          <li class="{% if page_name == 'companies' %}active{% endif %}"><a class="{% if page_name == 'companies' %}active{% endif %}" href="#">Empresas</a></li>
+
+          {% elif user_role ==  'common_user' %}
+          <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
+          <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+          <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
+          <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+          
+          {% elif user_role ==  'company_user' %}
+          <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
+          <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+          <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
+          <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+          {% endif %}
         </ul>
       </nav>
 
@@ -62,7 +77,7 @@
               <h4>Más opciones</h4>
 
               <ul>
-                <li><a href="#">Proyectos</a></li>
+                <li><a href="#">Usuarios</a></li>
                 <li><a href="#">Convocatorias</a></li>
                 <li><a href="#">Registra tu empresa</a></li>
                 <li><a href="#">Tu perfil</a></li>
