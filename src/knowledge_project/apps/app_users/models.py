@@ -1,79 +1,35 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-# Create your models here.
-from django.db import models
-from django.core.validators import RegexValidator, EmailValidator
-from django.core.exceptions import ValidationError
-from datetime import datetime, timedelta
-from django.contrib.auth.hashers import check_password
+class UserManager(BaseUserManager):
+    def create_user(self, user_cc, password=None, **extra_fields):
+        if not user_cc:
+            raise ValueError('La cédula es obligatoria')
+        user_cc = self.normalize_email(user_cc)
+        user = self.model(user_cc=user_cc, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
+    def create_superuser(self, user_cc, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(user_cc, password, **extra_fields)
 
-class UserRole(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
-    role = models.ForeignKey("Role", on_delete=models.CASCADE)
-
-    def __str___(self):
-        return f"{self.user.cc} - {self.role.name}"
-
-
-class User(AbstractUser):
-    groups = models.ManyToManyField(
-        Group,
-        blank=True,
-        related_name="user_groups",
-        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
-        related_query_name="user",
-    )
-
-    user_permissions = models.ManyToManyField(
-        Permission,
-        blank=True,
-        related_name="user_permissions",
-        help_text="Specific permissions for this user.",
-        related_query_name="user",
-    )
-    phone_regex = RegexValidator(
-        regex=r"^\d{8,10}$",
-        message="El número de teléfono debe tener entre 8 y 10 dígitos",
-    )
-    phone = models.CharField(validators=[phone_regex], max_length=10, blank=True)
-    email = models.EmailField(
-        unique=True,
-        max_length=255,
-        validators=[EmailValidator()],
-        verbose_name="correo electrónico",
-    )
+class User(AbstractBaseUser, PermissionsMixin):
+    user_cc = models.CharField(max_length=10, unique=True)
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=10)
     birth_date = models.DateField()
+    photo = models.ImageField(upload_to='fotos', blank=True, null=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
-    def clean(self):
-        try:
-            age = datetime.today().date() - self.birth_date
-            if age < timedelta(days=365 * 18):
-                raise ValidationError("Debes ser mayor de edad para registrarte.")
-        except TypeError:
-            raise ValidationError("Fecha de nacimiento inválida.")
+    USERNAME_FIELD = 'user_cc'
+    REQUIRED_FIELDS = ['full_name', 'email', 'phone', 'birth_date']
 
-    full_name = models.CharField(max_length=100)
-    last_login = models.DateTimeField(auto_now=True)
+    objects = UserManager()
 
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
-
-    photo = models.ImageField(blank=True, null=True)
-    cc_regex = RegexValidator(
-        regex=r"^\d{6,10}$",
-        message="La cédula de ciudadanía debe contener entre 6 y 10 dígitos",
-    )
-    cc = models.CharField(max_length=10, primary_key=True, validators=[cc_regex])
-
-    def __str__(self) -> str:
-        return f"{self.full_name} - CC: {self.cc}"
-
-
-class Role(models.Model):
-    id_role = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-
-    def __str__(self) -> str:
-        return f"{self.id_role} - Name:  {self.name}"
+    def __str__(self):
+        return self.user_cc

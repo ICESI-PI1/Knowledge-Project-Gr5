@@ -1,5 +1,3 @@
-from typing import Any
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, login, authenticate
 from .models import User
@@ -7,7 +5,6 @@ from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.views import View
-from .backends import LoginBackend
 
 
 class LoginView(View):
@@ -18,25 +15,21 @@ class LoginView(View):
 
     def post(self, request, *args, **kwargs):
         # Obtener los datos del formulario enviado
-        cedula = request.POST.get("username")
+        user_cc = request.POST.get("username")
         password = request.POST.get("password")
 
         # Autenticar al usuario
-        user = authenticate(request =request,cedula=cedula, password=password, backend=LoginBackend())
+        user = authenticate(request=request, user_cc=user_cc, password=password)
 
         # Verificar si la autenticación fue exitosa
         if user is not None:
-            print(f"User is not None")
             # Iniciar sesión
             login(request, user)
             # Redirigir al usuario a la página de inicio
-            return LoginBackend.login_success()
+            return redirect("home")
         else:
-            print("Cédula o contraseña incorrectas. Por favor, inténtalo de nuevo")
             # Mostrar un mensaje de error en caso de que la autenticación falle
-            error_message = (
-                "Cédula o contraseña incorrectas. Por favor, inténtalo de nuevo."
-            )
+            error_message = "Cédula o contraseña incorrectas. Por favor, inténtalo de nuevo."
             return render(request, self.template_name, {"error_message": error_message})
 
 
@@ -71,13 +64,13 @@ class UserRegistration(CreateView):
             )
 
         # Crear el usuario
-        user = User.objects.create(
+        user = User.objects.create_user(
+            user_cc=user_cc,
+            password = password1,
             phone=phone,
             email=email,
-            password = make_password(password1),
             birth_date=birthdate,
             full_name=full_name,
-            cc=user_cc,
         )
 
         # Guardar el usuario en la base de datos
