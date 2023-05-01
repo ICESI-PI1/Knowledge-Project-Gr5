@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -17,15 +16,12 @@
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link
       rel="stylesheet"
-      href="{% static 'css/projects/createproject_style.css' %}"
+      href="{% static 'css/projects/createproject.css' %}"
     />
     {% endblock %}
   </head>
   <body>
     <div class="main-container">
-      <div class="back-btn">
-        <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
-      </div>
       <div class="content">
         <div class="welcome-screen-container">
           <div class="message">
@@ -36,7 +32,8 @@
         <div class="form-container">
           <h2>NUEVA PROPUESTA</h2>
           <div class="signup-container">
-            <form id="formulario" class="form" action="POST">
+            <form id="formulario" class="form" method="POST">
+              {% csrf_token %}
               <p>
                 <label for="title">TÍTULO DEL PROYECTO</label>
                 <input
@@ -47,6 +44,15 @@
                   id="fullname"
                 />
               </p>
+              <label for="format">CATEGORÍA</label>
+              <div class="select">
+                <select name="format" id="format" required>
+                  <option selected disabled>Selecciona una categoría</option>
+                  {% for category in categories %}
+                  <option name="category" value="{{category.id_category}}">{{category.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
               <p>
                 <label for="objetive">OBJETIVO DEL PROYECTO</label>
                 <textarea
@@ -79,15 +85,9 @@
               </p>
             </form>
             <div class="options">
-              <button class="btn btn-cancel">Cancelar</button>
-              <script>
-                document
-                  .getElementById("cancelar")
-                  .addEventListener("click", function () {
-                    window.history.back();
-                  });
-              </script>
-              <button id="next" class="btn btn-next">Siguiente</button>
+              <button id="next" type="button" class="btn btn-next">
+                Siguiente
+              </button>
               <script>
                 var btnTerminar = document.getElementById("next");
                 var miFormulario = document.getElementById("formulario");
@@ -95,6 +95,14 @@
                 btnTerminar.addEventListener("click", function () {
                   miFormulario.submit();
                 });
+              </script>
+              <button id="cancelar" class="btn btn-cancel">Cancelar</button>
+              <script>
+                document
+                  .getElementById("cancelar")
+                  .addEventListener("click", function () {
+                    window.history.back();
+                  });
               </script>
             </div>
           </div>

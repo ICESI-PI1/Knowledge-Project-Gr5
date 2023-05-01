@@ -66,14 +66,12 @@ class Project(models.Model):
 
 class Announcement(models.Model):
     id_announ = models.AutoField(primary_key=True)
-    init_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    init_date = models.DateField()
+    end_date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    id_projects = models.ManyToManyField(Project)
-    projects_amount = models.PositiveIntegerField()
 
     def clean(self):
-        if self.init_date < timezone.now():
+        if self.init_date < timezone.now().date():
             raise ValidationError(
                 "La fecha de inicio no puede ser anterior a la fecha actual"
             )
@@ -86,14 +84,10 @@ class Announcement(models.Model):
             raise ValidationError(
                 "La duración de la convocatoria debe ser entre 3 y 30 días"
             )
-        projects_categories = set(self.id_projects.values_list("category", flat=True))
-        if (
-            len(projects_categories) != 1
-            or projects_categories.pop() != self.category.id_category
-        ):
-            raise ValidationError(
-                "Los proyectos asociados deben tener la misma categoría de la convocatoria"
-            )
+
+class AnnouncementProject(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
 
 class Resource(models.Model):
     id_resource = models.AutoField(primary_key=True)
