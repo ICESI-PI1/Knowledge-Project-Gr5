@@ -15,8 +15,8 @@ class Company(models.Model):
         max_length=10, primary_key=True, validators=[nit_regex], verbose_name="NIT"
     )
     phone_regex = RegexValidator(
-        regex=r"^\+57\d{8,10}$",
-        message="El número de teléfono debe ser de formato '+57xxxxxxxxx'",
+        regex=r"\d{8,10}$",
+        message="El número de teléfono debe tener de 8 a 10 dígitos",
     )
     phone = models.CharField(
         validators=[phone_regex], max_length=13, verbose_name="teléfono"
@@ -106,7 +106,7 @@ class Resource(models.Model):
 
 
 class Requirement(models.Model):
-    project_id = models.ForeignKey("Project", on_delete=models.CASCADE)
+    project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     resource_id = models.ForeignKey(Resource, on_delete=models.CASCADE)
     objective = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -121,7 +121,7 @@ class Requirement(models.Model):
 
 
 class ResourcesBag(models.Model):
-    project_id = models.ForeignKey("Project", on_delete=models.CASCADE)
+    project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     resource_id = models.ForeignKey(Resource, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
 

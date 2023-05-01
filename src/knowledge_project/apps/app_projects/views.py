@@ -61,7 +61,7 @@ class ResourceCreateView(CreateView):
 
 
 
-class AnnouncementView(View):   
+class AnnouncementView(View):
     def get(self, request):
         template_name = "projects/announcement.html"
         return render(
@@ -75,11 +75,36 @@ class AnnouncementView(View):
 
 class ProjectCreateView(View):
     def get(self, request):
+        page_name = 'project'
+        temp_user = get_object_or_404(UserRole, user = request.user)
+        user_role = temp_user.role.name
+
         template_name = "projects/create_project.html"
         return render(
             request,
             template_name,
             {
-                "user": "page_manager",
+                "user_role": user_role,
+                "page_name" : page_name,
+            },
+        )
+    #Hacer funcionar el POST!!!
+    def post(self, request):
+        title = request.POST["title"]
+        print(f"{title}")
+
+class Requirements2ProjectView(View):
+     def get(self, request):
+        page_name = 'requirements'
+        temp_user = get_object_or_404(UserRole, user = request.user)
+        user_role = temp_user.role.name
+
+        template_name = "projects/requirements_project.html"
+        return render(
+            request,
+            template_name,
+            {
+                "user_role": user_role,
+                "page_name" : page_name,
             },
         )
