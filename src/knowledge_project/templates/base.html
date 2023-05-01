@@ -10,9 +10,9 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="shortcut icon" type="image/png" href="{% static 'img/logo.ico' %}"/>
-    <title>{% block title %}Título de la página{% endblock %}</title>
+    <title>{% block title %}{{ page_name }}{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -28,8 +28,12 @@
         <ul>
           {% if user_role ==  'page_manager' %}
             {% if page_name == 'resources' or page_name == 'categories' %}
+            <li class=""><a class="" href="/">Home</a></li>
               {% if page_name == 'resources' %}
                 <li class="active"><a class="active" href="#">Gestionar Recursos</a></li>
+              {% endif %}
+              {% if page_name == 'categories' %}
+                <li class="active"><a class="active" href="#">Gestionar Categorias</a></li>
               {% endif %}
             
             {% else %}
@@ -54,7 +58,18 @@
         </ul>
       </nav>
 
-      <div class="content">{% block content %}{% endblock %}</div>
+      <div class="content">
+        <div class="back-btn">
+          <a onclick="goBack()"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+        </div>
+    
+        <script>
+          function goBack() {
+            window.history.back();
+          }
+          </script>
+        {% block content %}{% endblock %}
+      </div>
 
       <footer class="footer">
         <div class="container">

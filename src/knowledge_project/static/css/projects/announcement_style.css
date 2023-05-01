@@ -28,6 +28,7 @@
 }
 
 .back-btn a:hover {
+  cursor: pointer;
   border-right: none;
   border-bottom: none;
 }

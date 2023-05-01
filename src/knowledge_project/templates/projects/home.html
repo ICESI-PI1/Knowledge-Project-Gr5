@@ -9,9 +9,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/projects/home.css' %}" />
     {% endblock %}
   </head>
@@ -34,7 +33,7 @@
           </div>
         </a>
 
-        <a href="#">
+        <a href="{% url 'categories-list' %}">
           <div class="single-option">
             <img
               class="option-icon"

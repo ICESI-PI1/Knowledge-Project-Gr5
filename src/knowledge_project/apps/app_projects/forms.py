@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resource
+from .models import Resource, Category
 
 class ResourceForm(forms.ModelForm):
     class Meta:
@@ -7,4 +7,12 @@ class ResourceForm(forms.ModelForm):
         fields = ['name', 'id_resource']
         labels = {
             'name':'Nombre de recurso',
+        }
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'id_category']
+        labels = {
+            'name':'Nombre de categoría',
         }
