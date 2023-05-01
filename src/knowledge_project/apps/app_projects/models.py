@@ -23,15 +23,13 @@ class Company(models.Model):
     )
     address = models.CharField(max_length=255, verbose_name="dirección")
     name = models.CharField(max_length=100, verbose_name="nombre")
-    user_cc = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        related_name="company",
-    )
 
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"
 
+class UserCompany(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 class Category(models.Model):
     id_category = models.AutoField(primary_key=True)
@@ -51,14 +49,14 @@ class Project(models.Model):
         (CALL_STATE, "En convocatoria"),
         (FACTORY_STATE, "En factory"),
     )
-    name = models.CharField(max_length=30)
+    title = models.CharField(max_length=30)
     objective = models.TextField()
     results = models.TextField()
     reach = models.TextField()
     state = models.CharField(
-        max_length=20, choices=STATE_CHOICES, default=PROPOSAL_STATE
+        max_length=20, choices=STATE_CHOICES, default=PROPOSAL_STATE, blank=True
     )
-    company_nit = models.ForeignKey("Company", on_delete=models.CASCADE)
+    company_nit = models.ForeignKey(Company, on_delete=models.CASCADE)
     id_project = models.AutoField(primary_key=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
