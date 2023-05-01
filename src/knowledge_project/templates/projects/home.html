@@ -11,8 +11,8 @@
     />
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/projects/home_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/home.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -22,23 +22,29 @@
     <div class="options-container">
       <h2 class="subtitle">¿Qué deseas hacer?</h2>
       <div class="options-wrapper">
-        <div class="single-option">
-          <img class="option-icon" src="{% static 'img/img-1.png' %}" />
-          <h2 class="options-h2">Nueva propuesta</h2>
-          <p class="options-p">Propón un nuevo proyecto</p>
-        </div>
+        {% if user_role == 'page_manager' %}
+        <a href="{% url 'resources-list' %}">
+          <div class="single-option">
+            <img
+              class="option-icon"
+              src="{% static 'img/home/resource.png' %}"
+            />
+            <h2 class="options-h2">Recursos</h2>
+            <p class="options-p">Gestionar recursos disponibles</p>
+          </div>
+        </a>
 
-        <div class="single-option">
-          <img class="option-icon" src="{% static 'img/img-2.png' %}" />
-          <h2 class="options-h2">Mis proyectos</h2>
-          <p class="options-p">Consulta el estado de tus proyectos</p>
-        </div>
-
-        <div class="single-option">
-          <img class="option-icon" src="{% static 'img/img-3.png' %}" />
-          <h2 class="options-h2">Convocatorias</h2>
-          <p class="options-p">Participa en algún proyecto abierto</p>
-        </div>
+        <a href="#">
+          <div class="single-option">
+            <img
+              class="option-icon"
+              src="{% static 'img/home/categories.png' %}"
+            />
+            <h2 class="options-h2">Categorías</h2>
+            <p class="options-p">Gestionar categorias de proyectos</p>
+          </div>
+        </a>
+        {% endif %}
       </div>
     </div>
   </body>

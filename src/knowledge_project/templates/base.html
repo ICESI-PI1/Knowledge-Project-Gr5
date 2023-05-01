@@ -12,7 +12,7 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'img/logo.ico' %}"/>
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
-    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -27,22 +27,29 @@
         <label class="logo">Knowledge Project</label>
         <ul>
           {% if user_role ==  'page_manager' %}
-          <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
-          <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="#">Usuarios</a></li>
-          <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
-          <li class="{% if page_name == 'companies' %}active{% endif %}"><a class="{% if page_name == 'companies' %}active{% endif %}" href="#">Empresas</a></li>
-
+            {% if page_name == 'resources' or page_name == 'categories' %}
+              {% if page_name == 'resources' %}
+                <li class="active"><a class="active" href="#">Gestionar Recursos</a></li>
+              {% endif %}
+            
+            {% else %}
+              <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
+              <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="#">Usuarios</a></li>
+              <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+              <li class="{% if page_name == 'companies' %}active{% endif %}"><a class="{% if page_name == 'companies' %}active{% endif %}" href="#">Empresas</a></li>
+            {% endif %}
           {% elif user_role ==  'common_user' %}
-          <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
-          <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
-          <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
-          <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+            <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
+            <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+            <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
+            <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
           
           {% elif user_role ==  'company_user' %}
-          <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
-          <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
-          <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
-          <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+            <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
+            <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+            <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
+            <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+
           {% endif %}
         </ul>
       </nav>

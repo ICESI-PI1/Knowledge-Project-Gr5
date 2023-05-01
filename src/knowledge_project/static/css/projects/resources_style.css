@@ -1,0 +1,8 @@
+.main-title {
+    font-size: 1.3rem;
+    width: fit-content;
+    margin: 0 auto;
+    text-transform: uppercase;
+    color: #001011;
+    padding-top: 30px;
+  }
