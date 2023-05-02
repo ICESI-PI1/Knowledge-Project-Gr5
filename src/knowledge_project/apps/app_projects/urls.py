@@ -52,6 +52,11 @@ urlpatterns = [
         name="announcement",
     ),
     path(
+        "projects/announcement/<int:pk>/list",
+        login_required(AnnouncementProjectListView.as_view()),
+        name="announcementProject-list",
+    ),
+    path(
         "projects/project/create/",
         login_required(ProjectCreateView.as_view()),
         name="project-create",
