@@ -2,9 +2,10 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
+from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from ..app_users.models import User, UserRole
-from .models import Resource, Category, Project, UserCompany, Requirement
+from .models import Resource, Category, Project, UserCompany, Requirement, ResourcesBag
 from .forms import ResourceForm, CategoryForm
 
 
@@ -196,7 +197,9 @@ class ProjectCreateView(View):
             company_nit=company,
         )
 
-        return redirect(reverse("project-create-requirements", args=[project.id_project]))
+        return redirect(
+            reverse("project-create-requirements", args=[project.id_project])
+        )
 
 
 class Requirements2ProjectView(View):
@@ -220,15 +223,25 @@ class Requirements2ProjectView(View):
                 "page_name": page_name,
                 "resourses": resourses,
                 "requirements": requirements,
-                "project": project
+                "project": project,
             },
         )
 
-    #Arreglar el error :)
+    # Arreglar el error :)
     def post(self, request, project_id):
         print(f"POST!!!!!!!!!!!:\n{request.POST}")
-        page_name = "requirements"
-        temp_user = get_object_or_404(UserRole, user=request.user)
-        user_role = temp_user.role.name
 
-        return redirect(f'/projects/project/create/{project_id}/requirements')
+        project = get_object_or_404(Project, id_project=project_id)
+        resourse = get_object_or_404(Resource, id_resource=request.POST['format'])
+        objective = request.POST['objective']
+
+        try:
+            Requirement.objects.create(project_id=project, resource_id=resourse, objective=objective)
+            ResourcesBag.objects.create(project_id=project, resource_id=resourse, amount=0)
+        except IntegrityError as e:
+            if 'unique constraint' in str(e).lower() and 'resourcesbag_project_id_resource_id' in str(e).lower():
+                print("El recurso ya ha sido asignado al proyecto.")
+            else:
+                print(f"Error: {e}")
+
+        return redirect(reverse("project-create-requirements", args=[project_id]))

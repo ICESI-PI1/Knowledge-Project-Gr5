@@ -51,6 +51,7 @@
           <h2>AGREGA UN RECURSO</h2>
           <div class="signup-container">
             <form id="formulario" class="form" method="POST" action="{% url 'project-create-requirements' project.id_project %}">
+              {% csrf_token %}
               <label for="format">RECURSO</label>
               <div class="select">
                 <select name="format" id="format" required>
