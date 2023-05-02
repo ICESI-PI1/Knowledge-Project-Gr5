@@ -109,7 +109,7 @@ class Requirement(models.Model):
         )
 
     def __str__(self):
-        return f"{self.project_id.name} - {self.resource_id.name} ({self.objective})"
+        return f"{self.project_id.title} - {self.resource_id.name} ({self.objective})"
 
 
 class ResourcesBag(models.Model):

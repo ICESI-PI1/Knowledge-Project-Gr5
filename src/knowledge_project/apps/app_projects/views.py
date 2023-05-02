@@ -2,9 +2,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from ..app_users.models import User, UserRole
-from .models import Resource, Category, Project, UserCompany
+from .models import Resource, Category, Project, UserCompany, Requirement
 from .forms import ResourceForm, CategoryForm
 
 
@@ -196,15 +196,20 @@ class ProjectCreateView(View):
             company_nit=company,
         )
 
-        print(f"Este es el proyecto creado:\n{project}")
-        return redirect("project-create-requirements")
+        return redirect(reverse("project-create-requirements", args=[project.id_project]))
 
 
 class Requirements2ProjectView(View):
-    def get(self, request):
+    def get(self, request, project_id):
         page_name = "requirements"
         temp_user = get_object_or_404(UserRole, user=request.user)
         user_role = temp_user.role.name
+
+        resourses = Resource.objects.all()
+
+        project = get_object_or_404(Project, id_project=project_id)
+
+        requirements = Requirement.objects.filter(project_id=project)
 
         template_name = "projects/requirements_project.html"
         return render(
@@ -213,5 +218,17 @@ class Requirements2ProjectView(View):
             {
                 "user_role": user_role,
                 "page_name": page_name,
+                "resourses": resourses,
+                "requirements": requirements,
+                "project": project
             },
         )
+
+    #Arreglar el error :)
+    def post(self, request, project_id):
+        print(f"POST!!!!!!!!!!!:\n{request.POST}")
+        page_name = "requirements"
+        temp_user = get_object_or_404(UserRole, user=request.user)
+        user_role = temp_user.role.name
+
+        return redirect(f'/projects/project/create/{project_id}/requirements')
