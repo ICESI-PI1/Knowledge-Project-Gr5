@@ -3,13 +3,17 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, user_cc, password=None, **extra_fields):
+    def create_user(self, user_cc, password=None, role=None, **extra_fields):
         if not user_cc:
             raise ValueError('La cédula es obligatoria')
         user_cc = self.normalize_email(user_cc)
         user = self.model(user_cc=user_cc, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+
+        if role:
+            UserRole.objects.create(user=user, role=Role.objects.get(pk=role))
+
         return user
 
     def create_superuser(self, user_cc, password=None, **extra_fields):

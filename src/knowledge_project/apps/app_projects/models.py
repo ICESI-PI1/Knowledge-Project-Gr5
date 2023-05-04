@@ -3,7 +3,8 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db import models
-from ..app_users.models import User
+from apps.app_users.models import User
+
 
 # Create your models here.
 class Company(models.Model):
@@ -23,19 +24,18 @@ class Company(models.Model):
     )
     address = models.CharField(max_length=255, verbose_name="dirección")
     name = models.CharField(max_length=100, verbose_name="nombre")
-    user_cc = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        related_name="company",
-    )
 
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"
-
+    
+class UserCompany(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 class Category(models.Model):
     id_category = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    photo = models.ImageField(upload_to='static/img/categories/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.id_category} - Name: {self.name}"
@@ -51,14 +51,14 @@ class Project(models.Model):
         (CALL_STATE, "En convocatoria"),
         (FACTORY_STATE, "En factory"),
     )
-    name = models.CharField(max_length=30)
+    title = models.CharField(max_length=30)
     objective = models.TextField()
     results = models.TextField()
     reach = models.TextField()
     state = models.CharField(
-        max_length=20, choices=STATE_CHOICES, default=PROPOSAL_STATE
+        max_length=20, choices=STATE_CHOICES, default=PROPOSAL_STATE, blank=True
     )
-    company_nit = models.ForeignKey("Company", on_delete=models.CASCADE)
+    company_nit = models.ForeignKey(Company, on_delete=models.CASCADE)
     id_project = models.AutoField(primary_key=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
@@ -68,14 +68,12 @@ class Project(models.Model):
 
 class Announcement(models.Model):
     id_announ = models.AutoField(primary_key=True)
-    init_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    init_date = models.DateField()
+    end_date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    id_projects = models.ManyToManyField(Project)
-    projects_amount = models.PositiveIntegerField()
 
     def clean(self):
-        if self.init_date < timezone.now():
+        if self.init_date < timezone.now().date():
             raise ValidationError(
                 "La fecha de inicio no puede ser anterior a la fecha actual"
             )
@@ -88,14 +86,10 @@ class Announcement(models.Model):
             raise ValidationError(
                 "La duración de la convocatoria debe ser entre 3 y 30 días"
             )
-        projects_categories = set(self.id_projects.values_list("category", flat=True))
-        if (
-            len(projects_categories) != 1
-            or projects_categories.pop() != self.category.id_category
-        ):
-            raise ValidationError(
-                "Los proyectos asociados deben tener la misma categoría de la convocatoria"
-            )
+
+class AnnouncementProject(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)
 
 class Resource(models.Model):
     id_resource = models.AutoField(primary_key=True)
@@ -161,5 +155,4 @@ class Donation(models.Model):
 
     def __str__(self):
         return f"Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
-
 

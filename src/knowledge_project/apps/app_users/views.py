@@ -51,6 +51,7 @@ class UserRegistration(CreateView):
         birthdate = request.POST["birthdate"]
         password1 = request.POST["password"]
         password2 = request.POST["confirm_password"]
+        role = '2'
 
         print(f"POST:\n{request.POST}")
 
@@ -67,6 +68,7 @@ class UserRegistration(CreateView):
         user = User.objects.create_user(
             user_cc=user_cc,
             password = password1,
+            role=role,
             phone=phone,
             email=email,
             birth_date=birthdate,

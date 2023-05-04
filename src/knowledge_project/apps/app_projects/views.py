@@ -4,7 +4,7 @@ from django.views.generic.base import View
 from django.contrib.auth import logout
 from django.urls import reverse_lazy
 from ..app_users.models import User, UserRole
-from .models import Resource, Category
+from .models import Resource, Category, Announcement
 from .forms import ResourceForm, CategoryForm
 
 def signout(request):
@@ -146,9 +146,32 @@ class CategoryDeleteView(DeleteView):
         return context
 
 
+class AnnouncementListView( ListView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_list.html"
+    context_object_name = "announcements"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_id = self.request.GET.get('category', None)
+        if category_id:
+            queryset = queryset.filter(category__id_category=category_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'announcement'
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context['user_role'] = temp.role.name
+        context['categories'] = Category.objects.all()
+        return context
+
+
+
 class AnnouncementView(View):
     def get(self, request):
-        template_name = "projects/announcement.html"
+        template_name = "projects/announcements.html"
         return render(
             request,
             template_name,

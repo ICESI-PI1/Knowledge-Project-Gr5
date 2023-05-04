@@ -11,7 +11,7 @@
     />
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/projects/crud_views.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/crud.css' %}" />
     {% endblock %}
   </head>
   <body>
@@ -27,13 +27,16 @@
       <tr>
         <th>id</th>
         <th>Nombre</th>
+        <th>Foto</th>
         <th>Acciones</th>
       </tr>
     {% for category in categories %}
         
         <tr>
+
             <td>{{ category.id_category }}</td>
             <td>{{ category.name }}</td>
+            <td><img src="../../../{{ category.photo }}" alt="{{ category.name }}"  height="100" width="100"></td>
             <td><a class="btn edit" href="{% url 'categories-update' category.pk %}"><i class="fa-solid fa-pen-to-square"></i></a><a class="btn delete" href="{% url 'categories-delete' category.pk %}" ><i class="fa-solid fa-trash"></i></a></td>
             
         </tr>
