@@ -3,7 +3,8 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db import models
-from ..app_users.models import User
+from apps.app_users.models import User
+
 
 # Create your models here.
 class Company(models.Model):
@@ -26,6 +27,7 @@ class Company(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"
+    
 
 class UserCompany(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -34,6 +36,7 @@ class UserCompany(models.Model):
 class Category(models.Model):
     id_category = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    photo = models.ImageField(upload_to='static/img/categories/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.id_category} - Name: {self.name}"
@@ -152,5 +155,4 @@ class Donation(models.Model):
 
     def __str__(self):
         return f" Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
-
 

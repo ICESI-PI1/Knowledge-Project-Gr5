@@ -12,7 +12,8 @@ class ResourceForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'id_category']
+        fields = ['name', 'id_category', 'photo']
         labels = {
             'name':'Nombre de categoría',
+            'photo':'Foto de categoría'
         }
