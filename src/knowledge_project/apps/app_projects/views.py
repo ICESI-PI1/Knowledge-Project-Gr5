@@ -170,19 +170,6 @@ class AnnouncementListView( ListView):
         return context
 
 
-
-class AnnouncementView(View):
-    def get(self, request):
-        template_name = "projects/announcements.html"
-        return render(
-            request,
-            template_name,
-            {
-                "user": "page_manager",
-            },
-        )
-
-
 class ProjectCreateView(View):
     def get(self, request):
         page_name = "project"
@@ -192,7 +179,7 @@ class ProjectCreateView(View):
 
         print(f"Usuario logued:\n{request.user}")
 
-        template_name = "projects/create_project.html"
+        template_name = "projects/crud_projects/create_project.html"
         return render(
             request,
             template_name,
@@ -238,7 +225,7 @@ class Requirements2ProjectView(View):
 
         requirements = Requirement.objects.filter(project_id=project)
 
-        template_name = "projects/requirements_project.html"
+        template_name = "projects/crud_projects/requirements_project.html"
         return render(
             request,
             template_name,
@@ -251,7 +238,6 @@ class Requirements2ProjectView(View):
             },
         )
 
-    # Arreglar el error :)
     def post(self, request, project_id):
         print(f"POST!!!!!!!!!!!:\n{request.POST}")
 
