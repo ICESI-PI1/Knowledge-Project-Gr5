@@ -172,7 +172,7 @@ class AnnouncementListView( ListView):
 
 class AnnouncementProjectListView(ListView):
     model = AnnouncementProject
-    template_name = 'projects/announcement/announcement_list.html'
+    template_name = 'projects/announcements/announcementProjects_list.html'
     context_object_name = 'projects'
 
     def get_queryset(self):
