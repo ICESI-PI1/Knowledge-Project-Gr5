@@ -28,6 +28,7 @@ class Company(models.Model):
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"
     
+
 class UserCompany(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -111,7 +112,7 @@ class Requirement(models.Model):
         )
 
     def __str__(self):
-        return f"{self.project_id.name} - {self.resource_id.name} ({self.objective})"
+        return f"{self.project_id.title} - {self.resource_id.name} ({self.objective})"
 
 
 class ResourcesBag(models.Model):

@@ -83,8 +83,7 @@
   padding: 2px 0;
 }
 
-.main-container .content .form-container .signup-container textarea.input {
-  height: 80px;
+.main-container .content .form-container .signup-container #objective {
   padding: 12px 20px;
   font-size: 1rem;
   resize: none;
@@ -92,7 +91,6 @@
   display: block;
   width: 100%;
   box-sizing: border-box;
-  padding: 8px;
   border-top: hidden;
   border-left: hidden;
   border-right: hidden;
@@ -103,7 +101,7 @@
   .content
   .form-container
   .signup-container
-  textarea.input::placeholder {
+  #objective::placeholder {
   color: #00101050;
   text-align: justify;
 }
@@ -112,7 +110,7 @@
   .content
   .form-container
   .signup-container
-  textarea.input:focus {
+  #objective{
   outline: none;
   border-bottom: solid 2px #001010;
 }
