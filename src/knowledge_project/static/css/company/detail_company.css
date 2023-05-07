@@ -1,0 +1,103 @@
+
+body{
+    margin-top:20px;
+    color: #1a202c;
+    text-align: center;
+    background-color: #001011;    
+}
+
+.main-body {
+    display: flex;
+    padding: 15px;
+    justify-content: space-between;
+    margin-right: 10%;
+}
+.logo {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}
+
+.logo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    height: 500px;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1rem;
+}
+
+.btn_edit{
+border-radius: 10px;
+height: 30px;
+width: 100px;
+font-size: medium;
+font-weight: bold;
+color: #fff;
+background-color: #001011;
+}
+
+.btn_delete{
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 30px;
+    width: 100px;
+    margin-left: 10px;
+    font-size: medium;
+    font-weight: bold;
+    color: #fff;
+    background-color:#FF0000 ;
+}
+
+.main-body>h6{
+height:2ch;
+}
+
+.info{
+    margin-left: 5%;
+    background-color: #fff;
+    border-radius: .25rem;
+    padding: 20px;
+    width: 40%;
+}
+
+h6{
+    font-size: large;
+}
+
+.back-btn {
+    position: relative;
+    height: 15%;
+    min-width: 15%;
+    display: flex;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
+  }
+
+.back-btn i {
+    font-size: 35px;
+    color: white;
+    line-height: 80px;
+  }
+ .back-btn a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    border-radius: 10px;
+    height: 50px;
+    border-right: solid 2px #b33b00;
+    border-bottom: solid 2px #b33b00;
+    background-color: #ff7733;
+    color: #fff;
+  }

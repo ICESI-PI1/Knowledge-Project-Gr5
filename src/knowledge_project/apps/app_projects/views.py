@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from ..app_users.models import User, UserRole
-from .models import Resource, Category, Announcement
+from .models import Resource, Category, Announcement, Company
 from .models import Resource, Category, Project, UserCompany, Requirement, ResourcesBag
 from .forms import ResourceForm, CategoryForm
 
@@ -255,3 +255,45 @@ class Requirements2ProjectView(View):
                 print(f"Error: {e}")
 
         return redirect(reverse("project-create-requirements", args=[project_id]))
+    
+class CompanyRegistration(View):
+    def get(self, request):
+        page_name = "Company sing up"
+        template_name = "company\create_company.html"
+        print(f"Usuario logued:\n{request.user}")
+        return render(request, template_name,{"page_name": page_name,})
+    
+    def post(self,request):
+        #Obtener datos del formulario
+        name = request.POST["Name"]
+        nit  = request.POST["Nit"]
+        address = request.POST["Adress"]
+        phone = request.POST["Phone"]
+        logo = request.Post["Logo"]
+        
+        company = Company.objects.create(
+            name=name, 
+            nit=nit,
+            address = address,
+            phone = phone,
+            logo = logo,
+        )
+        #Redirigir a la ventana home
+        return redirect("home")   
+    
+class CompanyDetail(View):
+    def get(self , request):
+        company_nit = UserCompany.objects.get(user=request.user).company
+        company = Company.objects.filter(nit = company_nit).first
+        template_name = "company\detailCompany.html"
+        return render(
+            request,
+            template_name,
+            {
+                "company_logo":company.logo,
+                "company_name":company.name,
+                "company_address":company.address,
+                "company_phone":company.phone,
+                "company_nit":company.nit,
+            },
+        )

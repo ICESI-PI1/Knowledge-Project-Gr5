@@ -59,3 +59,5 @@ class UserRole(models.Model):
 
     def __str___(self):
         return f"{self.user} - Rol:  {self.role}"
+    
+

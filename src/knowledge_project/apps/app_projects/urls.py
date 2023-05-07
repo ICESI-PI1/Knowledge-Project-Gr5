@@ -87,4 +87,6 @@ urlpatterns = [
         login_required(Requirements2ProjectView.as_view()),
         name="project-create-requirements",
     ),
+    #---------------- Company -------------
+    path('projects/company/create/',login_required(CompanyRegistration.as_view()),name = "register_company"),
 ]
