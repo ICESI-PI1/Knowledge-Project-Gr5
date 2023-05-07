@@ -1,13 +1,12 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from ..app_users.models import User, UserRole
-from .models import Resource, Category, Announcement, Company
-from .models import Resource, Category, Project, UserCompany, Requirement, ResourcesBag
-from .forms import ResourceForm, CategoryForm
+from .models import *
+from .forms import *
 
 
 def signout(request):
@@ -169,6 +168,18 @@ class AnnouncementListView( ListView):
         context['categories'] = Category.objects.all()
         return context
 
+
+class AnnouncementProjectListView(ListView):
+    model = AnnouncementProject
+    template_name = 'projects/announcements/announcementProjects_list.html'
+    context_object_name = 'projects'
+
+    def get_queryset(self):
+        announcement_id = self.kwargs['pk'] 
+        announcement = Announcement.objects.get(id_announ=announcement_id) 
+        announcement_projects = AnnouncementProject.objects.filter(announcement=announcement) 
+        projects = [ap.project for ap in announcement_projects] 
+        return projects
 
 class ProjectCreateView(View):
     def get(self, request):

@@ -73,11 +73,10 @@ class Announcement(models.Model):
     init_date = models.DateField()
     end_date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
     def clean(self):
         if self.init_date < timezone.now().date():
             raise ValidationError(
-                "La fecha de inicio no puede ser anterior a la fecha actual"
+                "La fecha de inicio no puede ser anterior a la fecha actual "
             )
         if self.end_date <= self.init_date:
             raise ValidationError(
@@ -86,7 +85,7 @@ class Announcement(models.Model):
         duration = self.end_date - self.init_date
         if duration.days < 3 or duration.days > 30:
             raise ValidationError(
-                "La duración de la convocatoria debe ser entre 3 y 30 días"
+                "La duración de la convocatoria debe ser entre 3 y  30 días"
             )
 
 class AnnouncementProject(models.Model):
@@ -156,5 +155,5 @@ class Donation(models.Model):
             )
 
     def __str__(self):
-        return f"Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
+        return f" Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
 
