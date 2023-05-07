@@ -135,3 +135,112 @@ class ProjectModelTestCase(TestCase):
             ("En factory", "En factory")
         )
         self.assertEqual(self.project.STATE_CHOICES, choices)
+
+class AnnouncementModelTestCase(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(
+            name="Test Category",
+            photo="path/to/photo.jpg"
+        )
+        self.valid_announcement = Announcement.objects.create(
+            init_date=datetime.now().date(),
+            end_date=datetime.now().date() + timedelta(days=10),
+            category=self.category
+        )
+    
+    def test_valid_announcement(self):
+        self.assertTrue(isinstance(self.valid_announcement, Announcement))
+    
+    def test_init_date_not_past(self):
+        with self.assertRaises(ValidationError):
+            Announcement.full_clean(
+                Announcement.objects.create(
+                    init_date=datetime.now().date() - timedelta(days=1),
+                    end_date=datetime.now().date() + timedelta(days=10),
+                    category=self.category
+                )
+            )
+    
+    def test_end_date_after_init_date(self):
+        with self.assertRaises(ValidationError):
+            Announcement.full_clean(
+                Announcement.objects.create(
+                    init_date=datetime.now().date(),
+                    end_date=datetime.now().date() - timedelta(days=10),
+                    category=self.category
+                )
+            )
+    
+    def test_duration_between_3_and_30_days(self):
+        with self.assertRaises(ValidationError):
+            Announcement.full_clean(
+                Announcement.objects.create(
+                    init_date=datetime.now().date(),
+                    end_date=datetime.now().date() + timedelta(days=2),
+                    category=self.category
+                )
+            )
+        
+        with self.assertRaises(ValidationError):
+            Announcement.full_clean(
+                Announcement.objects.create(
+                    init_date=datetime.now().date(),
+                    end_date=datetime.now().date() + timedelta(days=31),
+                    category=self.category
+                )
+            )
+
+class AnnouncementProjectModelTestCase(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name='Test Category')
+        self.company = Company.objects.create(
+            nit='1234567890',
+            phone='1234567890',
+            address='Test Address',
+            name='Test Company'
+        )
+        self.project = Project.objects.create(
+            title='Test Project',
+            objective='Test Objective',
+            results='Test Results',
+            reach='Test Reach',
+            company_nit=self.company,
+            category=self.category
+        )
+        self.announcement = Announcement.objects.create(
+            init_date=datetime.now().date(),
+            end_date=datetime.now().date() + timedelta(days=10),
+            category=self.category
+        )
+        self.announcement_project = AnnouncementProject.objects.create(
+            announcement=self.announcement,
+            project=self.project
+        )
+    
+    def test_valid_announcement_project(self):
+        self.assertTrue(isinstance(self.announcement_project, AnnouncementProject))
+    
+    def test_announcement_cascade_delete(self):
+        announcement_id = self.announcement.id_announ
+        self.announcement.delete()
+        with self.assertRaises(AnnouncementProject.DoesNotExist):
+            AnnouncementProject.objects.get(announcement_id=announcement_id)
+    
+    def test_project_cascade_delete(self):
+        project_id = self.project.id_project
+        self.project.delete()
+        with self.assertRaises(AnnouncementProject.DoesNotExist):
+            AnnouncementProject.objects.get(project_id=project_id)
+
+class ResourceModelTestCase(TestCase):
+    def setUp(self):
+        Resource.objects.create(name="Resource 1")
+        Resource.objects.create(name="Resource 2")
+
+    def test_resource_str(self):
+        resource = Resource.objects.get(name="Resource 1")
+        self.assertEqual(str(resource), "1 - Resource 1")
+
+    def test_resource_id(self):
+        resource = Resource.objects.get(name="Resource 2")
+        self.assertEqual(resource.id_resource, 2)
