@@ -9,7 +9,7 @@ from apps.app_users.models import User
 # Create your models here.
 class Company(models.Model):
     nit_regex = RegexValidator(
-        regex=r"^\d{9,10}$",
+        regex=r"^\d{10,10}$",
         message="El NIT debe tener entre 9 y 10 dígitos",
     )
     nit = models.CharField(
@@ -24,7 +24,7 @@ class Company(models.Model):
     )
     address = models.CharField(max_length=255, verbose_name="dirección")
     name = models.CharField(max_length=100, verbose_name="nombre")
-    logo = models.ImageField(verbose_name="logo")
+    logo = models.ImageField(verbose_name="logo", null=True)
 
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"
@@ -74,6 +74,12 @@ class Announcement(models.Model):
     end_date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     def clean(self):
+        if self.init_date is None:
+            raise ValidationError("La fecha de inicio no puede ser nula")
+
+        if self.end_date is None:
+            raise ValidationError("La fecha de finalización no puede ser nula")
+
         if self.init_date < timezone.now().date():
             raise ValidationError(
                 "La fecha de inicio no puede ser anterior a la fecha actual "

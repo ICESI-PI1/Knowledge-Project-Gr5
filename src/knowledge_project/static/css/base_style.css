@@ -73,7 +73,7 @@ nav ul li:hover {
   transition: 0.5s;
   height: 85px;
 }
-.logout-btn {
+/*.logout-btn {
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -92,7 +92,7 @@ nav ul li:hover {
   background: #ff7733c9;
   transition: all 0.5s;
 }
-
+*/
 .checkbtn {
   font-size: 30px;
   color: #ff7733;
@@ -117,7 +117,11 @@ nav ul li:hover {
   }
 }
 @media (max-width: 980px) {
-  .logout-btn {
+  /*.logout-btn {
+    display: none;
+  }
+  */
+  .profile_pic{
     display: none;
   }
   .checkbtn {
@@ -165,6 +169,96 @@ nav ul li:hover {
     right: -2.3%;
   }
 }
+
+.profile_pic{
+  width: 40px;
+  border-radius: 50%;
+  cursor:pointer;
+  margin-left: 30px;
+  float: right;
+  align-self: flex-end;
+  color: #ff7733;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.sub_menu_wrap{
+  position:absolute;
+  top:100%;
+  right: 10%;
+  width: 320px;
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height 0.5s;
+}
+
+.sub_menu_wrap.open-menu{
+  max-height:400px;
+}
+
+.sub_menu{
+  background:#fff;
+  padding: 20px;
+  margin:10px;
+
+}
+
+.user_info{
+  display: flex;
+  align-items: center;
+}
+
+.user_info h3{
+  font-weight: 500;
+}
+
+.user_info img{
+  width: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+
+}
+
+.sub_menu hr{
+  border: 0;
+  height: 1px;
+  width: 100%;
+  background: #ccc;
+  margin: 15px 0 10px;
+}
+
+.sub_menu_link{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #525252;
+  margin: 12px 0;
+}
+
+.sub_menu_link p{
+  width: 100%;
+}
+
+.sub_menu_link img{
+  width: 40px;
+  background: #e5e5e5;
+  border-radius: 50%;
+  padding: 8px;
+  margin-right: 15px;
+}
+.sub_menu_link span{
+  font-size: 22px;
+  transition: transform 0.5s;
+}
+
+.sub_menu_link:hover span{
+  transform: translateX(5px);
+}
+
+.sub_menu_link:hover p{
+  font-weight: 600;
+}
+
+
 
 /*---------------------------------------End Navbar----------------------*/
 

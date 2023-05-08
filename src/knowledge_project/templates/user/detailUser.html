@@ -23,23 +23,23 @@
                 <div class="back-btn">
                     <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
                 </div>
-                <div class="logo">
+                <div class="profile_picture">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
                         <img 
-                        {% if company_logo %}
-                          src={{company_logo}} 
-                        {% else %}
-                          src="{% static 'img\nav-bar-icons\company.png' %}"
-                        {% endif %}
+                          {% if profile_pic %}
+                          src={{profile_pic}} 
+                          {% else %}
+                          src="{% static 'img\nav-bar-icons\profile.png' %}"
+                          {% endif %}
                           alt="Admin" 
                           class="rounded-circle" 
                           width="150"
                         >
                         <div class="Name">
-                          <h4>{{company_name}}</h4>
-                          <p class="address">{{company_address}}</p>
-                          <p class="phone">{{company_phone}}</p>
+                          <h4>{{user_name}}</h4>
+                          <p class="Email">{{user_email}}</p>
+                          <p class="phone">{{user_phone}}</p>
                           <button class="btn_edit">Edit</button>
                           <button class="btn_delete">Delete</button>
                         </div>
@@ -53,16 +53,16 @@
                         <h6 class="NameTitle">Name</h6>
                       </div>
                       <div class="Name">
-                        {{company_name}}
+                        {{user_name}}
                       </div>
                     </div>
                     <hr>
                     <div class="row">
                       <div class="col-sm-3">
-                        <h6 class="NitTitle">Nit</h6>
+                        <h6 class="ccTitle">CC</h6>
                       </div>
-                      <div class="Nit">
-                        {{company_nit}}
+                      <div class="cc">
+                        {{user_cc}}
                       </div>
                     </div>
                     <hr>
@@ -71,19 +71,28 @@
                         <h6 class="PhoneTitle">Phone</h6>
                       </div>
                       <div class="Phone">
-                        {{company_phone}}
+                        {{user_phone}}
                       </div>
                     </div>
                     <hr>
                     <div class="row">
                       <div class="col-sm-3">
-                        <h6 class="AddressTitle">Address</h6>
+                        <h6 class="EmailTitle">Email</h6>
                       </div>
-                      <div class="Address">
-                        {{company_address}}
+                      <div class="Email">
+                        {{user_email}}
                       </div>
                     </div>
                     <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="BirthDateTitle">Birth Date</h6>
+                        </div>
+                        <div class="BirthDate">
+                          {{birth_date}}
+                        </div>
+                      </div>
+                      <hr>
                 </div>
         
             </div>

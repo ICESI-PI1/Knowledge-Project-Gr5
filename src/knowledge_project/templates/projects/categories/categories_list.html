@@ -38,11 +38,11 @@
             <td>{{ category.name }}</td>
             <td><img src="../../../{{ category.photo }}" alt="{{ category.name }}"  height="100" width="100"></td>
             <td><a class="btn edit" href="{% url 'categories-update' category.pk %}"><i class="fa-solid fa-pen-to-square"></i></a><a class="btn delete" href="{% url 'categories-delete' category.pk %}" ><i class="fa-solid fa-trash"></i></a></td>
-            
+            {% empty %}
+                <td>No se encontró ninguna categoría.</td>
+            {% endfor %}
         </tr>
-    {% empty %}
-        <li>No categories found.</li>
-    {% endfor %}
+    
     </table>
     
 
