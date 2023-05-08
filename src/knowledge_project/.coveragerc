@@ -1,0 +1,19 @@
+[run]
+omit =
+    manage.py*
+    apps\app_projects\__init__.py*
+    apps\app_projects\admin.py*
+    apps\app_projects\apps.py*
+    apps\app_projects\forms.py*
+    apps\app_projects\migrations\*
+    apps\app_projects\tests.py*
+    apps\app_projects\urls.py*
+    apps\app_users\__init__.py*
+    apps\app_users\admin.py*
+    apps\app_users\apps.py*
+    apps\app_users\migrations\*
+    apps\app_users\tests.py*
+    apps\app_users\urls.py*
+    knowledge_project\__init__.py*
+    knowledge_project\settings.py*
+    knowledge_project\urls.py*
