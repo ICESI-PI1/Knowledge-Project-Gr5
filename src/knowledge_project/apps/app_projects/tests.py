@@ -299,8 +299,151 @@ class RequirementModelTestCase(TestCase):
 
     def test_requirement_str_representation(self):
         expected_str = f"{self.project.title} - {self.resource.name} (10.5)"
-        self.assertEqual(str(self.requirement), expected_str)
-        
+        self.assertEqual(str(self.requirement), expected_str)        
+
+class ResourcesBagModelTestCase(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name='Test Category')
+        self.company = Company.objects.create(
+            nit='1234567890',
+            phone='1234567890',
+            address='Test Address',
+            name='Test Company'
+        )
+        self.project = Project.objects.create(
+            title='Test Project',
+            objective='Test Objective',
+            results='Test Results',
+            reach='Test Reach',
+            company_nit=self.company,
+            category=self.category
+        )
+        self.resource = Resource.objects.create(name='Test Resource')
+        self.resources_bag = ResourcesBag.objects.create(project_id=self.project, resource_id=self.resource, amount=100.0)
+
+    def test_resources_bag_creation(self):
+        self.assertEqual(self.resources_bag.project_id, self.project)
+        self.assertEqual(self.resources_bag.resource_id, self.resource)
+        self.assertEqual(self.resources_bag.amount, 100.0)
+
+    def test_resources_bag_unique_together(self):
+        with self.assertRaises(IntegrityError):
+            ResourcesBag.objects.create(project_id=self.project, resource_id=self.resource, amount=50.0)
+
+    def test_resources_bag_str_representation(self):
+        expected_str = f"{self.project.title} - {self.resource.name} (100.0)"
+        self.assertEqual(self.resources_bag.__str__(), expected_str)
+
+
+class DonationModelTestCase(TestCase):
+    def setUp(self):
+        self.company = Company.objects.create(
+            nit="123456789",
+            phone="12345678",
+            address="Dirección de la compañía",
+            name="Nombre de la compañía",
+        )
+        self.resource = Resource.objects.create(
+            name="Nombre del recurso"
+        )
+        self.category = Category.objects.create(name='Test Category')
+        self.project = Project.objects.create(
+            title="Título del proyecto",
+            objective="Objetivo del proyecto",
+            results="Resultados del proyecto",
+            reach="Alcance del proyecto",
+            company_nit=self.company,
+            category=self.category
+        )
+        self.requirement = Requirement.objects.create(
+            project_id=self.project,
+            resource_id=self.resource,
+            objective=100.0
+        )
+        self.resources_bag = ResourcesBag.objects.create(
+            project_id=self.project,
+            resource_id=self.resource,
+            amount=50.0
+        )
+
+    def test_valid_donation(self):
+        donation = Donation(
+            company_nit=self.company,
+            resource_id=self.resource,
+            amount=30.0,
+            project_id=self.project,
+            description="Descripción de la donación",
+        )
+        donation.full_clean()  # No debe generar ninguna excepción
+        donation.save()
+
+        self.assertEqual(Donation.objects.count(), 1)
+
+    def test_invalid_donation_not_required_resource(self):
+        donation = Donation(
+            company_nit=self.company,
+            resource_id=Resource.objects.create(name="Otro recurso"),
+            amount=30.0,
+            project_id=self.project,
+            description="Descripción de la donación",
+        )
+
+        with self.assertRaises(ValidationError):
+            donation.full_clean()
+
+    def test_invalid_donation_exceeds_requirement(self):
+        donation = Donation(
+            company_nit=self.company,
+            resource_id=self.resource,
+            amount=80.0,
+            project_id=self.project,
+            description="Descripción de la donación",
+        )
+
+        with self.assertRaises(ValidationError):
+            donation.full_clean()
+
+    def test_str_representation(self):
+        donation = Donation(
+            company_nit=self.company,
+            resource_id=self.resource,
+            amount=30.0,
+            project_id=self.project,
+            description="Descripción de la donación",
+        )
+        self.assertEqual(
+            str(donation),
+            " Donación de Nombre de la compañía - Nombre del recurso (30.0)"
+        )
+
+
+class UserCompanyModelTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            user_cc="1234567890",
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+            password="testpassword"
+        )
+        self.company = Company.objects.create(
+            nit="123456789",
+            phone="12345678",
+            address="Dirección de la compañía",
+            name="Nombre de la compañía",
+        )
+
+    def test_user_company_creation(self):
+        user_company = UserCompany.objects.create(
+            user=self.user,
+            company=self.company
+        )
+
+        self.assertEqual(UserCompany.objects.count(), 1)
+        self.assertEqual(user_company.user, self.user)
+        self.assertEqual(user_company.company, self.company)
+
 class TestCreateCompanyView(TestCase):
     def setUp(self):
         self.client=Client()
