@@ -173,7 +173,7 @@ class AnnouncementCategoriesListView(ListView):
         return context
 
 
-class AnnouncementListView(ListView):
+class AnnouncementListView( ListView):
     model = Announcement
     template_name = "projects/announcements/announcements_list.html"
     context_object_name = "announcements"
