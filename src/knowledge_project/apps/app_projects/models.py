@@ -133,7 +133,7 @@ class ResourcesBag(models.Model):
         )
 
     def __str__(self):
-        return f"{self.project_id} - {self.resource_id.name} ({self.amount})"
+        return f"{self.project_id.title} - {self.resource_id.name} ({self.amount})"
 
 
 class Donation(models.Model):
@@ -163,4 +163,3 @@ class Donation(models.Model):
 
     def __str__(self):
         return f" Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
-
