@@ -473,6 +473,41 @@ class HomeViewTestCase(TestCase):
     def test_home_view_unauthenticated_user(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 302)
+
+class UserDetailViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+            photo="path/to/photo.jpg",
+        )
+        self.user.save()
+        self.resource_create_url = reverse("resources-create")
+        self.role1=Role.objects.create(name="admin")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role1)
+        self.url = reverse('user_detail')
+
+    def test_user_detail_view(self):
+        # Iniciar sesión con el usuario de prueba
+        self.client.login(username=self.user_cc, password=self.password)
+
+        # Verificar que se pueda acceder correctamente a la vista
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user\detailUser.html')
+
+        # Verificar que los datos del usuario se muestren correctamente en la vista
+        self.assertContains(response, self.user.full_name)
+        self.assertContains(response, self.user.email)
+        self.assertContains(response, self.user.phone)
+        self.assertContains(response, self.user.user_cc)
         
 class ResourceListViewTestCase(TestCase):
     def setUp(self):

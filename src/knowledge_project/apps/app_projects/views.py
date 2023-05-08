@@ -35,7 +35,7 @@ class HomeView(View):
 class UserDetail(View):
     def get(self , request):
         page_name = "User detail"
-        user = User.objects.filter(user_cc=request.user.user_cc).first
+        user = request.user
         template_name = "user\detailUser.html"
         return render(
             request,
