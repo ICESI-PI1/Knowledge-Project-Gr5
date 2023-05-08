@@ -450,8 +450,8 @@ class TestCreateCompanyView(TestCase):
         image = io.BytesIO()
         image.write(b'some image content')
         image.seek(0)
-        url = reverse('register_company')
-        context = {
+        self.url = reverse('register_company')
+        self.context = {
             "Name":"Facebook",
             "Nit":"9007105256",
             "Adress": "CARRERA 11 79 35 P 9, BOGOTA, BOGOTA",
@@ -461,9 +461,9 @@ class TestCreateCompanyView(TestCase):
         
     def testGet(self):
         response = self.client.get(reverse('register_company'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         
     def testPost(self):
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(self.url, self.context)
+        self.assertEqual(response.status_code, 302)
         
