@@ -9,7 +9,7 @@ from apps.app_users.models import User
 # Create your models here.
 class Company(models.Model):
     nit_regex = RegexValidator(
-        regex=r"^\d{9,10}$",
+        regex=r"^\d{10,10}$",
         message="El NIT debe tener entre 9 y 10 dígitos",
     )
     nit = models.CharField(

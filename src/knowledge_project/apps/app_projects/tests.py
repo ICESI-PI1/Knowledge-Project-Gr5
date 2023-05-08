@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.test import TestCase
+from django.db import IntegrityError
 from apps.app_projects.models import *
 from apps.app_users.models import *
 from datetime import *
@@ -151,6 +151,25 @@ class AnnouncementModelTestCase(TestCase):
     def test_valid_announcement(self):
         self.assertTrue(isinstance(self.valid_announcement, Announcement))
     
+    def test_null_init_date(self):
+        with self.assertRaises(IntegrityError):
+            Announcement.full_clean(
+                Announcement.objects.create(
+                    init_date=None,
+                    end_date=datetime.now().date() + timedelta(days=10),
+                    category=self.category
+                )
+            )
+    def test_null_init_date(self):
+        with self.assertRaises(IntegrityError):
+            Announcement.full_clean(
+                Announcement.objects.create(
+                    init_date=datetime.now().date(),
+                    end_date=None,
+                    category=self.category
+                )
+            )
+
     def test_init_date_not_past(self):
         with self.assertRaises(ValidationError):
             Announcement.full_clean(
@@ -244,3 +263,37 @@ class ResourceModelTestCase(TestCase):
     def test_resource_id(self):
         resource = Resource.objects.get(name="Resource 2")
         self.assertEqual(resource.id_resource, 2)
+
+
+class RequirementModelTestCase(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name='Test Category')
+        self.company = Company.objects.create(
+            nit='1234567890',
+            phone='1234567890',
+            address='Test Address',
+            name='Test Company'
+        )
+        self.project = Project.objects.create(
+            title='Test Project',
+            objective='Test Objective',
+            results='Test Results',
+            reach='Test Reach',
+            company_nit=self.company,
+            category=self.category
+        )
+        self.resource = Resource.objects.create(name='Test Resource')
+        self.requirement = Requirement.objects.create(project_id=self.project, resource_id=self.resource, objective=10.5)
+
+    def test_requirement_creation(self):
+        self.assertEqual(self.requirement.project_id, self.project)
+        self.assertEqual(self.requirement.resource_id, self.resource)
+        self.assertEqual(self.requirement.objective, 10.5)
+
+    def test_requirement_unique_together(self):
+        with self.assertRaises(IntegrityError):
+            Requirement.objects.create(project_id=self.project, resource_id=self.resource, objective=5.0)
+
+    def test_requirement_str_representation(self):
+        expected_str = f"{self.project.title} - {self.resource.name} (10.5)"
+        self.assertEqual(str(self.requirement), expected_str)
