@@ -1,5 +1,16 @@
 from django.contrib import admin
-from .models import *
+from .models import (
+    Resource,
+    Category,
+    Company,
+    UserCompany,
+    Project,
+    Announcement,
+    AnnouncementProject,
+    Requirement,
+    ResourcesBag,
+    Donation,
+)
 
 admin.site.register(Resource)
 admin.site.register(Category)
@@ -10,3 +21,4 @@ admin.site.register(AnnouncementProject)
 admin.site.register(Announcement)
 admin.site.register(Requirement)
 admin.site.register(ResourcesBag)
+admin.site.register(Donation)

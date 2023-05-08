@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resource, Category, Announcement
+from .models import Resource, Category, Donation, Announcement
 
 class ResourceForm(forms.ModelForm):
     class Meta:
@@ -17,7 +17,7 @@ class CategoryForm(forms.ModelForm):
             'name':'Nombre de categoría',
             'photo':'Foto de categoría'
         }
-
+        
 class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = Announcement
@@ -32,3 +32,11 @@ class AnnouncementForm(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
         }
         
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ['amount', 'description']
+        labels = {
+            'amount':'Cantidad',
+            'description':'Ingresa una descripción sobre la donación que realizarás.',
+        }

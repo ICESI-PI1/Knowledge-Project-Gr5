@@ -1,0 +1,114 @@
+{% block content %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <title>{% block title %}Título de la página{% endblock %}</title>
+        {% block head %}
+        <link
+        rel="stylesheet"
+        href="{% static 'css/company/create_company.css' %}"
+        />
+        {% endblock %}
+    </head>
+    <body>
+        <div class="main-container">
+          <div class="back-btn">
+            <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+          </div>
+            <div class="welcome-screen-container">
+              <h2>Knowledge Projects</h2>
+              <p>“Haz tus sueños realidad y ayuda a los demás”</p>
+            </div>
+            <div class="form-container">
+              <div class="signup-container">
+                <h2>Editar Compañia</h2>
+                <form id="formulario" class="formulario" action="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <p>
+                    <label for="Name">NOMBRE</label>
+                    <input
+                      class="input"
+                      placeholder="Ingresa el nombre de la compañia"
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={{company_name}}
+                    />
+                  </p>
+                  <p>
+                    <label for="Nit">NIT</label>
+                    <input
+                      class="input"
+                      placeholder="Ingresa el NIT de la compañia"
+                      type="text"
+                      name="Nit"
+                      id="Nit"
+                      value = {{company_nit}}
+                    />
+                  </p>
+                  <p>
+                    <label for="Adress">DIRECCIÓN</label>
+                    <input
+                      class="input"
+                      placeholder="Ingresa la dirección de la compañia"
+                      type="text"
+                      name="Adress"
+                      id="Adress"
+                      value = {{company_address}}
+                    />
+                  </p>
+                  <p>
+                    <label for="Phone">TELÉFONO</label>
+                    <input
+                      class="input"
+                      placeholder="Ingresa el número telefónico de la compañia"
+                      type="text"
+                      name="Phone"
+                      id="Phone"
+                      value = {{company_phone}}
+                    />
+                  </p>
+                  <p>
+                    <label for="Logo">LOGO</label>
+                    <input
+                      class="input"
+                      type="file"
+                      name="Logo"
+                      id="Logo"
+                    />
+                  </p>
+                    <div class="options">
+                        <button id="terminar" type="button" class="btn btn-signup">
+                            Terminar
+                        </button>
+                        <script>
+                            var btnTerminar = document.getElementById("terminar");
+                            var miFormulario = document.getElementById("formulario");
+                
+                            btnTerminar.addEventListener("click", function () {
+                                miFormulario.submit();
+                            });
+                        </script>
+                        <button id="cancelar" class="btn btn-cancel">Cancelar</button>
+                        <script>
+                            document
+                            .getElementById("cancelar")
+                            .addEventListener("click", function () {
+                            window.history.back();
+                            });
+                        </script>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+    </body>
+</html>
+{% endblock %}

@@ -392,15 +392,14 @@ class CompanyRegistration(View):
 class CompanyDetail(View):
     def get(self , request):
         page_name = "Company detail"
-        company_nit = UserCompany.objects.get(user=request.user).company
-        company = Company.objects.filter(nit = company_nit).first
+        company = UserCompany.objects.get(user=request.user).company
         template_name = "company\detailCompany.html"
         return render(
             request,
             template_name,
             {
                 "page_name": page_name,
-                "company_logo":company.logo,
+                "company_logo":company.logo.url,
                 "company_name":company.name,
                 "company_address":company.address,
                 "company_phone":company.phone,
@@ -418,7 +417,7 @@ class UserDetail(View):
             template_name,
             {
                 "page_name": page_name,
-                "profile_pic":user.photo,
+                "profile_pic":user.photo.url,
                 "user_name":user.full_name,
                 "user_email":user.email,
                 "user_phone":user.phone,
@@ -426,3 +425,91 @@ class UserDetail(View):
                 "birth_date":user.birth_date,
             },
         )
+        
+class EditCompany(View):
+    def get(self , request):
+        page_name = "User detail"
+        company = UserCompany.objects.get(user=request.user).company
+        template_name = "user\detailUser.html"
+        return render(
+            request,
+            template_name,
+            {
+                "page_name": page_name,
+                "company_logo":company.logo.url,
+                "company_name":company.name,
+                "company_address":company.address,
+                "company_phone":company.phone,
+                "company_nit":company.nit,
+            },
+        )
+    
+    def post(self , request):
+        name = request.POST["name"]
+        Nit = request.POST["Nit"]
+        Adress = request.POST["Adress"]
+        Phone = request.POST["Phone"]
+        Logo = request.POST["Logo"]
+        
+        company = UserCompany.objects.get(user=request.user).company
+        
+        company.name = name
+        company.nit = Nit
+        company.address = Adress
+        company.phone = Phone
+        if (Logo != None):
+            company.logo = Logo
+        
+        company.save()
+        
+        return redirect("company_detail")
+    
+class DonationCreateView(CreateView):
+    template_name = "projects/donations/create_donation.html"
+    form_class = DonationForm
+    context_object_name = 'resources'
+    success_url = reverse_lazy("home")
+    
+    def post(self, request, pk):
+        recurso = request.POST["recurso"]
+        canti = Decimal(request.POST["canti"])
+        descripcion = request.POST["descripcion"]
+        user = request.user
+        
+        project = Project.objects.get(id_project=pk)
+        
+        donation = Donation.objects.create(company_nit=project.company_nit, 
+                                           resource_id=Resource.objects.get(id_resource=recurso[0]), 
+                                           amount=canti, 
+                                           project_id=project,
+                                           description=descripcion)
+        
+        Donation.full_clean(donation)
+        
+        resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
+        cant_total = resourceBag.amount+canti
+        resourceBag.amount=cant_total
+        ResourcesBag.full_clean(resourceBag)
+        resourceBag.save() 
+        
+        print(resourceBag)
+
+        return redirect(
+            reverse("home")
+        )
+        
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project_pk = self.kwargs['pk']
+        requirements = Requirement.objects.filter(project_id=project_pk)
+        resources = [res.resource_id for res in requirements]
+        context["page_name"] = "resources"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        context['resources'] = resources
+        return context
