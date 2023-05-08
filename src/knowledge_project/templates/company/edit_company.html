@@ -13,14 +13,14 @@
         {% block head %}
         <link
         rel="stylesheet"
-        href="{% static 'css/company/create_company.css' %}"
+        href="{% static 'css/company/edit_company.css' %}"
         />
         {% endblock %}
     </head>
     <body>
         <div class="main-container">
           <div class="back-btn">
-            <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+            <a href="{% url 'company_detail' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
           </div>
             <div class="welcome-screen-container">
               <h2>Knowledge Projects</h2>
@@ -96,14 +96,7 @@
                                 miFormulario.submit();
                             });
                         </script>
-                        <button id="cancelar" class="btn btn-cancel">Cancelar</button>
-                        <script>
-                            document
-                            .getElementById("cancelar")
-                            .addEventListener("click", function () {
-                            window.history.back();
-                            });
-                        </script>
+                        <button href="{% url 'company_detail' %}" id="cancelar" class="btn btn-cancel">Cancelar</button>
                     </div>
                 </form>
               </div>

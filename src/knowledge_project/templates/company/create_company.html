@@ -20,7 +20,7 @@
     <body>
         <div class="main-container">
           <div class="back-btn">
-            <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+            <a href="{% url 'home' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
           </div>
             <div class="welcome-screen-container">
               <h2>Knowledge Projects</h2>
@@ -92,14 +92,7 @@
                                 miFormulario.submit();
                             });
                         </script>
-                        <button id="cancelar" class="btn btn-cancel">Cancelar</button>
-                        <script>
-                            document
-                            .getElementById("cancelar")
-                            .addEventListener("click", function () {
-                            window.history.back();
-                            });
-                        </script>
+                        <button href="{% url 'home' %}" id="cancelar" class="btn btn-cancel">Cancelar</button>
                     </div>
                 </form>
               </div>

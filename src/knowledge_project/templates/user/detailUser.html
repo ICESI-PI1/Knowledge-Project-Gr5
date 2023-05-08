@@ -13,7 +13,7 @@
         {% block head %}
         <link
         rel="stylesheet"
-        href="{% static 'css/company/detail_company.css' %}"
+        href="{% static 'css/company/detail_user.css' %}"
         />
         {% endblock %}
     </head>
@@ -26,22 +26,16 @@
                 <div class="profile_picture">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
-                        <img 
-                          {% if profile_pic %}
-                          src={{profile_pic}} 
-                          {% else %}
-                          src="{% static 'img\nav-bar-icons\profile.png' %}"
-                          {% endif %}
-                          alt="Admin" 
-                          class="rounded-circle" 
-                          width="150"
-                        >
+                        {% if profile_pic %}
+                        <img src={{profile_pic}} alt="Admin" class="rounded-circle" width="150">
+                        {% else %}
+                        <img src="{% static 'img\nav-bar-icons\profile.png' %}" alt="Admin" class="rounded-circle" width="150">
+                        {% endif %}
                         <div class="Name">
                           <h4>{{user_name}}</h4>
                           <p class="Email">{{user_email}}</p>
                           <p class="phone">{{user_phone}}</p>
-                          <button class="btn_edit">Edit</button>
-                          <button class="btn_delete">Delete</button>
+                         <!-- <button class="btn_edit">Edit</button> -->
                         </div>
                       </div>
                     </div>

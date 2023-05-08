@@ -368,6 +368,8 @@ class EditCompany(View):
         
         return redirect("company_detail")
     
+    
+    
 class DonationCreateView(CreateView):
     template_name = "projects/donations/create_donation.html"
     form_class = DonationForm
@@ -416,4 +418,14 @@ class DonationCreateView(CreateView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         context['resources'] = resources
+        return context
+
+class CompanyDeleteView(DeleteView):
+    model = Company
+    template_name = "company/delete_company.html"
+    success_url = reverse_lazy("company_detail")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "categories"
         return context

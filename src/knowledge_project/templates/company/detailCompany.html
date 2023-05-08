@@ -21,27 +21,22 @@
         <div class="container">
             <div class="main-body">
                 <div class="back-btn">
-                    <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+                    <a href="{% url 'home' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
                 </div>
                 <div class="logo">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
-                        <img 
                         {% if company_logo %}
-                          src={{company_logo}} 
+                        <img src={{company_logo}}  alt="Admin" class="rounded-circle" width="150">
                         {% else %}
-                          src="{% static 'img\nav-bar-icons\company.png' %}"
+                        <img src="{% static 'img\nav-bar-icons\company.png' %}" alt="Admin" class="rounded-circle" width="150">
                         {% endif %}
-                          alt="Admin" 
-                          class="rounded-circle" 
-                          width="150"
-                        >
                         <div class="Name">
                           <h4>{{company_name}}</h4>
                           <p class="address">{{company_address}}</p>
                           <p class="phone">{{company_phone}}</p>
-                          <button class="btn_edit">Edit</button>
-                          <button class="btn_delete">Delete</button>
+                          <button href="{% url 'edit_company' %}" class="btn_edit">Edit</button>
+                          <button href="{% url 'delete_company' %}" class="btn_delete">Delete</button>
                         </div>
                       </div>
                     </div>

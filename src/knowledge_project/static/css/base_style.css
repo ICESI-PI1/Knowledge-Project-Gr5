@@ -175,9 +175,8 @@ nav ul li:hover {
   border-radius: 50%;
   cursor:pointer;
   margin-left: 30px;
-  float: right;
-  align-self: flex-end;
-  color: #ff7733;
+  /*float: right;
+  align-self: flex-end;*/
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
