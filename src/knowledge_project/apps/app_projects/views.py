@@ -32,6 +32,26 @@ class HomeView(View):
             },
         )
 
+class UserDetail(View):
+    def get(self , request):
+        page_name = "User detail"
+        user = User.objects.filter(user_cc=request.user.user_cc).first
+        template_name = "user\detailUser.html"
+        return render(
+            request,
+            template_name,
+            {
+                "page_name": page_name,
+                "profile_pic":user.photo.url,
+                "user_name":user.full_name,
+                "user_email":user.email,
+                "user_phone":user.phone,
+                "user_cc":user.user_cc,
+                "birth_date":user.birth_date,
+            },
+        )
+
+#--------------- Resources --------------------
 
 class ResourceListView(ListView):
     model = Resource
@@ -90,6 +110,7 @@ class ResourceDeleteView(DeleteView):
         context["user_role"] = temp.role.name
         return context
 
+#--------------- Categories --------------------
 
 class CategoryListView(ListView):
     model = Category
@@ -147,6 +168,8 @@ class CategoryDeleteView(DeleteView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         return context
+
+#--------------- Announcements --------------------
 
 class AnnouncementCategoriesListView(ListView):
     model = Announcement
@@ -240,6 +263,8 @@ class AnnouncementProjectListView(ListView):
         projects = [ap.project for ap in announcement_projects] 
         return projects
 
+#--------------- Projects --------------------
+
 class ProjectCreateView(View):
     def get(self, request):
         page_name = "project"
@@ -282,6 +307,7 @@ class ProjectCreateView(View):
             reverse("project-create-requirements", args=[project.id_project])
         )
 
+#--------------- Requeriements --------------------
 
 class Requirements2ProjectView(View):
     def get(self, request, project_id):
@@ -326,6 +352,8 @@ class Requirements2ProjectView(View):
 
         return redirect(reverse("project-create-requirements", args=[project_id]))
     
+#--------------- Companies --------------------
+
 class CompanyRegistration(View):
     def get(self, request):
         page_name = "Company sing up"
@@ -368,25 +396,6 @@ class CompanyDetail(View):
                 "company_nit":company.nit,
             },
         )
-
-class UserDetail(View):
-    def get(self , request):
-        page_name = "User detail"
-        user = User.objects.filter(user_cc=request.user.user_cc).first
-        template_name = "user\detailUser.html"
-        return render(
-            request,
-            template_name,
-            {
-                "page_name": page_name,
-                "profile_pic":user.photo.url,
-                "user_name":user.full_name,
-                "user_email":user.email,
-                "user_phone":user.phone,
-                "user_cc":user.user_cc,
-                "birth_date":user.birth_date,
-            },
-        )
         
 class EditCompany(View):
     def get(self , request):
@@ -426,7 +435,17 @@ class EditCompany(View):
         
         return redirect("company_detail")
     
-    
+class CompanyDeleteView(DeleteView):
+    model = Company
+    template_name = "company/delete_company.html"
+    success_url = reverse_lazy("company_detail")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "categories"
+        return context
+
+#--------------- Donations --------------------
     
 class DonationCreateView(CreateView):
     template_name = "projects/donations/create_donation.html"
@@ -476,14 +495,4 @@ class DonationCreateView(CreateView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         context['resources'] = resources
-        return context
-
-class CompanyDeleteView(DeleteView):
-    model = Company
-    template_name = "company/delete_company.html"
-    success_url = reverse_lazy("company_detail")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["page_name"] = "categories"
         return context

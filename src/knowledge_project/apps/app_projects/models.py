@@ -160,6 +160,10 @@ class Donation(models.Model):
             raise ValidationError(
                 "La donación excede la cantidad requerida para el proyecto."
             )
+        if(self.amount <= 0):
+            raise ValidationError(
+                "No se puede donar esta cantidad."
+                )
 
     def __str__(self):
         return f" Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"

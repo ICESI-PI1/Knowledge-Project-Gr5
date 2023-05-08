@@ -7,6 +7,8 @@ from datetime import *
 import io
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+#------------------- Models -----------------------
+
 class CompanyModelTestCase(TestCase):
     
     def setUp(self):
@@ -444,6 +446,168 @@ class UserCompanyModelTestCase(TestCase):
         self.assertEqual(user_company.user, self.user)
         self.assertEqual(user_company.company, self.company)
 
+#------------------- Views -----------------------
+
+class HomeViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", email="testuser@example.com", password="password"
+        )
+        self.user_role = UserRole.objects.create(user=self.user, role="admin")
+
+    def test_home_view_authenticated_user(self):
+        self.client.login(username="testuser", password="password")
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Welcome to the home page!")
+        self.assertContains(response, "Logged in as testuser")
+        self.assertContains(response, "User role: admin")
+
+    def test_home_view_unauthenticated_user(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, "/accounts/login/?next=/")
+        
+class ResourceListViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", email="testuser@example.com", password="password"
+        )
+        self.user_role = UserRole.objects.create(user=self.user, role="admin")
+        self.resource1 = Resource.objects.create(name="Resource 1", description="Description of Resource 1")
+        self.resource2 = Resource.objects.create(name="Resource 2", description="Description of Resource 2")
+
+    def test_resource_list_view_authenticated_user(self):
+        self.client.login(username="testuser", password="password")
+        response = self.client.get(reverse("resources"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Resource 1")
+        self.assertContains(response, "Resource 2")
+        self.assertContains(response, "Description of Resource 1")
+        self.assertContains(response, "Description of Resource 2")
+
+    def test_resource_list_view_unauthenticated_user(self):
+        response = self.client.get(reverse("resources"))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, "/accounts/login/?next=/resources/")
+
+class ResourceCreateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testuser", email="testuser@test.com", password="testpass"
+        )
+        self.resource_create_url = reverse("resource-create")
+        UserRole.objects.create(user=self.user, role="admin")
+
+    def test_resource_create_view_success(self):
+        self.client.login(username="testuser", password="testpass")
+        data = {
+            "name": "Test Resource",
+            "description": "A test resource",
+            "category": "test",
+            "unit_price": 5.0,
+            "quantity": 10,
+        }
+        response = self.client.post(self.resource_create_url, data)
+        self.assertEqual(response.status_code, 302)  # Should redirect
+        self.assertEqual(Resource.objects.count(), 1)  # Should create a new resource
+
+    def test_resource_create_view_not_authenticated(self):
+        response = self.client.get(self.resource_create_url)
+        self.assertRedirects(response, "/accounts/login/?next=/resources/create/")
+        response = self.client.post(self.resource_create_url)
+        self.assertRedirects(response, "/accounts/login/?next=/resources/create/")
+
+    def test_resource_create_view_not_authorized(self):
+        self.client.login(username="testuser", password="testpass")
+        UserRole.objects.filter(user=self.user).update(role="viewer")
+        response = self.client.get(self.resource_create_url)
+        self.assertEqual(response.status_code, 403)  # Should be forbidden
+        response = self.client.post(self.resource_create_url)
+        self.assertEqual(response.status_code, 403)  # Should be forbidden
+
+class ResourceUpdateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username="testuser", email="testuser@test.com", password="testing"
+        )
+        self.role = UserRole.objects.create(
+            user=self.user, role="admin"
+        )
+        self.resource = Resource.objects.create(
+            name="Test Resource",
+            description="This is a test resource",
+            quantity=5
+        )
+        
+    def test_resource_update_view_accessible_by_admin(self):
+        self.client.login(username="testuser", password="testing")
+        response = self.client.get(reverse("resource-update", args=[self.resource.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "projects/resources/resources_form.html")
+        
+    def test_resource_update_view_redirects_to_login_page_for_anonymous_user(self):
+        response = self.client.get(reverse("resource-update", args=[self.resource.pk]))
+        self.assertRedirects(response, "/accounts/login/?next=/resources/update/{}/".format(self.resource.pk))
+        
+    def test_resource_update_view_redirects_to_resource_list_on_successful_update(self):
+        self.client.login(username="testuser", password="testing")
+        response = self.client.post(
+            reverse("resource-update", args=[self.resource.pk]),
+            {
+                "name": "Updated Test Resource",
+                "description": "This is an updated test resource",
+                "quantity": 10,
+            },
+        )
+        self.assertRedirects(response, reverse("resources-list"))
+        self.assertEqual(Resource.objects.get(pk=self.resource.pk).name, "Updated Test Resource")
+        self.assertEqual(Resource.objects.get(pk=self.resource.pk).description, "This is an updated test resource")
+        self.assertEqual(Resource.objects.get(pk=self.resource.pk).quantity, 10)
+        
+    def test_resource_update_view_does_not_update_on_form_errors(self):
+        self.client.login(username="testuser", password="testing")
+        response = self.client.post(
+            reverse("resource-update", args=[self.resource.pk]),
+            {
+                "name": "",
+                "description": "This is an updated test resource",
+                "quantity": 10,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response, "form", "name", "Este campo es obligatorio.")
+        self.assertEqual(Resource.objects.get(pk=self.resource.pk).name, "Test Resource")
+        self.assertEqual(Resource.objects.get(pk=self.resource.pk).description, "This is a test resource")
+        self.assertEqual(Resource.objects.get(pk=self.resource.pk).quantity, 5)
+        
+class ResourceDeleteViewTestCase(TestCase):
+    def setUp(self):
+        self.user_role = UserRole.objects.create(role='admin')
+        self.resource = Resource.objects.create(name='Test Resource', quantity=10)
+        self.url = reverse('resource-delete', kwargs={'pk': self.resource.pk})
+        self.client.force_login(self.user_role.user)
+
+    def test_get_request(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'projects/resources/resource_confirm_delete.html')
+
+    def test_delete_resource(self):
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Resource.objects.filter(pk=self.resource.pk).exists())
+
+    def test_user_role(self):
+        self.user_role.role = 'client'
+        self.user_role.save()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 403)
+
+
+
 class TestCreateCompanyView(TestCase):
     def setUp(self):
         self.client=Client()
@@ -466,4 +630,62 @@ class TestCreateCompanyView(TestCase):
     def testPost(self):
         response = self.client.post(self.url, self.context)
         self.assertEqual(response.status_code, 302)
+
+class DonationCreateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser', email='testuser@example.com', password='testpassword')
+        self.project = Project.objects.create(
+            name='Test Project', description='This is a test project', company_nit='123456')
+        self.resource = Resource.objects.create(
+            name='Test Resource', description='This is a test resource')
+        self.requirement = Requirement.objects.create(
+            project=self.project, resource=self.resource, amount=10)
+        self.user_role = UserRole.objects.create(
+            user=self.user, project=self.project, role='member')
+        self.url = reverse('donation-create', args=[self.project.pk])
+        self.client.login(username='testuser', password='testpassword')
+
+    def test_donation_create(self):
+        data = {
+            'recurso': self.resource.pk,
+            'canti': 5.0,
+            'descripcion': 'This is a test donation'
+        }
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Donation.objects.count(), 1)
+        donation = Donation.objects.first()
+        self.assertEqual(donation.company_nit, self.project.company_nit)
+        self.assertEqual(donation.resource_id, self.resource)
+        self.assertEqual(donation.amount, Decimal('5.0'))
+        self.assertEqual(donation.project_id, self.project)
+        self.assertEqual(donation.description, 'This is a test donation')
+        resources_bag = ResourcesBag.objects.get(
+            project=self.project, resource=self.resource)
+        self.assertEqual(resources_bag.amount, Decimal('15.0'))
+
+    def test_donation_create_invalid_data(self):
+        data = {
+            'recurso': self.resource.pk,
+            'canti': 'invalid amount',
+            'descripcion': 'This is a test donation'
+        }
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Donation.objects.count(), 0)
+        self.assertEqual(ResourcesBag.objects.count(), 0)
+
+    def test_donation_create_unauthenticated(self):
+        self.client.logout()
+        data = {
+            'recurso': self.resource.pk,
+            'canti': 5.0,
+            'descripcion': 'This is a test donation'
+        }
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Donation.objects.count(), 0)
+        self.assertEqual(ResourcesBag.objects.count(), 0)
         
