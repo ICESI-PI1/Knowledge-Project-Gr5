@@ -1,8 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse
 from django.db import IntegrityError
 from apps.app_projects.models import *
 from apps.app_users.models import *
 from datetime import *
+import io
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class CompanyModelTestCase(TestCase):
     
@@ -297,3 +300,27 @@ class RequirementModelTestCase(TestCase):
     def test_requirement_str_representation(self):
         expected_str = f"{self.project.title} - {self.resource.name} (10.5)"
         self.assertEqual(str(self.requirement), expected_str)
+        
+class TestCreateCompanyView(TestCase):
+    def setUp(self):
+        self.client=Client()
+        image = io.BytesIO()
+        image.write(b'some image content')
+        image.seek(0)
+        url = reverse('register_company')
+        context = {
+            "Name":"Facebook",
+            "Nit":"9007105256",
+            "Adress": "CARRERA 11 79 35 P 9, BOGOTA, BOGOTA",
+            "Phone": "6013832120",
+            "Logo":SimpleUploadedFile('image.jpg', image.read()),
+        }
+        
+    def testGet(self):
+        response = self.client.get(reverse('register_company'))
+        self.assertEqual(response.status_code, 200)
+        
+    def testPost(self):
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)
+        

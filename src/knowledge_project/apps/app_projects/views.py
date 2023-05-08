@@ -10,6 +10,7 @@ from .forms import *
 from decimal import Decimal
 
 
+
 def signout(request):
     logout(request)
     return redirect("/")
