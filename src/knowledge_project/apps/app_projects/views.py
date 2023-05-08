@@ -399,7 +399,7 @@ class CompanyDetail(View):
         
 class EditCompany(View):
     def get(self , request):
-        page_name = "User detail"
+        page_name = "Edit company"
         company = UserCompany.objects.get(user=request.user).company
         template_name = "user\detailUser.html"
         return render(
