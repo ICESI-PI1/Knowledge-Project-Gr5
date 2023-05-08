@@ -9,6 +9,7 @@ from .models import (
     AnnouncementProject,
     Requirement,
     ResourcesBag,
+    Donation,
 )
 
 admin.site.register(Resource)
@@ -20,3 +21,4 @@ admin.site.register(AnnouncementProject)
 admin.site.register(Announcement)
 admin.site.register(Requirement)
 admin.site.register(ResourcesBag)
+admin.site.register(Donation)

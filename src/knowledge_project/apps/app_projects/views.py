@@ -7,6 +7,7 @@ from django.urls import reverse_lazy, reverse
 from ..app_users.models import User, UserRole
 from .models import *
 from .forms import *
+from decimal import Decimal
 
 
 def signout(request):
@@ -147,7 +148,7 @@ class CategoryDeleteView(DeleteView):
         return context
 
 
-class AnnouncementListView( ListView):
+class AnnouncementListView(ListView):
     model = Announcement
     template_name = "projects/announcements/announcements_list.html"
     context_object_name = "announcements"
@@ -308,3 +309,65 @@ class CompanyDetail(View):
                 "company_nit":company.nit,
             },
         )
+
+"""class DonationListView(ListView):
+    model = Donation
+    template_name = 'projects/donations/donations_list.html'
+    context_object_name = 'donations'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'donations'
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context['user_role'] = temp.role.name
+        return context"""
+
+class DonationCreateView(CreateView):
+    template_name = "projects/donations/create_donation.html"
+    form_class = DonationForm
+    context_object_name = 'resources'
+    success_url = reverse_lazy("home")
+    
+    def post(self, request, pk):
+        recurso = request.POST["recurso"]
+        canti = Decimal(request.POST["canti"])
+        descripcion = request.POST["descripcion"]
+        user = request.user
+        
+        project = Project.objects.get(id_project=pk)
+        
+        donation = Donation.objects.create(company_nit=project.company_nit, 
+                                           resource_id=Resource.objects.get(id_resource=recurso[0]), 
+                                           amount=canti, 
+                                           project_id=project,
+                                           description=descripcion)
+        
+        Donation.full_clean(donation)
+        
+        resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
+        cant_total = resourceBag.amount+canti
+        resourceBag.amount=cant_total
+        ResourcesBag.full_clean(resourceBag)
+        resourceBag.save() 
+        
+        print(resourceBag)
+
+        return redirect(
+            reverse("home")
+        )
+        
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project_pk = self.kwargs['pk']
+        requirements = Requirement.objects.filter(project_id=project_pk)
+        resources = [res.resource_id for res in requirements]
+        context["page_name"] = "resources"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        context['resources'] = resources
+        return context

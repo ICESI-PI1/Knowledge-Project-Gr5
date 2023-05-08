@@ -127,7 +127,7 @@ class ResourcesBag(models.Model):
         )
 
     def __str__(self):
-        return f"{self.project_id.name} - {self.resource_id.name} ({self.amount})"
+        return f"{self.project_id} - {self.resource_id.name} ({self.amount})"
 
 
 class Donation(models.Model):
@@ -136,6 +136,7 @@ class Donation(models.Model):
     resource_id = models.ForeignKey(Resource, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     project_id = models.ForeignKey("Project", on_delete=models.CASCADE)
+    description = models.TextField(blank=True)
 
     def clean(self):
         requirements = Requirement.objects.filter(project_id=self.project_id)
@@ -151,7 +152,7 @@ class Donation(models.Model):
             > requirements.get(resource_id=self.resource_id).objective
         ):
             raise ValidationError(
-                "La donación excede la cantidad requerida para el proyecto"
+                "La donación excede la cantidad requerida para el proyecto."
             )
 
     def __str__(self):
