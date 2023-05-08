@@ -450,13 +450,21 @@ class UserCompanyModelTestCase(TestCase):
 
 class HomeViewTestCase(TestCase):
     def setUp(self):
+        self.user_cc = "1234567890"
+        self.password = "123"
         self.user = User.objects.create_user(
-            username="testuser", email="testuser@example.com", password="password"
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
         )
+        self.user.save()
         self.user_role = UserRole.objects.create(user=self.user, role="admin")
 
     def test_home_view_authenticated_user(self):
-        self.client.login(username="testuser", password="password")
+        self.client.login(username=self.user_cc, password=self.password)
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Welcome to the home page!")
@@ -470,15 +478,23 @@ class HomeViewTestCase(TestCase):
         
 class ResourceListViewTestCase(TestCase):
     def setUp(self):
+        self.user_cc = "1234567890"
+        self.password = "123"
         self.user = User.objects.create_user(
-            username="testuser", email="testuser@example.com", password="password"
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
         )
+        self.user.save()
         self.user_role = UserRole.objects.create(user=self.user, role="admin")
         self.resource1 = Resource.objects.create(name="Resource 1", description="Description of Resource 1")
         self.resource2 = Resource.objects.create(name="Resource 2", description="Description of Resource 2")
 
     def test_resource_list_view_authenticated_user(self):
-        self.client.login(username="testuser", password="password")
+        self.client.login(username=self.user_cc, password=self.password)
         response = self.client.get(reverse("resources"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Resource 1")
@@ -494,14 +510,22 @@ class ResourceListViewTestCase(TestCase):
 class ResourceCreateViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
         self.user = User.objects.create_user(
-            username="testuser", email="testuser@test.com", password="testpass"
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
         )
+        self.user.save()
         self.resource_create_url = reverse("resource-create")
         UserRole.objects.create(user=self.user, role="admin")
 
     def test_resource_create_view_success(self):
-        self.client.login(username="testuser", password="testpass")
+        self.client.login(username=self.user_cc, password=self.password)
         data = {
             "name": "Test Resource",
             "description": "A test resource",
@@ -520,7 +544,7 @@ class ResourceCreateViewTestCase(TestCase):
         self.assertRedirects(response, "/accounts/login/?next=/resources/create/")
 
     def test_resource_create_view_not_authorized(self):
-        self.client.login(username="testuser", password="testpass")
+        self.client.login(username=self.user_cc, password=self.password)
         UserRole.objects.filter(user=self.user).update(role="viewer")
         response = self.client.get(self.resource_create_url)
         self.assertEqual(response.status_code, 403)  # Should be forbidden
@@ -530,36 +554,42 @@ class ResourceCreateViewTestCase(TestCase):
 class ResourceUpdateViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
         self.user = User.objects.create_user(
-            username="testuser", email="testuser@test.com", password="testing"
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
         )
+        self.user.save()
+        self.role1=Role.objects.create(name="admin")
         self.role = UserRole.objects.create(
-            user=self.user, role="admin"
+            user=self.user, role=self.role1
         )
         self.resource = Resource.objects.create(
-            name="Test Resource",
-            description="This is a test resource",
-            quantity=5
+            name="Test Resource"
         )
         
     def test_resource_update_view_accessible_by_admin(self):
-        self.client.login(username="testuser", password="testing")
-        response = self.client.get(reverse("resource-update", args=[self.resource.pk]))
+        self.client.login(username=self.user_cc, password=self.password)
+        response = self.client.get(reverse("resources-update", args=[self.resource.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "projects/resources/resources_form.html")
         
     def test_resource_update_view_redirects_to_login_page_for_anonymous_user(self):
-        response = self.client.get(reverse("resource-update", args=[self.resource.pk]))
+        response = self.client.get(reverse("resources-update", args=[self.resource.pk]))
         self.assertRedirects(response, "/accounts/login/?next=/resources/update/{}/".format(self.resource.pk))
         
     def test_resource_update_view_redirects_to_resource_list_on_successful_update(self):
-        self.client.login(username="testuser", password="testing")
+        self.client.login(username=self.user_cc, password=self.password)
+
         response = self.client.post(
-            reverse("resource-update", args=[self.resource.pk]),
+            reverse("resources-update", args=[self.resource.pk]),
             {
                 "name": "Updated Test Resource",
-                "description": "This is an updated test resource",
-                "quantity": 10,
             },
         )
         self.assertRedirects(response, reverse("resources-list"))
@@ -568,13 +598,11 @@ class ResourceUpdateViewTestCase(TestCase):
         self.assertEqual(Resource.objects.get(pk=self.resource.pk).quantity, 10)
         
     def test_resource_update_view_does_not_update_on_form_errors(self):
-        self.client.login(username="testuser", password="testing")
+        self.client.login(username=self.user_cc, password=self.password)
         response = self.client.post(
-            reverse("resource-update", args=[self.resource.pk]),
+            reverse("resources-update", args=[self.resource.pk]),
             {
                 "name": "",
-                "description": "This is an updated test resource",
-                "quantity": 10,
             },
         )
         self.assertEqual(response.status_code, 200)
@@ -634,18 +662,27 @@ class TestCreateCompanyView(TestCase):
 class DonationCreateViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
         self.user = User.objects.create_user(
-            username='testuser', email='testuser@example.com', password='testpassword')
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
         self.project = Project.objects.create(
             name='Test Project', description='This is a test project', company_nit='123456')
         self.resource = Resource.objects.create(
             name='Test Resource', description='This is a test resource')
         self.requirement = Requirement.objects.create(
             project=self.project, resource=self.resource, amount=10)
+        self.role1=Role.objects.create(name="member")
         self.user_role = UserRole.objects.create(
-            user=self.user, project=self.project, role='member')
+            user=self.user, project=self.project, role=self.role1)
         self.url = reverse('donation-create', args=[self.project.pk])
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username=self.user_cc, password=self.password)
 
     def test_donation_create(self):
         data = {
