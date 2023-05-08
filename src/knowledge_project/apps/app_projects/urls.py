@@ -17,6 +17,7 @@ urlpatterns = [
     path('projects/categories/<int:pk>/update/', login_required(CategoryUpdateView.as_view()), name='categories-update'),
     path('projects/categories/<int:pk>/delete/', login_required(CategoryDeleteView.as_view()), name='categories-delete'),
     #---------------- Announcements -------------
+    path('projects/announcements/categories', login_required(AnnouncementCategoriesListView.as_view()), name='announcements-categories'),
     path('projects/announcements/', login_required(AnnouncementListView.as_view()), name='announcements-list'),
     path('projects/announcements/create/', login_required(AnnouncementListView.as_view()), name='announcements-create'),
     path('projects/announcements/<int:pk>/update/', login_required(AnnouncementListView.as_view()), name='announcements-update'),

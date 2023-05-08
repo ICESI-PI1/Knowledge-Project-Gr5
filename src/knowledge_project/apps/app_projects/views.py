@@ -147,6 +147,63 @@ class CategoryDeleteView(DeleteView):
         context["user_role"] = temp.role.name
         return context
 
+class AnnouncementCategoriesListView(ListView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_select_category.html"
+    context_object_name = "announcements"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'announcement'
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context['user_role'] = temp.role.name
+        context["user_name"] = temp.user.full_name
+        context['categories'] = Category.objects.all()
+        return context
+
+class AnnouncementCreateView(CreateView):
+    template_name = "projects/announcements/announcements_form.html"
+    form_class = AnnouncementForm
+
+    success_url = reverse_lazy("announcements-list")
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+    
+class AnnouncementUpdateView(UpdateView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_form.html"
+    form_class = AnnouncementForm
+    success_url = reverse_lazy("announcements-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+
+class AnnouncementDeleteView(DeleteView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_confirm_delete.html"
+    success_url = reverse_lazy("announcements-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
 
 class AnnouncementListView(ListView):
     model = Announcement
