@@ -1,13 +1,12 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from ..app_users.models import User, UserRole
-from .models import Resource, Category, Announcement, Company
-from .models import Resource, Category, Project, UserCompany, Requirement, ResourcesBag
-from .forms import ResourceForm, CategoryForm
+from .models import *
+from .forms import *
 
 
 def signout(request):
@@ -19,6 +18,7 @@ class HomeView(View):
     def get(self, request):
         page_name = "home"
         temp_user = get_object_or_404(UserRole, user=request.user)
+        user_name = temp_user.user.full_name
         user_role = temp_user.role.name
 
         template_name = "projects/home.html"
@@ -28,6 +28,7 @@ class HomeView(View):
             {
                 "user_role": user_role,
                 "page_name": page_name,
+                "user_name": user_name,
             },
         )
 
@@ -42,6 +43,7 @@ class ResourceListView(ListView):
         context["page_name"] = "resources"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -60,6 +62,7 @@ class ResourceCreateView(CreateView):
         context["page_name"] = "resources"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -74,6 +77,7 @@ class ResourceUpdateView(UpdateView):
         context["page_name"] = "resources"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -87,6 +91,7 @@ class ResourceDeleteView(DeleteView):
         context["page_name"] = "resources"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -100,6 +105,7 @@ class CategoryListView(ListView):
         context["page_name"] = "categories"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -118,6 +124,7 @@ class CategoryCreateView(CreateView):
         context["page_name"] = "categories"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -132,6 +139,7 @@ class CategoryUpdateView(UpdateView):
         context["page_name"] = "categories"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
@@ -145,10 +153,27 @@ class CategoryDeleteView(DeleteView):
         context["page_name"] = "categories"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["user_name"] = temp.user.full_name
         return context
 
 
-class AnnouncementListView( ListView):
+class AnnouncementCategoriesListView(ListView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_select_category.html"
+    context_object_name = "announcements"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'announcement'
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context['user_role'] = temp.role.name
+        context["user_name"] = temp.user.full_name
+        context['categories'] = Category.objects.all()
+        return context
+
+
+class AnnouncementListView(ListView):
     model = Announcement
     template_name = "projects/announcements/announcements_list.html"
     context_object_name = "announcements"
@@ -158,7 +183,6 @@ class AnnouncementListView( ListView):
         category_id = self.request.GET.get('category', None)
         if category_id:
             queryset = queryset.filter(category__id_category=category_id)
-
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -167,14 +191,83 @@ class AnnouncementListView( ListView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context['user_role'] = temp.role.name
         context['categories'] = Category.objects.all()
+
+        category_id = self.request.GET.get('category', None)
+        category_name = None
+        categ = None
+        if category_id:
+            try:
+                category = Category.objects.get(id_category=category_id)
+                categ = category
+                category_name = category.name
+            except Category.DoesNotExist:
+                pass
+        context['current_category_name'] = category_name
+        context['category'] = categ
         return context
 
+class AnnouncementCreateView(CreateView):
+    template_name = "projects/announcements/announcements_form.html"
+    form_class = AnnouncementForm
+
+    success_url = reverse_lazy("announcements-list")
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+    
+class AnnouncementUpdateView(UpdateView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_form.html"
+    form_class = AnnouncementForm
+    success_url = reverse_lazy("announcements-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+
+class AnnouncementDeleteView(DeleteView):
+    model = Announcement
+    template_name = "projects/announcements/announcements_confirm_delete.html"
+    success_url = reverse_lazy("announcements-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+
+class AnnouncementProjectListView(ListView):
+    model = AnnouncementProject
+    template_name = 'projects/announcements/announcementProjects_list.html'
+    context_object_name = 'projects'
+
+    def get_queryset(self):
+        announcement_id = self.kwargs['pk'] 
+        announcement = Announcement.objects.get(id_announ=announcement_id) 
+        announcement_projects = AnnouncementProject.objects.filter(announcement=announcement) 
+        projects = [ap.project for ap in announcement_projects] 
+        return projects
 
 class ProjectCreateView(View):
     def get(self, request):
         page_name = "project"
         temp_user = get_object_or_404(UserRole, user=request.user)
         user_role = temp_user.role.name
+        user_name = temp_user.user.full_name
         categories = Category.objects.all()
 
         print(f"Usuario logued:\n{request.user}")
@@ -187,6 +280,7 @@ class ProjectCreateView(View):
                 "user_role": user_role,
                 "page_name": page_name,
                 "categories": categories,
+                "user_name":user_name,
             },
         )
 
@@ -218,6 +312,7 @@ class Requirements2ProjectView(View):
         page_name = "requirements"
         temp_user = get_object_or_404(UserRole, user=request.user)
         user_role = temp_user.role.name
+        user_name = temp_user.user.full_name
 
         resourses = Resource.objects.all()
 
@@ -235,6 +330,7 @@ class Requirements2ProjectView(View):
                 "resourses": resourses,
                 "requirements": requirements,
                 "project": project,
+                "user_name":user_name,
             },
         )
 
@@ -264,6 +360,7 @@ class CompanyRegistration(View):
         return render(request, template_name,{"page_name": page_name,})
     
     def post(self,request):
+        temp_user = get_object_or_404(UserRole, user=request.user)
         #Obtener datos del formulario
         name = request.POST["Name"]
         nit  = request.POST["Nit"]
@@ -278,11 +375,23 @@ class CompanyRegistration(View):
             phone = phone,
             logo = logo,
         )
+        company.save()
+        
+        user_company=UserCompany.objects.create(
+            user=request.user,
+            company=company,
+        )
+        user_company.save()
+        
+        temp_user.user.role = '3'
+        temp_user.user.save()
+        
         #Redirigir a la ventana home
         return redirect("home")   
     
 class CompanyDetail(View):
     def get(self , request):
+        page_name = "Company detail"
         company_nit = UserCompany.objects.get(user=request.user).company
         company = Company.objects.filter(nit = company_nit).first
         template_name = "company\detailCompany.html"
@@ -290,10 +399,30 @@ class CompanyDetail(View):
             request,
             template_name,
             {
+                "page_name": page_name,
                 "company_logo":company.logo,
                 "company_name":company.name,
                 "company_address":company.address,
                 "company_phone":company.phone,
                 "company_nit":company.nit,
+            },
+        )
+
+class UserDetail(View):
+    def get(self , request):
+        page_name = "User detail"
+        user = User.objects.filter(user_cc=request.user.user_cc).first
+        template_name = "user\detailUser.html"
+        return render(
+            request,
+            template_name,
+            {
+                "page_name": page_name,
+                "profile_pic":user.photo,
+                "user_name":user.full_name,
+                "user_email":user.email,
+                "user_phone":user.phone,
+                "user_cc":user.user_cc,
+                "birth_date":user.birth_date,
             },
         )

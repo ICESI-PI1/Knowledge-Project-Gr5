@@ -79,4 +79,6 @@ class UserRegistration(CreateView):
         user.save()
 
         return redirect("login")
+    
+
 

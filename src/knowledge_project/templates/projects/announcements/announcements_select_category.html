@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>{% block title %}Título de la página{% endblock %}</title>
+    {% block head %}
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/announcement_style.css' %}"/>
+    {% endblock %}
+  </head>
+  <body>
+    
+    <div class="content">
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar la categoría" />
+        <div class="btn">
+          <i class="fa fa-search"></i>
+        </div>
+      </div>
+      <h2>Convocatorias</h2>
+      <div class="grid">
+
+        {% for category in categories %}
+        <div class="category-item category-btn" id="category-btn-{{ category.id_category }}">
+          <img class="img" src="../../../{{ category.photo }}" alt="{{ category.name }}">
+          <h4>{{ category.name }}</h4>
+        </div>
+        {% endfor %}
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js">//Library importation</script>
+        <script>
+          $(document).ready(function() {
+            $('.category-btn').click(function() {
+              var categoryId = $(this).attr('id').split('-')[2];
+              var url = 'select?category=' + categoryId;  // Setting the filter URL
+              window.location.href = url;
+            });
+          });
+          
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
+
+{% endblock %}

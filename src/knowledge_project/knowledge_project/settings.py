@@ -80,7 +80,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "Knowledge_Projects.db",
+    },
+    "test": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME":"test.db",
     }
+
 }
 
 

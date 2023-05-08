@@ -18,7 +18,7 @@
   <body>
     <div class="wrapper">
       <nav>
-        <a class="logout-btn" href="{% url 'logout' %}">Salir</a>
+        <!-- <a class="logout-btn" href="{% url 'logout' %}">Salir</a> -->
 
         <input type="checkbox" id="check" />
         <label for="check" class="checkbtn">
@@ -39,23 +39,63 @@
             {% else %}
               <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
               <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="#">Usuarios</a></li>
-              <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-list' %}">Convocatorias</a></li>
+              <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-categories' %}">Convocatorias</a></li>
               <li class="{% if page_name == 'companies' %}active{% endif %}"><a class="{% if page_name == 'companies' %}active{% endif %}" href="#">Empresas</a></li>
             {% endif %}
           {% elif user_role ==  'common_user' %}
             <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
-            <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+            <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-categories' %}">Convocatorias</a></li>
             <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
-            <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+            <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="{% url 'register_company' %}">Empresa</a></li>
           
           {% elif user_role ==  'company_user' %}
             <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
-            <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="#">Convocatorias</a></li>
+            <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-categories' %}">Convocatorias</a></li>
             <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
-            <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="#">Empresa</a></li>
+            <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="{% url 'company_detail' %}">Empresa</a></li>
 
           {% endif %}
         </ul>
+
+        <img src="{% static 'img\nav-bar-icons\profile.png' %}" class="profile_pic" onclick="toggleMenu()">
+
+        <div class="sub_menu_wrap" id="subMenu">
+          <div class="sub_menu">
+            <div class="user_info">
+              <img src="{% static 'img\nav-bar-icons\profile.png' %}">
+              <h3>{{user_name}}</h3>
+            </div>
+            <hr>
+
+            <a href="{% url 'user_detail' %}" class="sub_menu_link">
+              <img src="{% static 'img\nav-bar-icons\profile.png' %}">
+              <p>Detalle de perfil</p>
+              <span>></span>
+            </a>
+
+            <a 
+            {% if user_role ==  'company_user' %}
+              href="{% url 'company_detail' %}" 
+            {% else %} 
+              href="{% url 'register_company' %}"
+            {% endif %}
+              class="sub_menu_link"
+            >
+              <img src="{% static 'img\nav-bar-icons\company.png' %}">
+              <p>Detalle de compañia</p>
+              <span>></span>
+            </a>
+            
+
+            <a href="{% url 'logout' %}" class="sub_menu_link">
+              <img src="{% static 'img\nav-bar-icons\logout.png' %}">
+              <p>Cerrar sesion</p>
+              <span>></span>
+            </a>
+
+          </div>
+        </div>
+
       </nav>
 
       <div class="content">
@@ -90,7 +130,7 @@
               <h4>Ayuda</h4>
 
               <ul>
-                <li><a href="#">Preguntas fracuentes</a></li>
+                <li><a href="#">Preguntas frecuentes</a></li>
                 <li><a href="#">Soporte técnico</a></li>
                 <li><a href="#">Código abierto</a></li>
                 <li><a href="#">Nuestro equipo</a></li>
@@ -121,5 +161,13 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      let subMenu = document.getElementById("subMenu");
+      function toggleMenu(){
+        subMenu.classList.toggle("open-menu");
+      }
+    </script>
+
   </body>
 </html>
