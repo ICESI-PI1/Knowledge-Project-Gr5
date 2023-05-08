@@ -12,97 +12,75 @@
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
-    <link
-      rel="stylesheet"
-      href="{% static 'css/projects/announcement_style.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'css/projects/crud.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/announcement_style.css' %}" />
     {% endblock %}
   </head>
   <body>
-<<<<<<<< HEAD:src/knowledge_project/templates/projects/announcement/announcement.html
-========
     
+    {% if user_role == 'page_manager' %}
+    <div class="main-title">
+      <h1>Convocatorias {% if current_category_name %} de {{ current_category_name }} {% else %} abiertas {% endif %}</h1>
+    </div>
+    <a class="btn new-item" href="{% url 'announcements-create' %}">Nueva Convocatoria
+      <img src="{% static 'img/plus.png' %}" class="plus-symbol">
+    </a>
     <form method="get">
-      <label for="category">Filtrar por categoría:</label>
-      <select name="category" id="category">
-        <option value="">Todas las categorías</option>
-        {% for category in categories %}
-          <option value="{{ category.id_category }}" {% if category.id_category|stringformat:"s" == request.GET.category %}selected{% endif %}>{{ category.name }}</option>
-        {% endfor %}
-      </select>
-      <button type="submit">Filtrar</button>
+      <div>
+        <button class="btn-primary"> Todas las categorías </button>
+      </div>
     </form>
-
-    <h1>Categorías de Convocatorias</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Fecha de inicio</th>
-        <th>Fecha de finalización</th>
-        <th>Categoría</th>
-        <th>Opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for announcement in announcements %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha de inicio</th>
+          <th>Fecha de finalización</th>
+          <th>Categoría</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for announcement in announcements %}
         <tr>
           <td>{{ announcement.id_announ }}</td>
           <td>{{ announcement.init_date }}</td>
           <td>{{ announcement.end_date }}</td>
           <td>{{ announcement.category }}</td>
           <td>
-            <a href="{% url 'announcements-update' announcement.id_announ %}">Editar</a>
-            <a href="{% url 'announcements-delete' announcement.id_announ %}">Eliminar</a>
+            <a class="btn edit" href="{% url 'announcements-update' announcement.id_announ %}"
+              ><i class="fa-solid fa-pen-to-square"></i></a
+            >
+            <a class="btn delete" href="{% url 'announcements-delete' announcement.id_announ %}"
+              ><i class="fa-solid fa-trash"></i></a
+            >
           </td>
         </tr>
-      {% empty %}
+        {% empty %}
         <tr>
-          <td colspan="5">No hay anuncios disponibles.</td>
+          <td colspan="5">No hay convocatorias {% if current_category_name %} de {{ current_category_name }} {% else %} abiertas {% endif %} disponibles.</td>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <a href="{% url 'announcements-create' %}">Crear nuevo anuncio</a>
-
-
->>>>>>>> organized-directory-project:src/knowledge_project/templates/projects/announcements/announcements_list.html
-
-    <div class="content">
-      <div class="search-bar">
-        <input type="text" placeholder="Buscar la categoría" />
-        <div class="btn">
-          <i class="fa fa-search"></i>
-        </div>
-      </div>
-      <h2>Convocatorias</h2>
-      <div class="grid">
-        <div class="category-item">
-          <img class="img" src="{% static 'img/announcement_imgs/tecnologia.png' %}" />
-          <h4>Tecnología</h4>
-        </div>
-        <div class="category-item">
-          <img class="img" src="{% static 'img/announcement_imgs/videojuegos.png' %}" />
-          <h4>Videojuegos</h4>
-        </div>
-        <div class="category-item">
-          <img class="img" src="{% static 'img/announcement_imgs/sociedad.png' %}" />
-          <h4>Sociedad</h4>
-        </div>
-        <div class="category-item">
-          <img class="img" src="{% static 'img/announcement_imgs/agronomia.png' %}" />
-          <h4>Agronomía</h4>
-        </div>
-        <div class="category-item">
-          <img class="img" src="{% static 'img/announcement_imgs/educacion.png' %}" />
-          <h4>Educación</h4>
-        </div>
-        <div class="category-item">
-          <img class="img" src="{% static 'img/announcement_imgs/salud.png' %}" />
-          <h4>Salud</h4>
-        </div>
-      </div>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <img class="img" src="../../../{{ category.photo }}" alt="{{ category.name }}" width="100">
+    <div class="main-title">
+      <h1>Convocatorias de {{ current_category_name }}</h1>
     </div>
+      <ul class="announcements-list">
+
+        {% for announcement in announcements %}
+          <a href="#"><li>{{ announcement.init_date }} - {{ announcement.end_date }}</li></a>
+          
+          {% empty %}
+          <li>No hay convocatorias {% if current_category_name %} de {{ current_category_name }} {% else %} abiertas {% endif %} disponibles.</li>
+        {% endfor %}
+
+      </ul>
+
+    {% endif %}
+    
   </body>
 </html>
 

@@ -1,15 +1,5 @@
 from django.contrib import admin
-from .models import (
-    Resource,
-    Category,
-    Company,
-    UserCompany,
-    Project,
-    Announcement,
-    AnnouncementProject,
-    Requirement,
-    ResourcesBag,
-)
+from .models import *
 
 admin.site.register(Resource)
 admin.site.register(Category)

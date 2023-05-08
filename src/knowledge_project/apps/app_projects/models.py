@@ -74,6 +74,12 @@ class Announcement(models.Model):
     end_date = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     def clean(self):
+        if self.init_date is None:
+            raise ValidationError("La fecha de inicio no puede ser nula")
+
+        if self.end_date is None:
+            raise ValidationError("La fecha de finalización no puede ser nula")
+
         if self.init_date < timezone.now().date():
             raise ValidationError(
                 "La fecha de inicio no puede ser anterior a la fecha actual "
