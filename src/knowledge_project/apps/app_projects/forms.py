@@ -20,16 +20,11 @@ class CategoryForm(forms.ModelForm):
         
 class AnnouncementForm(forms.ModelForm):
     class Meta:
-        model = Announcement
-        fields = ['id_announ', 'init_date', 'end_date', 'category']
+        model = Donation
+        fields = ['amount', 'description']
         labels = {
-            'init_date':'Fecha de inicio',
-            'end_date':'Fecha de finalización',
-            'category':'Categoría',
-        }
-        widgets = {
-            'init_date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
-            'end_date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
+            'amount':'Cantidad',
+            'description':'Ingresa una descripción sobre la donación que realizarás.',
         }
         
 class DonationForm(forms.ModelForm):

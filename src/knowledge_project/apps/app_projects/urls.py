@@ -17,11 +17,10 @@ urlpatterns = [
     path('projects/categories/<int:pk>/update/', login_required(CategoryUpdateView.as_view()), name='categories-update'),
     path('projects/categories/<int:pk>/delete/', login_required(CategoryDeleteView.as_view()), name='categories-delete'),
     #---------------- Announcements -------------
-    path('projects/announcements/categories', login_required(AnnouncementCategoriesListView.as_view()), name='announcements-categories'),
-    path('projects/announcements/select', login_required(AnnouncementListView.as_view()), name='announcements-list'),
-    path('projects/announcements/create/', login_required(AnnouncementCreateView.as_view()), name='announcements-create'),
-    path('projects/announcements/<int:pk>/update/', login_required(AnnouncementUpdateView.as_view()), name='announcements-update'),
-    path('projects/announcements/<int:pk>/delete/', login_required(AnnouncementDeleteView.as_view()), name='announcements-delete'),
+    path('projects/announcements/', login_required(AnnouncementListView.as_view()), name='announcements-list'),
+    path('projects/announcements/create/', login_required(AnnouncementListView.as_view()), name='announcements-create'),
+    path('projects/announcements/<int:pk>/update/', login_required(AnnouncementListView.as_view()), name='announcements-update'),
+    path('projects/announcements/<int:pk>/delete/', login_required(AnnouncementListView.as_view()), name='announcements-delete'),
     path('projects/announcements/<int:pk>/projects/', login_required(AnnouncementProjectListView.as_view()), name='announcementProjects-list'),
     #---------------- Projects -------------
     path('projects/project/create/', login_required(ProjectCreateView.as_view()), name='project-create'),
