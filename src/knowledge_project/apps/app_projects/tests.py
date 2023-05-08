@@ -413,3 +413,30 @@ class DonationModelTestCase(TestCase):
             " Donación de Nombre de la compañía - Nombre del recurso (30.0)"
         )
 
+
+class UserCompanyModelTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            user_cc="1234567890",
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+            password="testpassword"
+        )
+        self.company = Company.objects.create(
+            nit="123456789",
+            phone="12345678",
+            address="Dirección de la compañía",
+            name="Nombre de la compañía",
+        )
+
+    def test_user_company_creation(self):
+        user_company = UserCompany.objects.create(
+            user=self.user,
+            company=self.company
+        )
+
+        self.assertEqual(UserCompany.objects.count(), 1)
+        self.assertEqual(user_company.user, self.user)
+        self.assertEqual(user_company.company, self.company)

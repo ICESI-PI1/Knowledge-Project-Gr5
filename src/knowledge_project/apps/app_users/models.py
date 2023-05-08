@@ -56,8 +56,7 @@ class Role(models.Model):
 class UserRole(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
-
-    def __str___(self):
-        return f"{self.user} - Rol:  {self.role}"
+    def __str__(self):
+        return f"{self.user.full_name} - Rol: {self.role.name}"
     
 
