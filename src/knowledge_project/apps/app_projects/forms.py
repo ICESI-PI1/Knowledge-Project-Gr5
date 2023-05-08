@@ -30,8 +30,9 @@ class AnnouncementForm(forms.ModelForm):
 class DonationForm(forms.ModelForm):
     class Meta:
         model = Donation
-        fields = ['amount', 'description']
+        fields = ['resource_id','amount', 'description']
         labels = {
+            'resource_id':'Recurso',
             'amount':'Cantidad',
             'description':'Ingresa una descripción sobre la donación que realizarás.',
         }

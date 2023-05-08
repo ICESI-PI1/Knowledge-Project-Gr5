@@ -36,9 +36,9 @@
           <div class="signup-container">
             <form class="form" method="POST">
               {% csrf_token %}
-              <label for="recurso">RECURSO</label>
+              <label for="resource_id">RECURSO</label>
               <div class="select">
-                <select name="recurso" id="recurso">
+                <select name="resource_id" id="resource_id">
                   <option selected disabled>Selecciona un recurso</option>
                   {% for resource in resources %}
                     <option>{{resource.id_resource}}. {{ resource.name }}</option>                   
@@ -48,22 +48,22 @@
                 </select>
               </div>
               <p>
-                <label for="canti">Cantidad</label>
+                <label for="amount">Cantidad</label>
                 <textarea
                   class="input"
                   type="text"
-                  name="canti"
-                  id="canti"
+                  name="amount"
+                  id="amount"
                 ></textarea>
               </p>
               <p>
-                <label for="descripcion">DESCRIPCIÓN</label>
+                <label for="description">DESCRIPCIÓN</label>
                 <textarea
                   class="input"
                   placeholder="Ingresa una descripción sobre la donación que realizarás."
                   type="text"
-                  name="descripcion"
-                  id="descripcion"
+                  name="description"
+                  id="description"
                 ></textarea>
               </p>
               <div class="options">
