@@ -737,3 +737,59 @@ class DonationCreateViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(Donation.objects.count(), 0)
             self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
+
+class AnnouncementCategoriesListViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role=Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.category = Category.objects.create(name="Test Category")
+        self.announcement = Announcement.objects.create(init_date=datetime.now(),end_date=datetime.now()+timedelta(days=10), category=self.category)
+        self.client.force_login(self.user)
+
+        
+
+    def test_get(self):
+        # Realizar la solicitud GET a la vista de lista de categorías de anuncios
+        response = self.client.get(reverse("announcements-categories"))
+
+        # Verificar que la respuesta tenga un código de estado exitoso (200)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar que el template utilizado sea "projects/announcements/announcements_select_category.html"
+        self.assertTemplateUsed(response, "projects/announcements/announcements_select_category.html")
+
+        # Verificar que el contexto contenga una lista de anuncios
+        self.assertIn("announcements", response.context)
+
+        # Verificar que el contexto contenga el nombre de la página como "announcement"
+        self.assertEqual(response.context["page_name"], "announcement")
+
+        # Verificar que el contexto contenga el rol del usuario
+        self.assertIn("user_role", response.context)
+
+        # Verificar que el contexto contenga el nombre completo del usuario
+        self.assertIn("user_name", response.context)
+
+        # Verificar que el contexto contenga una lista de categorías de anuncios
+        self.assertIn("categories", response.context)
+
+    def test_get_context_data(self):
+        # Realizar la solicitud GET a la vista de lista de categorías de anuncios
+        response = self.client.get(reverse("announcements-categories"))
+
+        # Verificar que el contexto contenga una lista de categorías de anuncios
+        self.assertIn("categories", response.context)
+
+        # Verificar que la lista de categorías de anuncios en el contexto sea igual a todas las categorías en la base de datos
+        self.assertQuerysetEqual(response.context["categories"], Category.objects.all(), ordered=False)
