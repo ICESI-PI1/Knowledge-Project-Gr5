@@ -737,5 +737,3 @@ class DonationCreateViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(Donation.objects.count(), 0)
             self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
-        
-
