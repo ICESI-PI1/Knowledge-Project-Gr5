@@ -42,7 +42,7 @@ class UserDetail(View):
             template_name,
             {
                 "page_name": page_name,
-                "profile_pic":user.photo.url,
+                "profile_pic":user.photo,
                 "user_name":user.full_name,
                 "user_email":user.email,
                 "user_phone":user.phone,
@@ -373,7 +373,20 @@ class Requirements2ProjectView(View):
                 print(f"Error: {e}")
 
         return redirect(reverse("project-create-requirements", args=[project_id]))
-    
+
+
+def requitements_delete(request, project_id, resource_id):
+
+    project = get_object_or_404(Project, id_project=project_id)
+    resource = get_object_or_404(Resource, id_resource=resource_id)
+
+    requirement = Requirement.objects.get(project_id=project, resource_id=resource)
+    requirement.delete()
+    resources_bag = ResourcesBag.objects.get(project_id=project, resource_id=resource)
+    resources_bag.delete()
+
+    return redirect(reverse("project-create-requirements", args=[project_id]))
+
 #--------------- Companies --------------------
 
 class CompanyRegistration(View):
@@ -468,38 +481,41 @@ class CompanyDeleteView(DeleteView):
         return context
 
 #--------------- Donations --------------------
-    
+
 class DonationCreateView(CreateView):
     template_name = "projects/donations/create_donation.html"
     form_class = DonationForm
     context_object_name = 'resources'
     success_url = reverse_lazy("home")
-    
+
     def post(self, request, pk):
         recurso = request.POST["resource_id"]
         amountDonated = Decimal(request.POST["amount"])
         descriptionAs = request.POST["description"]
         user = request.user
-        
+
         project = Project.objects.get(id_project=pk)
-        
-        donation = Donation.objects.create(company_nit=project.company_nit, 
-                                           resource_id=Resource.objects.get(id_resource=recurso[0]), 
-                                           amount=amountDonated, 
+
+        donation = Donation.objects.create(company_nit=project.company_nit,
+                                           resource_id=Resource.objects.get(id_resource=recurso[0]),
+                                           amount=amountDonated,
                                            project_id=project,
                                            description=descriptionAs)
-        
-        Donation.full_clean(donation)
-        
-        resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
-        cant_total = resourceBag.amount+amountDonated
-        resourceBag.amount=cant_total
-        resourceBag.save() 
+
+        try:
+            Donation.full_clean(donation)
+            resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
+            cant_total = resourceBag.amount+amountDonated
+            resourceBag.amount=cant_total
+            resourceBag.save()
+        except ValidationError:
+            donation.delete()
+
 
         return redirect(
             reverse("home")
         )
-        
+
 
     def form_valid(self, form):
         # Realizar las operaciones necesarias antes de guardar el objeto
