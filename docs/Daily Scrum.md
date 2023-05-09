@@ -5,7 +5,7 @@
 * *Geovanny Quintero Velez:* 
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Nada
 
 **¿Qué harás hoy?**
 
@@ -13,7 +13,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Investigar como realizar test en django
 
 **¿Tienes algún impedimento o problema?**
 
@@ -21,7 +21,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:*No
 
 ## Fecha: 19/04/2023
 **¿Qué hiciste ayer?**
@@ -30,7 +30,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Nada
 
 **¿Qué harás hoy?**
 
@@ -38,7 +38,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Nada
 
 **¿Tienes algún impedimento o problema?**
 
@@ -46,7 +46,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Se han presentado parciales y se me dificulto avanzar en el proyecto
 
 ## Fecha: 24/04/2023
 **¿Qué hiciste ayer?**
@@ -55,7 +55,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Empeze a realizar los test de la db
 
 **¿Qué harás hoy?**
 
@@ -63,7 +63,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Terminar los test de la db
 
 **¿Tienes algún impedimento o problema?**
 
@@ -71,7 +71,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* No
 
 ## Fecha: 25/04/2023
 **¿Qué hiciste ayer?**
@@ -80,7 +80,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Investigar como realizar test de las views
 
 **¿Qué harás hoy?**
 
@@ -88,7 +88,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Revisar soluciones anteriores
 
 **¿Tienes algún impedimento o problema?**
 
@@ -96,7 +96,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* No tengo conocimiento de html y poco entendimiento de django
 
 ## Fecha: 27/04/2023
 **¿Qué hiciste ayer?**
@@ -105,7 +105,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* No trabajé en el proyecto
 
 **¿Qué harás hoy?**
 
@@ -113,7 +113,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Investigare sobre django
 
 **¿Tienes algún impedimento o problema?**
 
@@ -121,7 +121,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Todavia no tengo buena compresnsión de como funciona django
 
 ## Fecha: 29/04/2023
 **¿Qué hiciste ayer?**
@@ -130,7 +130,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Empeze a rehacer algunos test de la db
 
 **¿Qué harás hoy?**
 
@@ -138,7 +138,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Continuar con los test de la db
 
 **¿Tienes algún impedimento o problema?**
 
@@ -146,7 +146,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* No
 
 ## Fecha: 01/04/2023
 **¿Qué hiciste ayer?**
@@ -155,7 +155,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Avance en algunos test de la db
 
 **¿Qué harás hoy?**
 
@@ -163,7 +163,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Avanzare en otros test de la db
 
 **¿Tienes algún impedimento o problema?**
 
@@ -171,7 +171,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:*No
 
 ## Fecha: 04/04/2023
 **¿Qué hiciste ayer?**
@@ -180,7 +180,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Empece a ddefinir como quedara AnnouncementProjects
 
 **¿Qué harás hoy?**
 
@@ -188,7 +188,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Terminar AnnouncementProjects
 
 **¿Tienes algún impedimento o problema?**
 
@@ -196,7 +196,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* No
 
 ## Fecha: 06/04/2023
 **¿Qué hiciste ayer?**
@@ -205,7 +205,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Avanzar en los test de la nueva db
 
 **¿Qué harás hoy?**
 
@@ -213,7 +213,7 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* Terminar los test de la nueva db
 
 **¿Tienes algún impedimento o problema?**
 
@@ -221,4 +221,4 @@
 * *Geovanny Quintero Velez:*
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:*
+* *Juan David Garzón:* No
