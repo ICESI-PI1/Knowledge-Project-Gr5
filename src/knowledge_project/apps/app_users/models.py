@@ -23,7 +23,8 @@ class UserManager(BaseUserManager):
     def create_superuser(self, user_cc, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        return self.create_user(user_cc, password, **extra_fields)
+        #Si falla eliminar el Role.objects.get(name='page_manager')
+        return self.create_user(user_cc, password, Role.objects.get(name='page_manager'),**extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):

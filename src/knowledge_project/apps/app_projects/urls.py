@@ -26,11 +26,13 @@ urlpatterns = [
     #---------------- Projects -------------
     path('projects/project/create/', login_required(ProjectCreateView.as_view()), name='project-create'),
     path("projects/project/create/<int:project_id>/requirements",login_required(Requirements2ProjectView.as_view()),name="project-create-requirements"),
+    path("projects/project/create/<int:project_id>/<int:requirement_id>/requirements/update", login_required(ProjectCreateView.as_view()), name='requirement-update'),
+    path("projects/project/create/<int:project_id>/<int:requirement_id>/requirements/delete", login_required(ProjectCreateView.as_view()), name='requirement-delete'),
     #---------------- Company -------------
     path('projects/company/create/',login_required(CompanyRegistration.as_view()),name = "register_company"),
     path('projects/company/detail/',login_required(CompanyDetail.as_view()),name = "company_detail"),
     path('projects/company/edit/',login_required(EditCompany.as_view()),name = "edit_company"),
-    path('projects/company/delete/',login_required(CompanyDeleteView.as_view()),name = "delete_company"),
+    path('projects/company/<int:pk>/delete/',login_required(CompanyDeleteView.as_view()),name = "delete_company"),
     #---------------- User -------------
     path('projects/user/detail/',login_required(UserDetail.as_view()),name = "user_detail"),
      #---------------- Donation --------------
