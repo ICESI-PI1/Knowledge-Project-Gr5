@@ -81,17 +81,9 @@
                     />
                   </p>
                     <div class="options">
-                        <button id="terminar" type="button" class="btn btn-signup">
+                        <button id="terminar" type="submit" class="btn btn-signup">
                             Terminar
                         </button>
-                        <script>
-                            var btnTerminar = document.getElementById("terminar");
-                            var miFormulario = document.getElementById("formulario");
-                
-                            btnTerminar.addEventListener("click", function () {
-                                miFormulario.submit();
-                            });
-                        </script>
                         <button href="{% url 'home' %}" id="cancelar" class="btn btn-cancel">Cancelar</button>
                     </div>
                 </form>
