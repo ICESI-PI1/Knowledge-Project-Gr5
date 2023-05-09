@@ -12,36 +12,56 @@
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/projects/crud.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/carousel.css' %}" />
     {% endblock %}
   </head>
   <body>
-    <div class="main-title">
-      <h1>Proyectos de la convocatoria</h1>
+    <div class="main-title float-left">
+      <h1>Proyectos - {{ current_category_name }}</h1>
     </div>
 
-
-    Nueva Categoria
-      <img src="{% static 'img/plus.png' %}" class="plus-symbol">
-    </a>
-    <table>
-      <tr>
-        <th>id</th>
-        <th>Nombre</th>
-        <th>Acciones</th>
-      </tr>
-    {% for project in projects %}
-      
-        <tr>
-            <td>{{ project.id_project }}</td>
-            <td>{{ project.title }}</td>
-            
-            
-        </tr>
-    {% empty %}
-        <li>No categories found.</li>
-    {% endfor %}
-    </table>
     
+    <div class="slider">
+      {% for project in projects %}
+      <input type="radio" name="slider" title="slide{{ forloop.counter }}" {% if forloop.first %}checked="checked"{% endif %} class="slider__nav" data-number="{{ forloop.counter|add:'-1' }}"/>
+      {% endfor %}
+      <div class="slider__inner" style="--projects-count: {{ projects|length }};">
+        <script>
+          const sliderNavs = document.querySelectorAll('.slider__nav');
+          const sliderInner = document.querySelector('.slider__inner');
+  
+          sliderNavs.forEach(nav => {
+            nav.addEventListener('change', () => {
+              const btnNumber = nav.getAttribute('data-number');
+              sliderInner.style.left = `calc(-100% * ${btnNumber})`;
+            });
+          });
+        </script>
+        {% for project in projects %}
+        <div class="slider__contents">
+          <h1 class="slider__caption">{{ project.title }}</h1>
+          <h2 class="slider__subtitle">{{ project.company_nit.name }}</h2>
+          <div class="slider__description">
+            <h2>Resumen de proyecto</h2>
+            <p class="slider__txt"><b>Objetivo: </b>{{ project.objective }}</p>
+            <p class="slider__txt"><b>Resultados: </b>{{ project.results }}</p>
+            <p class="slider__txt"><b>Alcance: </b>{{ project.reach }}</p>
+          </div>
+          <a class="slide__text-link">Aportar</a>
+        </div>
+        {% empty %}
+        <div class="slider__contents">
+          <h2>No se encontraron proyectos en esta convocatoria</h2>
+        </div>
+        
+        {% endfor %}
+        
+      </div>
+    </div>
+
+    
+
+
 
   </body>
 </html>
