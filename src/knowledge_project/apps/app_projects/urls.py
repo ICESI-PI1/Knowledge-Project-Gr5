@@ -26,8 +26,6 @@ urlpatterns = [
     #---------------- Projects -------------
     path('projects/project/create/', login_required(ProjectCreateView.as_view()), name='project-create'),
     path("projects/project/create/<int:project_id>/requirements",login_required(Requirements2ProjectView.as_view()),name="project-create-requirements"),
-    path("projects/project/create/<int:project_id>/<int:requirement_id>/requirements/update", login_required(ProjectCreateView.as_view()), name='requirement-update'),
-    path("projects/project/create/<int:project_id>/<int:requirement_id>/requirements/delete", login_required(ProjectCreateView.as_view()), name='requirement-delete'),
     #---------------- Company -------------
     path('projects/company/create/',login_required(CompanyRegistration.as_view()),name = "register_company"),
     path('projects/company/detail/',login_required(CompanyDetail.as_view()),name = "company_detail"),
