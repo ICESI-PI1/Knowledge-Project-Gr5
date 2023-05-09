@@ -180,7 +180,7 @@
 * *Geovanny Quintero Velez:* Terminé el crud de Company en las vistas html, css y class based views
 * *Johan Felipe Jojoa:*
 * *Gabriel Restrepo Giraldo:*
-* *Juan David Garzón:* Empece a ddefinir como quedara AnnouncementProjects
+* *Juan David Garzón:* Empece a definir como quedara AnnouncementProjects
 
 **¿Qué harás hoy?**
 
