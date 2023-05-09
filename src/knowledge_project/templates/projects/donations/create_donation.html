@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block content %} {% load static %} 
+{% extends 'base.html' %} {% block content %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Donate</title>
-    
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -16,14 +16,14 @@
     />
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/projects/create_donation.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/projects/create_donation_style.css' %}"
+    />
     {% endblock %}
   </head>
   <body>
     <div class="main-container">
-      <div class="back-btn">
-        <a href="#"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
-      </div>
       <div class="content">
         <div class="welcome-screen-container">
           <div class="message">
@@ -41,20 +41,22 @@
                 <select name="resource_id" id="resource_id">
                   <option selected disabled>Selecciona un recurso</option>
                   {% for resource in resources %}
-                    <option>{{resource.id_resource}}. {{ resource.name }}</option>                   
-                  {% empty %}
-                
-                  {% endfor %}
+                  <option>{{resource.id_resource}}. {{ resource.name }}</option>
+                  {% empty %} {% endfor %}
                 </select>
               </div>
               <p>
-                <label for="amount">Cantidad</label>
-                <textarea
+                <label for="objective">CANTIDAD</label>
+                <input
                   class="input"
-                  type="text"
+                  id="objective"
                   name="amount"
-                  id="amount"
-                ></textarea>
+                  placeholder="Ingresa un valor objetivo para el recurso"
+                  type="number"
+                  step="any"
+                  min="0"
+                  max="100"
+                />
               </p>
               <p>
                 <label for="description">DESCRIPCIÓN</label>
@@ -67,7 +69,7 @@
                 ></textarea>
               </p>
               <div class="options">
-                <button type="submit" class="btn btn-primary">Proceder</button>
+                <button type="submit" class="btn btn-add">Donar</button>
               </div>
             </form>
           </div>
