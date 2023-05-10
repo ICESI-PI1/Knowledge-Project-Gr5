@@ -23,7 +23,8 @@ class UserManager(BaseUserManager):
     def create_superuser(self, user_cc, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        return self.create_user(user_cc, password, **extra_fields)
+        #Si falla eliminar el Role.objects.get(name='page_manager')
+        return self.create_user(user_cc, password, Role.objects.get(name='page_manager'),**extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -32,7 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=10)
     birth_date = models.DateField()
-    photo = models.ImageField(upload_to="fotos", blank=True, null=True)
+    photo = models.ImageField(upload_to="static/img/users/", default='static/img/users/defautl_user.png', blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -58,5 +59,3 @@ class UserRole(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.user.full_name} - Rol: {self.role.name}"
-    
-

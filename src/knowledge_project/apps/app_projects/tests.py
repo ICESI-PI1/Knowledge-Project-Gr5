@@ -634,6 +634,7 @@ class ResourceDeleteViewTestCase(TestCase):
         self.assertFalse(Resource.objects.filter(pk=self.resource.pk).exists())
 
 
+
 class TestCreateCompanyView(TestCase):
     def setUp(self):
         self.client=Client()
@@ -736,4 +737,3 @@ class DonationCreateViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(Donation.objects.count(), 0)
             self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
-        
