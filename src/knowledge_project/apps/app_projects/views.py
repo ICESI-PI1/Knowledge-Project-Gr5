@@ -398,11 +398,11 @@ class CompanyRegistration(View):
     
     def post(self,request):
         #Obtener datos del formulario
-        name = request.POST["Name"]
+        name = request.POST["name"]
         nit  = request.POST["Nit"]
         address = request.POST["Adress"]
         phone = request.POST["Phone"]
-        logo = request.Post["Logo"]
+        logo = request.POST["Logo"]
         
         company = Company.objects.create(
             name=name, 
@@ -411,8 +411,10 @@ class CompanyRegistration(View):
             phone = phone,
             logo = logo,
         )
+
+        company.save()
         #Redirigir a la ventana home
-        return redirect("home")   
+        return redirect("")   
     
 class CompanyDetail(View):
     def get(self , request):
