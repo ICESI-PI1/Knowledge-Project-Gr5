@@ -71,7 +71,7 @@
       <ul class="announcements-list">
 
         {% for announcement in announcements %}
-          <a href="#"><li>{{ announcement.init_date }} - {{ announcement.end_date }}</li></a>
+          <a href="{% url 'announcementProjects-list' announcement.id_announ %}"><li>{{ announcement.init_date }} - {{ announcement.end_date }}</li></a>
           
           {% empty %}
           <li>No hay convocatorias {% if current_category_name %} de {{ current_category_name }} {% else %} abiertas {% endif %} disponibles.</li>

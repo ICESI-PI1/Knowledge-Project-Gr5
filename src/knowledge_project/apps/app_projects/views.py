@@ -262,6 +262,28 @@ class AnnouncementProjectListView(ListView):
         announcement_projects = AnnouncementProject.objects.filter(announcement=announcement) 
         projects = [ap.project for ap in announcement_projects] 
         return projects
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "announcement"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+
+        announcement_id = self.kwargs['pk']
+        category_name = None
+
+        if announcement_id:
+            try:
+                announcement = Announcement.objects.get(id_announ=announcement_id)
+                category = announcement.category
+                category_name = category.name
+            except Category.DoesNotExist:
+                pass
+            
+        context["current_category_name"] = category_name
+
+        return context
+
 
 #--------------- Projects --------------------
 
@@ -363,11 +385,11 @@ class CompanyRegistration(View):
     
     def post(self,request):
         #Obtener datos del formulario
-        name = request.POST["Name"]
+        name = request.POST["name"]
         nit  = request.POST["Nit"]
         address = request.POST["Adress"]
         phone = request.POST["Phone"]
-        logo = request.Post["Logo"]
+        logo = request.POST["Logo"]
         
         company = Company.objects.create(
             name=name, 
@@ -376,8 +398,10 @@ class CompanyRegistration(View):
             phone = phone,
             logo = logo,
         )
+
+        company.save()
         #Redirigir a la ventana home
-        return redirect("home")   
+        return redirect("")   
     
 class CompanyDetail(View):
     def get(self , request):
