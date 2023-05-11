@@ -4,7 +4,7 @@ from django.views.generic.base import View
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
-from apps.app_users.models import User, UserRole
+from apps.app_users.models import User, UserRole, Role
 from .models import *
 from .forms import *
 from decimal import Decimal
@@ -406,8 +406,20 @@ class CompanyRegistration(View):
             phone = phone,
             logo = logo,
         )
-
         company.save()
+        UserCompany.objects.create(
+            user = request.user,
+            company = company,
+        )
+        
+        get_object_or_404(UserRole, user=request.user).delete
+        
+        newRole = Role.objects.get(id_role=3)
+        UserRole.objects.create(
+            user=request.user,
+            role=newRole,
+        )
+        
         #Redirigir a la ventana home
         return redirect(reverse('home'))   
     
@@ -452,7 +464,7 @@ class EditCompany(View):
         Nit = request.POST["Nit"]
         Adress = request.POST["Adress"]
         Phone = request.POST["Phone"]
-        Logo = request.FILES.get["Logo"]
+        Logo = request.FILES.get("Logo")
         
         company = UserCompany.objects.get(user=request.user).company
         

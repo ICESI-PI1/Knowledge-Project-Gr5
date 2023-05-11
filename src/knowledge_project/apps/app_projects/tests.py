@@ -7,6 +7,7 @@ from datetime import *
 from decimal import Decimal
 import io
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.exceptions import ObjectDoesNotExist
 
 #------------------- Models -----------------------
 class CompanyModelTestCase(TestCase):
@@ -1219,6 +1220,7 @@ class AnnouncementProjectListViewTestCase(TestCase):
         # Verificar la presencia de los proyectos en el contenido de la respuesta
         self.assertContains(response, "Project 1")
         self.assertContains(response, "Project 2")
+        
 class CreateCompanyViewTestCase(TestCase):
     def setUp(self):
         #with open('Mapa_Conceptual.jpg','rb') as f:
@@ -1244,7 +1246,8 @@ class CreateCompanyViewTestCase(TestCase):
             birth_date="1990-01-01",
         )
         self.user.save()
-        self.role = Role.objects.create(name="Role Test")
+        self.client = Client()
+        self.role = Role.objects.create(name="common_user")
         self.user_role = UserRole.objects.create(user=self.user, role=self.role)
         self.client.force_login(self.user)
         
@@ -1264,3 +1267,158 @@ class CreateCompanyViewTestCase(TestCase):
         self.assertEqual(company.address, "CARRERA 11 79 35 P 9, BOGOTA, BOGOTA")
         self.assertEqual(company.phone, "6013832120")
        
+class CompanyDetailTestCase(TestCase):
+    def setUp(self):
+        #with open('Mapa_Conceptual.jpg','rb') as f:
+        #    image_data = f.read()
+        #file_name = 'Mapa_Conceptual.jpg'
+        #content_type = 'image/jpg'
+        self.url = reverse('company_detail')
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.user.save()
+        self.role = Role.objects.create(name="company_user")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.client.force_login(self.user)
+        
+        self.company = Company.objects.create(
+            name='Facebook',
+            address='CARRERA 11 79 35 P 9, BOGOTA, BOGOTA',
+            phone='6013832120',
+            nit='9007105256',
+            logo="Path/to/image.jpg"
+        )
+        self.company.save()
+   
+    def test_company_detail_view(self):
+        response = self.client.get(self.url)
+        self.url = reverse('register_company')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.company.name)
+        self.assertContains(response, self.company.address)
+        self.assertContains(response, self.company.phone)
+        self.assertContains(response, self.company.nit)
+
+class EditCompanyTestCase(TestCase):
+    def setUp(self):
+        #with open('Mapa_Conceptual.jpg','rb') as f:
+        #    image_data = f.read()
+        #file_name = 'Mapa_Conceptual.jpg'
+        #content_type = 'image/jpg'
+        self.client = Client()
+        #self.factory = RequestFactory()
+        self.url = reverse('edit_company')
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.user.save()
+        self.company = Company.objects.create(
+            name='Facebook',
+            address='CARRERA 11 79 35 P 9, BOGOTA, BOGOTA',
+            phone='6013832120',
+            nit='9007105256',
+            logo="Path/to/image.jpg"
+        )
+        self.company.save()
+        self.user_company = UserCompany.objects.create(user=self.user, company=self.company)
+        self.role = Role.objects.create(name="company_user")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.client.force_login(self.user)
+
+    def test_edit_company_view_get(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        print(response.context)
+        print(self.company.name)
+        self.assertContains(response.context, self.company.name)
+        self.assertContains(response, self.company.address)
+        self.assertContains(response, self.company.phone)
+        self.assertContains(response, self.company.nit)
+
+    def test_edit_company_view_post(self):
+        data = {
+            'name': 'Facebook',
+            'Nit': '9007105256',
+            'Adress': 'CARRERA 11 79 35 P 9, BOGOTA, BOGOTA',
+            'Phone': '6013832120',
+            'Logo': 'Path/to/image.jpg'
+        }
+        response = self.client.post(self.url,data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('company_detail'))
+        company = UserCompany.objects.get(user=self.user).company
+        self.assertEqual(company.name, data['name'])
+        self.assertEqual(company.nit, data['Nit'])
+        self.assertEqual(company.address, data['Adress'])
+        self.assertEqual(company.phone, data['Phone'])
+        self.assertEqual(company.logo, data['Logo'])
+  
+class CompanyDeleteViewTestCase(TestCase):
+
+    def setUp(self):
+        #with open('Mapa_Conceptual.jpg','rb') as f:
+        #    image_data = f.read()
+        #file_name = 'Mapa_Conceptual.jpg'
+        #content_type = 'image/jpg'
+        # Create a user for testing purposes
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.user.save()
+
+        # Create a company for testing purposes
+        self.company_name = 'Test Company'
+        self.company = Company.objects.create(
+            name='Facebook',
+            address='CARRERA 11 79 35 P 9, BOGOTA, BOGOTA',
+            phone='6013832120',
+            nit='9007105256',
+            logo="Path/to/image.jpg"
+        )
+        self.company.save()
+
+        # Login the user
+        self.client = Client()
+        self.role = Role.objects.create(name="company_user")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.client.force_login(self.user)
+
+    def test_company_delete_view_get(self):
+        response = self.client.get(
+            reverse('company_delete', kwargs={'pk': self.company.nit})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'company/delete_company.html')
+        self.assertContains(response, 'Delete')
+
+    def test_company_delete_view_post(self):
+        response = self.client.post(
+            reverse('company_delete', kwargs={'pk': self.company.nit})
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('company_detail'))
+        with self.assertRaises(ObjectDoesNotExist):
+            Company.objects.get(pk=self.company.nit)
