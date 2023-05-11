@@ -1,0 +1,44 @@
+{% extends 'base.html' %} {% block content %}
+
+<main class="container py-5">
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <h1 class="text-secondary">{{project.title}}</h1>
+
+      {{error}}
+
+      {{form.as_p}}
+      
+      <div class="text-center d-flex">
+        <p class>
+          <form method="POST">
+            {% csrf_token %}
+  
+            <button class="btn btn-primary">Actualizar</button>
+          </form>
+  
+        </p>
+        <p class="offset-1">
+          <form action="{% url 'complete_project' project.id %}" method="POST">
+            {% csrf_token %}
+  
+            <button class="btn btn-secondary">Completar</button>
+          </form>
+  
+    
+        </p>
+        <p class="offset-1">
+          <form action="{% url 'delete_project' project.id %}" method="POST">
+            {% csrf_token %}
+  
+            <button class="btn btn-danger">Eliminar</button>
+          </form>
+        </p>
+        
+                
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
