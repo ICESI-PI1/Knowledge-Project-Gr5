@@ -26,6 +26,7 @@ urlpatterns = [
     #---------------- Projects -------------
     path('projects/project/create/', login_required(ProjectCreateView.as_view()), name='project-create'),
     path("projects/project/create/<int:project_id>/requirements",login_required(Requirements2ProjectView.as_view()),name="project-create-requirements"),
+    path("projects/project/create/<int:project_id>/<int:resource_id>/requirements/delete",login_required(requitements_delete),name="project-delete-requirements"),
     #---------------- Company -------------
     path('projects/company/create/',login_required(CompanyRegistration.as_view()),name = "register_company"),
     path('projects/company/detail/',login_required(CompanyDetail.as_view()),name = "company_detail"),
@@ -33,8 +34,10 @@ urlpatterns = [
     path('projects/company/<int:pk>/delete/',login_required(CompanyDeleteView.as_view()),name = "delete_company"),
     #---------------- User -------------
     path('projects/user/detail/',login_required(UserDetail.as_view()),name = "user_detail"),
+    path('projects/user/<int:pk>/update/',login_required(UserUpdateView.as_view()),name = "user-update"),
      #---------------- Donation --------------
     #path('projects/donations/donations_list/', name='donations-list'),
     path('projects/donations/<int:pk>/create_donation/', login_required(DonationCreateView.as_view()), name='donation-create'),
 ]
+
 

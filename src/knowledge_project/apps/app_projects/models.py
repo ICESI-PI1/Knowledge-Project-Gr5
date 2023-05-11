@@ -24,7 +24,7 @@ class Company(models.Model):
     )
     address = models.CharField(max_length=255, verbose_name="dirección")
     name = models.CharField(max_length=100, verbose_name="nombre")
-    logo = models.ImageField(verbose_name="logo", null=True)
+    logo = models.ImageField(verbose_name="logo",upload_to='static/img/company/', null=True)
 
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"

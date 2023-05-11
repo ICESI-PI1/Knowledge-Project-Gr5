@@ -4,7 +4,7 @@
   box-sizing: border-box;
   text-decoration: none;
   font-family: Arial, Helvetica, sans-serif;
-}/*Todo el cuadro*/
+} /*Todo el cuadro*/
 
 .main-container {
   height: 100vh;
@@ -12,17 +12,17 @@
   min-width: 550px;
   display: flex;
   flex-direction: column;
-}/*Margen cuadrícula*/
+} /*Margen cuadrícula*/
 
 .main-container .back-btn {
   height: 15%;
-  min-width: 550px; 
+  min-width: 550px;
   display: flex;
   padding-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
   align-items: center;
-}/*Margen superior*/
+} /*Margen superior*/
 
 .main-container .back-btn i {
   font-size: 35px;
@@ -82,7 +82,35 @@
   font-size: 1rem;
   font-weight: bold;
   padding: 2px 0;
-}/*Cuadro de texto donaciones*/
+} /*Cuadro de texto donaciones*/
+
+.main-container .content .form-container .signup-container #objective {
+  padding: 12px 20px;
+  font-size: 1rem;
+  resize: none;
+  margin-bottom: 1rem;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: hidden;
+  border-left: hidden;
+  border-right: hidden;
+  border-bottom: solid 1.5px #aaaaaa;
+}
+
+.main-container
+  .content
+  .form-container
+  .signup-container
+  #objective::placeholder {
+  color: #00101050;
+  text-align: justify;
+}
+
+.main-container .content .form-container .signup-container #objective {
+  outline: none;
+  border-bottom: solid 2px #001010;
+}
 
 .main-container .content .form-container .signup-container textarea.input {
   height: 30px;

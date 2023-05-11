@@ -4,12 +4,11 @@ from django.views.generic.base import View
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
-from ..app_users.models import User, UserRole
+from apps.app_users.models import User, UserRole, Role
 from .models import *
 from .forms import *
 from decimal import Decimal
-
-
+from datetime import datetime
 
 def signout(request):
     logout(request)
@@ -42,7 +41,7 @@ class UserDetail(View):
             template_name,
             {
                 "page_name": page_name,
-                "profile_pic":user.photo.url,
+                "profile_pic":user.photo,
                 "user_name":user.full_name,
                 "user_email":user.email,
                 "user_phone":user.phone,
@@ -294,8 +293,6 @@ class ProjectCreateView(View):
         user_role = temp_user.role.name
         categories = Category.objects.all()
 
-        print(f"Usuario logued:\n{request.user}")
-
         template_name = "projects/crud_projects/create_project.html"
         return render(
             request,
@@ -357,7 +354,6 @@ class Requirements2ProjectView(View):
         )
 
     def post(self, request, project_id):
-        print(f"POST!!!!!!!!!!!:\n{request.POST}")
 
         project = get_object_or_404(Project, id_project=project_id)
         resourse = get_object_or_404(Resource, id_resource=request.POST['format'])
@@ -373,23 +369,35 @@ class Requirements2ProjectView(View):
                 print(f"Error: {e}")
 
         return redirect(reverse("project-create-requirements", args=[project_id]))
-    
+
+
+def requitements_delete(request, project_id, resource_id):
+
+    project = get_object_or_404(Project, id_project=project_id)
+    resource = get_object_or_404(Resource, id_resource=resource_id)
+
+    requirement = Requirement.objects.get(project_id=project, resource_id=resource)
+    requirement.delete()
+    resources_bag = ResourcesBag.objects.get(project_id=project, resource_id=resource)
+    resources_bag.delete()
+
+    return redirect(reverse("project-create-requirements", args=[project_id]))
+
 #--------------- Companies --------------------
 
 class CompanyRegistration(View):
     def get(self, request):
         page_name = "Company sing up"
-        template_name = "company\create_company.html"
-        print(f"Usuario logued:\n{request.user}")
+        template_name = "company/create_company.html"
         return render(request, template_name,{"page_name": page_name,})
     
     def post(self,request):
         #Obtener datos del formulario
-        name = request.POST["name"]
+        name = request.POST["Name"]
         nit  = request.POST["Nit"]
         address = request.POST["Adress"]
         phone = request.POST["Phone"]
-        logo = request.POST["Logo"]
+        logo = request.FILES.get("Logo")
         
         company = Company.objects.create(
             name=name, 
@@ -398,10 +406,22 @@ class CompanyRegistration(View):
             phone = phone,
             logo = logo,
         )
-
         company.save()
+        UserCompany.objects.create(
+            user = request.user,
+            company = company,
+        )
+        
+        get_object_or_404(UserRole, user=request.user).delete
+        
+        newRole = Role.objects.get(id_role=3)
+        UserRole.objects.create(
+            user=request.user,
+            role=newRole,
+        )
+        
         #Redirigir a la ventana home
-        return redirect("")   
+        return redirect(reverse('home'))   
     
 class CompanyDetail(View):
     def get(self , request):
@@ -444,7 +464,7 @@ class EditCompany(View):
         Nit = request.POST["Nit"]
         Adress = request.POST["Adress"]
         Phone = request.POST["Phone"]
-        Logo = request.POST["Logo"]
+        Logo = request.FILES.get("Logo")
         
         company = UserCompany.objects.get(user=request.user).company
         
@@ -470,38 +490,41 @@ class CompanyDeleteView(DeleteView):
         return context
 
 #--------------- Donations --------------------
-    
+
 class DonationCreateView(CreateView):
     template_name = "projects/donations/create_donation.html"
     form_class = DonationForm
     context_object_name = 'resources'
     success_url = reverse_lazy("home")
-    
+
     def post(self, request, pk):
         recurso = request.POST["resource_id"]
         amountDonated = Decimal(request.POST["amount"])
         descriptionAs = request.POST["description"]
         user = request.user
-        
+
         project = Project.objects.get(id_project=pk)
-        
-        donation = Donation.objects.create(company_nit=project.company_nit, 
-                                           resource_id=Resource.objects.get(id_resource=recurso[0]), 
-                                           amount=amountDonated, 
+
+        donation = Donation.objects.create(company_nit=project.company_nit,
+                                           resource_id=Resource.objects.get(id_resource=recurso[0]),
+                                           amount=amountDonated,
                                            project_id=project,
                                            description=descriptionAs)
-        
-        Donation.full_clean(donation)
-        
-        resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
-        cant_total = resourceBag.amount+amountDonated
-        resourceBag.amount=cant_total
-        resourceBag.save() 
+
+        try:
+            Donation.full_clean(donation)
+            resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
+            cant_total = resourceBag.amount+amountDonated
+            resourceBag.amount=cant_total
+            resourceBag.save()
+        except ValidationError:
+            donation.delete()
+
 
         return redirect(
             reverse("home")
         )
-        
+
 
     def form_valid(self, form):
         # Realizar las operaciones necesarias antes de guardar el objeto
@@ -517,3 +540,43 @@ class DonationCreateView(CreateView):
         context["user_role"] = temp.role.name
         context['resources'] = resources
         return context
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserForm
+    template_name = 'user/UpdateUser.html'
+    success_url = 'home'
+
+    def get(self, request, *args, **kwargs):
+        page_name = "User detail"
+        user = request.user
+        context = {
+            "page_name": page_name,
+            "profile_pic": user.photo,
+            "user_name": user.full_name,
+            "user_email": user.email,
+            "user_phone": user.phone,
+            "user_cc": user.user_cc,
+            "birth_date": user.birth_date,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        profile_pic = self.request.POST.get("profile_pic")
+        full_name = self.request.POST.get("user_name")
+        email = self.request.POST.get("user_email")
+        phone = self.request.POST.get("user_phone")
+        birth_date = request.POST.get("birth_date")
+        user.full_name = full_name
+        user.profile_pic = profile_pic
+        user.email = email
+        user.phone = phone
+        if birth_date!="":
+            user.birth_date = birth_date
+        user.save()
+
+        return redirect(reverse_lazy('home'))
+
+
+    
