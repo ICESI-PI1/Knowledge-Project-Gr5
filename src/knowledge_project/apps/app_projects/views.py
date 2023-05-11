@@ -293,8 +293,6 @@ class ProjectCreateView(View):
         user_role = temp_user.role.name
         categories = Category.objects.all()
 
-        print(f"Usuario logued:\n{request.user}")
-
         template_name = "projects/crud_projects/create_project.html"
         return render(
             request,
@@ -356,7 +354,6 @@ class Requirements2ProjectView(View):
         )
 
     def post(self, request, project_id):
-        print(f"POST!!!!!!!!!!!:\n{request.POST}")
 
         project = get_object_or_404(Project, id_project=project_id)
         resourse = get_object_or_404(Resource, id_resource=request.POST['format'])
@@ -392,7 +389,6 @@ class CompanyRegistration(View):
     def get(self, request):
         page_name = "Company sing up"
         template_name = "company\create_company.html"
-        print(f"Usuario logued:\n{request.user}")
         return render(request, template_name,{"page_name": page_name,})
     
     def post(self,request):

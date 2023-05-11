@@ -53,8 +53,6 @@ class UserRegistration(CreateView):
         password2 = request.POST["confirm_password"]
         role = '2'
 
-        print(f"POST:\n{request.POST}")
-
         # Validar los datos del formulario
         if password1 != password2:
             # Los passwords no coinciden
