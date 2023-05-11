@@ -40,3 +40,4 @@ urlpatterns = [
     path('projects/donations/<int:pk>/create_donation/', login_required(DonationCreateView.as_view()), name='donation-create'),
 ]
 
+

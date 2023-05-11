@@ -401,7 +401,7 @@ class CompanyRegistration(View):
         nit  = request.POST["Nit"]
         address = request.POST["Adress"]
         phone = request.POST["Phone"]
-        logo = request.POST["Logo"]
+        logo = request.FILES.get["Logo"]
         
         company = Company.objects.create(
             name=name, 
@@ -456,7 +456,7 @@ class EditCompany(View):
         Nit = request.POST["Nit"]
         Adress = request.POST["Adress"]
         Phone = request.POST["Phone"]
-        Logo = request.POST["Logo"]
+        Logo = request.FILES.get["Logo"]
         
         company = UserCompany.objects.get(user=request.user).company
         
