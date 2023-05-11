@@ -1422,3 +1422,49 @@ class CompanyDeleteViewTestCase(TestCase):
         self.assertRedirects(response, reverse('company_detail'))
         with self.assertRaises(ObjectDoesNotExist):
             Company.objects.get(pk=self.company.nit)
+
+class ProjectCreateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            email="johndoe@example.com",
+            full_name="John Doe",
+            phone="1234567890",
+            birth_date=datetime.date.today(),
+        )
+        self.user_role = UserRole.objects.create(user=self.user, role=Role.objects.get(name="admin"))
+        self.company = Company.objects.create(
+            nit="1234567890",
+            phone="1234567890",
+            address="Test address",
+            name="Test company",
+            logo=None,
+        )
+        self.category = Category.objects.create(name="Test Category")
+        self.project = Project.objects.create(
+            title="Test Project",
+            objective="Test objective",
+            results="Test results",
+            reach="Test reach",
+            company_nit=self.company,
+            category=self.category,
+        )
+
+    def test_project_create_view_success(self):
+        self.client.login(username=self.user_cc, password=self.password)
+
+        data = {
+            "title": "Test Project",
+            "category": self.category.id,
+            "objective": "Test Objective",
+            "results": "Test Results",
+            "reach": "Test Reach",
+        }
+        response = self.client.post(reverse("project-create"), data)
+
+        self.assertEqual(response.status_code, 302)  # Should redirect
+        self.assertEqual(Project.objects.count(), 1)  # Should create a new project
