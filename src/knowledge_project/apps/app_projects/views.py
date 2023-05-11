@@ -438,7 +438,7 @@ class CompanyRegistration(View):
 class CompanyDetail(View):
     def get(self , request):
         page_name = "Company detail"
-        company = UserCompany.objects.get(user=request.user).company
+        company= get_object_or_404(UserCompany, user=request.user).company
         template_name = "company\detailCompany.html"
         return render(
             request,
@@ -494,7 +494,7 @@ class EditCompany(View):
 class CompanyDeleteView(DeleteView):
     model = Company
     template_name = "company/delete_company.html"
-    success_url = reverse_lazy("company_detail")
+    success_url = reverse_lazy("home")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1489,10 +1489,10 @@ class CompanyDeleteViewTestCase(TestCase):
 
     def test_company_delete_view_post(self):
         response = self.client.post(
-            reverse('company_delete', kwargs={'pk': self.company.nit})
+            reverse('delete_company', kwargs={'pk': self.company.nit})
         )
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('company_detail'))
+        self.assertRedirects(response, reverse('home'))
         with self.assertRaises(ObjectDoesNotExist):
             Company.objects.get(pk=self.company.nit)
 
