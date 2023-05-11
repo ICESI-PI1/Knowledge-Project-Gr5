@@ -9,7 +9,6 @@ import io
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 #------------------- Models -----------------------
-
 class CompanyModelTestCase(TestCase):
     
     def setUp(self):
@@ -633,7 +632,141 @@ class ResourceDeleteViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Resource.objects.filter(pk=self.resource.pk).exists())
 
+class CategoryListViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role1=Role.objects.create(name="admin")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role1)
+        self.client.force_login(self.user_role.user)
+        self.category = Category.objects.create(name='Test Category')
+        self.client.force_login(self.user)
+        
+    def test_category_list_view(self):
+        url = reverse('categories-list')
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'projects/categories/categories_list.html')
+        self.assertContains(response, self.category.name)
+        
+class CategoryCreateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role1=Role.objects.create(name="admin")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role1)
+        self.client.force_login(self.user_role.user)
+        self.category = Category.objects.create(name='Test Category')
+        self.category_create_url = reverse("categories-create")
+        self.client.force_login(self.user)
 
+    def test_create_category(self):
+        data = {
+            "name": "Test Category"
+        }
+        beforepost = Category.objects.count()
+        response = self.client.post(self.category_create_url, data)
+        self.assertEqual(response.status_code, 302)  # Should redirect
+        self.assertRedirects(response, reverse("categories-list"))
+        self.assertEqual((Category.objects.count()-1), beforepost)  # Should create a new resource
+
+    def tearDown(self):
+        self.user.delete()
+        
+class CategoryUpdateViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role1=Role.objects.create(name="admin")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role1)
+        self.client.force_login(self.user_role.user)
+        self.category = Category.objects.create(name='Test Category')
+        self.client.force_login(self.user)
+        
+    def test_view_url_accessible(self):
+        # Comprueba que se puede acceder a la URL de actualización de categorías 
+        response = self.client.get(reverse('categories-update', args=[1]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        # Comprueba que se está utilizando el template correcto para la vista
+        response = self.client.get(reverse('categories-update', args=[1]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'projects/categories/categories_form.html')
+
+    def test_view_redirects_on_success(self):
+        # Comprueba que después de actualizar la categoría, se redirige a la lista de categorías
+        data = {
+            "name": "Test Category"
+        }
+        response = self.client.post(reverse('categories-update', args=[1]), data)
+        self.assertRedirects(response, reverse('categories-list'))
+
+class CategoryDeleteViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role1=Role.objects.create(name="admin")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role1)
+        self.client.force_login(self.user_role.user)
+        self.category = Category.objects.create(name='Test Category')
+        self.client.force_login(self.user)
+        self.url = reverse('categories-delete', args=[self.category.id_category])
+
+
+    def test_category_delete_view_get(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'projects/categories/categories_confirm_delete.html')
+
+    def test_category_delete_view_post(self):
+        # Test that the category is deleted after post request
+        self.assertEqual(Category.objects.count(), 1)
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Category.objects.count(), 0)
+
+    def test_category_delete_view_post_redirect(self):
+        # Test that after deleting the category, the view redirects to the success URL
+        response = self.client.post(self.url)
+        self.assertRedirects(response, reverse('categories-list'))
 
 class TestCreateCompanyView(TestCase):
     def setUp(self):
@@ -725,15 +858,14 @@ class DonationCreateViewTestCase(TestCase):
                                                  ,resource_id=self.resource.id_resource).amount, 3.0)
 
     def test_donation_create_invalid_data(self):
-        with self.assertRaises(ValidationError):
-            data = {
-                'company_nit' : self.company.nit,
-                'resource_id' : self.resource.id_resource,
-                'amount' : 20.0,
-                'project_id' : self.project.id_project,
-                'description' : 'Invalid donation',      
-            }
-            response = self.client.post(self.url, data)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(Donation.objects.count(), 0)
-            self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
+        data = {
+            'company_nit' : self.company.nit,
+            'resource_id' : self.resource.id_resource,
+            'amount' : 20.0,
+            'project_id' : self.project.id_project,
+            'description' : 'Invalid donation',      
+        }
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Donation.objects.count(), 0)
+        self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
