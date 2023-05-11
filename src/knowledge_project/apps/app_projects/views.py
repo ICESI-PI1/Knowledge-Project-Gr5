@@ -495,6 +495,23 @@ class CompanyDeleteView(DeleteView):
     model = Company
     template_name = "company/delete_company.html"
     success_url = reverse_lazy("home")
+    
+    def post(self, request, pk):
+        user = request.user
+        userCompany = UserCompany.objects.get(user = user)
+        company=userCompany.company
+        
+        get_object_or_404(UserRole, user=request.user).delete()
+        userCompany.delete()
+        company.delete()
+        
+        newRole = Role.objects.get(name='common_user')
+        UserRole.objects.create(
+            user=request.user,
+            role=newRole,
+        )
+        return redirect(reverse("home"))
+        
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
