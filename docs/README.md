@@ -1,6 +1,6 @@
 # KNOWLEDGE PROJECTS
 
-## Descripcion del projecto
+## Descripción del projecto
 
 El proyecto consiste en la donacion a proyectos. Muchas empresas sin presupuesto para realizar sus ideas. Por otro lado hay grandes organizaciones con ganas de donar algo de dinero a algo provechoso, que mejore el mundo y ayude a las personas. En Knowledge projects lo que se busca es conectar a estos 2 perfiles, de modo que los donantes puedan aportar recursos a proyectos innovadores propuestos por empresas con ganas de llevar sus ideas a cabo, y que estos ultimos puedan aprovechar estos recursos. 
 
