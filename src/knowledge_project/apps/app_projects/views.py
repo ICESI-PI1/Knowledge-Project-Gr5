@@ -238,7 +238,6 @@ class AnnouncementListView(ListView):
         category_id = self.request.GET.get('category', None)
         if category_id:
             queryset = queryset.filter(category__id_category=category_id)
-
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -247,6 +246,19 @@ class AnnouncementListView(ListView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context['user_role'] = temp.role.name
         context['categories'] = Category.objects.all()
+
+        category_id = self.request.GET.get('category', None)
+        category_name = None
+        categ = None
+        if category_id:
+            try:
+                category = Category.objects.get(id_category=category_id)
+                categ = category
+                category_name = category.name
+            except Category.DoesNotExist:
+                pass
+        context['current_category_name'] = category_name
+        context['category'] = categ
         return context
 
 

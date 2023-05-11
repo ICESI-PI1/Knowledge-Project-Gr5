@@ -174,8 +174,8 @@ nav ul li:hover {
 
 .profile_pic{
   display: flex;
-  align-items: center; /* Centrar verticalmente */
-  justify-content: center; /* Centrar horizontalmente */
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 25px;
   color: #ff7733;

@@ -1,103 +1,195 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
 
-body{
-    margin-top:20px;
-    color: #1a202c;
-    text-align: center;
-    background-color: #001011;    
-}
-
-.main-body {
-    display: flex;
-    padding: 15px;
-    justify-content: space-between;
-    margin-right: 10%;
-}
-.profile_picture {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+body {
+  height: 100%;
+  font-size: 16px;
+  color: #404040;
+  font-family: Montserrat, sans-serif;
+  background-image: linear-gradient(to bottom right, #001011 10% 45%, #013c41 95% 100%);
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 2rem 15px;
+  box-sizing: border-box;
+  display: flex;
 }
 
-.profile_picture {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 35%;
-    height: 500px;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 0 solid rgba(0,0,0,.125);
-    border-radius: .25rem;
+
+.card {
+  position: relative;
+  margin:auto;
+  width: 35%;
+  background-color: #fff;
+  min-width: 360px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 2rem;
+  box-shadow: 0px 1rem 1.5rem rgba(0,0,0,0.5);
+  
+}
+.card .banner {
+  background-image: url("https://images.unsplash.com/photo-1522426266214-ec2d2abb9ce0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1474&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 11rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.card .banner .circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+
+  color: #ff7733;
+  background-color: #fff;
+  width: 8rem;
+  height: 8rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.3);
+  border-radius: 50%;
+  transform: translateY(50%);
+  transition: transform 200ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
-.card-body {
-    flex: 1 1 auto;
-    min-height: 1px;
-    padding: 1rem;
+.card .banner .circle:hover {
+  transform: translateY(50%) scale(1.3);
 }
-/*
-.btn_edit{
-border-radius: 10px;
-height: 30px;
-width: 100px;
-font-size: medium;
-font-weight: bold;
-color: #fff;
-background-color: #001011;
+.card .menu {
+  width: 100%;
+  height: 4.5rem;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.btn_delete{
-    margin-top: 10px;
-    border-radius: 10px;
-    height: 30px;
-    width: 100px;
-    margin-left: 10px;
-    font-size: medium;
-    font-weight: bold;
-    color: #fff;
-    background-color:#FF0000 ;
+.card h2.name {
+  text-align: center;
+  padding: 0 2rem 0.5rem;
+  margin: 0;
 }
-*/
-.main-body>h6{
-height:2ch;
+.card .title {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0 2rem 1.2rem;
 }
-
-.info{
-    margin-left: 5%;
-    background-color: #fff;
-    border-radius: .25rem;
-    padding: 20px;
-    width: 40%;
+.card .actions {
+  padding: 0 2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+.card .actions .user-info {
+  padding: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
-h6{
-    font-size: large;
+.card .actions .user-info .row {
+  height: fit-content;
 }
+
+.card .actions .user-info h2{
+  font-size: 15px;
+  text-align: center;
+  color: #ff7733;
+  padding: 0px 10px;
+}
+
+.card .actions .user-info p{
+  font-size: 0.7rem;
+  text-align: center;
+  width: 100%;
+  color: #404040;
+}
+
+.card .actions .edit-btn button {
+  color: inherit;
+  font: inherit;
+  font-weight: bold;
+  background-color: #ffd01a;
+  width: 100%;
+  border: none;
+  padding: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  border-radius: 1.5rem/50%;
+  transition: background-color 100ms ease-in-out, transform 200ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.card .actions .edit-btn button:hover {
+  background-color: #efb10a;
+  transform: scale(1.1);
+}
+.card .actions .edit-btn button:active {
+  background-color: #e8a200;
+  transform: scale(1);
+}
+.card .desc {
+  text-align: justify;
+  padding: 0 2rem 2.5rem;
+  order: 100;
+}
+
 
 .back-btn {
-    position: relative;
-    height: 15%;
-    min-width: 15%;
-    display: flex;
-    padding-left: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    align-items: center;
-  }
+  z-index: 10;
+  position: absolute;
+  height: 15%;
+  min-width: 15%;
+  display: flex;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  align-items: center;
+}
 
 .back-btn i {
-    font-size: 35px;
-    color: white;
-    line-height: 80px;
+  font-size: 35px;
+  color: white;
+  line-height: 80px;
+}
+.back-btn a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  border-radius: 10px;
+  height: 50px;
+  border-right: solid 2px #b33b00;
+  border-bottom: solid 2px #b33b00;
+  background-color: #ff7733;
+  color: #fff;
+}
+
+
+.info{
+  margin: auto;
+  background-color: #fff;
+  border-radius: .25rem;
+  padding: 0px 20px 20px 20px;
+  width: 35%;
+  min-width: 350px;
+}
+
+.info h6{
+  font-size: 12.5px;
+}
+
+
+@media (max-width: 900px) {
+  body {
+    flex-direction: column;
+    justify-content: space-between;
   }
- .back-btn a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    border-radius: 10px;
-    height: 50px;
-    border-right: solid 2px #b33b00;
-    border-bottom: solid 2px #b33b00;
-    background-color: #ff7733;
-    color: #fff;
+
+  .info {
+    margin-top: 40px;
+    margin-bottom: 40px;
   }
+}

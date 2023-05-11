@@ -13,84 +13,93 @@
         {% block head %}
         <link
         rel="stylesheet"
-        href="{% static 'css/company/detail_user.css' %}"
+        href="{% static 'css/user/detailUser.css' %}"
         />
         {% endblock %}
     </head>
     <body>
-        <div class="container">
-            <div class="main-body">
-                <div class="back-btn">
-                    <a href="{% url 'home' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
-                </div>
-                <div class="profile_picture">
-                    <div class="card-body">
-                      <div class="d-flex flex-column align-items-center text-center">
-                        {% if profile_pic %}
-                        <img src={{profile_pic}} alt="Admin" class="rounded-circle" width="150">
-                        {% else %}
-                        <img src="{% static 'img\nav-bar-icons\profile.png' %}" alt="Admin" class="rounded-circle" width="150">
-                        {% endif %}
-                        <div class="Name">
-                          <h4>{{user_name}}</h4>
-                          <p class="Email">{{user_email}}</p>
-                          <p class="phone">{{user_phone}}</p>
-                         <!-- <button class="btn_edit">Edit</button> -->
-                        </div>
-                      </div>
-                    </div>
-                </div>
 
-                <div class="info">
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h6 class="NameTitle">Name</h6>
-                      </div>
-                      <div class="Name">
-                        {{user_name}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h6 class="ccTitle">CC</h6>
-                      </div>
-                      <div class="cc">
-                        {{user_cc}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h6 class="PhoneTitle">Phone</h6>
-                      </div>
-                      <div class="Phone">
-                        {{user_phone}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h6 class="EmailTitle">Email</h6>
-                      </div>
-                      <div class="Email">
-                        {{user_email}}
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-3">
-                          <h6 class="BirthDateTitle">Birth Date</h6>
-                        </div>
-                        <div class="BirthDate">
-                          {{birth_date}}
-                        </div>
-                      </div>
-                      <hr>
-                </div>
-        
-            </div>
+        <div class="back-btn">
+            <a href="{% url 'home' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
         </div>
+       
+        <div class="card">
+          <div class="banner">
+            <div class="circle">
+              <div class="fa-solid fa-user"></div>
+            </div>
+          </div>
+          <div class="menu">
+            
+          </div>
+          <h2 class="name">{{user_name}}</h2>
+          <div class="title">{{user_email}}</div>
+          <div class="actions">
+            <div class="user-info">
+              
+                <div class="row">
+                  <h2>CC:</h2>
+                  <p>{{user_cc}}</p>
+                </div>
+                <div class="row">
+                  <h2>Teléfono:</h2>
+                  <p>{{user_phone}}</p>
+                </div>
+           
+            </div>
+            <div class="edit-btn">
+              <button>Editar <i class="fa-solid fa-edit"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="info">
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="NameTitle">Nombre</h6>
+            </div>
+            <div class="Name">
+              {{user_name}}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="ccTitle">CC</h6>
+            </div>
+            <div class="cc">
+              {{user_cc}}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="PhoneTitle">Teléfono</h6>
+            </div>
+            <div class="Phone">
+              {{user_phone}}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              <h6 class="EmailTitle">Correo</h6>
+            </div>
+            <div class="Email">
+              {{user_email}}
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+              <div class="col-sm-3">
+                <h6 class="BirthDateTitle">Fecha de nacimiento</h6>
+              </div>
+              <div class="BirthDate">
+                {{birth_date}}
+              </div>
+            </div>
+            <hr>
+      </div>
     </body>
 </html>
 {% endblock %}
