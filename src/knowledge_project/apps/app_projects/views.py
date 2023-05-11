@@ -4,12 +4,11 @@ from django.views.generic.base import View
 from django.contrib.auth import logout
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
-from ..app_users.models import User, UserRole
+from apps.app_users.models import User, UserRole
 from .models import *
 from .forms import *
 from decimal import Decimal
-
-
+from datetime import datetime
 
 def signout(request):
     logout(request)
@@ -533,3 +532,43 @@ class DonationCreateView(CreateView):
         context["user_role"] = temp.role.name
         context['resources'] = resources
         return context
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserForm
+    template_name = 'user/UpdateUser.html'
+    success_url = 'home'
+
+    def get(self, request, *args, **kwargs):
+        page_name = "User detail"
+        user = request.user
+        context = {
+            "page_name": page_name,
+            "profile_pic": user.photo,
+            "user_name": user.full_name,
+            "user_email": user.email,
+            "user_phone": user.phone,
+            "user_cc": user.user_cc,
+            "birth_date": user.birth_date,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        profile_pic = self.request.POST.get("profile_pic")
+        full_name = self.request.POST.get("user_name")
+        email = self.request.POST.get("user_email")
+        phone = self.request.POST.get("user_phone")
+        birth_date = request.POST.get("birth_date")
+        user.full_name = full_name
+        user.profile_pic = profile_pic
+        user.email = email
+        user.phone = phone
+        if birth_date!="":
+            user.birth_date = birth_date
+        user.save()
+
+        return redirect(reverse_lazy('home'))
+
+
+    

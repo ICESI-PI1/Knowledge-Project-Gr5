@@ -1,6 +1,6 @@
 from django import forms
 from .models import Resource, Category, Donation, Announcement
-
+from apps.app_users.models import User
 class ResourceForm(forms.ModelForm):
     class Meta:
         model = Resource
@@ -40,4 +40,12 @@ class DonationForm(forms.ModelForm):
             'resource_id':'Recurso',
             'amount':'Cantidad',
             'description':'Ingresa una descripción sobre la donación que realizarás.',
+        }
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['user_cc', 'full_name', 'email', 'phone', 'birth_date', 'photo', 'is_staff', 'is_active']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
         }
