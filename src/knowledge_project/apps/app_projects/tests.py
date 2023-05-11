@@ -1219,4 +1219,48 @@ class AnnouncementProjectListViewTestCase(TestCase):
         # Verificar la presencia de los proyectos en el contenido de la respuesta
         self.assertContains(response, "Project 1")
         self.assertContains(response, "Project 2")
+class CreateCompanyViewTestCase(TestCase):
+    def setUp(self):
+        #with open('Mapa_Conceptual.jpg','rb') as f:
+        #    image_data = f.read()
+        #file_name = 'Mapa_Conceptual.jpg'
+        #content_type = 'image/jpg'
+        self.url = reverse('register_company')
+        self.context = {
+            "Name":"Facebook",
+            "Nit":"9007105256",
+            "Adress": "CARRERA 11 79 35 P 9, BOGOTA, BOGOTA",
+            "Phone": "6013832120",
+            "Logo":"Path/to/image.jpg"
+        }
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.user.save()
+        self.role = Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.client.force_login(self.user)
+        
+        
+    def testGet(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'company/create_company.html')
+        
+    def testPost(self):
+        response = self.client.post(self.url,data= self.context)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("home"))
+        company = Company.objects.last()
+        self.assertEqual(company.name, "Facebook")
+        self.assertEqual(company.nit, "9007105256")
+        self.assertEqual(company.address, "CARRERA 11 79 35 P 9, BOGOTA, BOGOTA")
+        self.assertEqual(company.phone, "6013832120")
        

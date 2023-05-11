@@ -388,16 +388,16 @@ def requitements_delete(request, project_id, resource_id):
 class CompanyRegistration(View):
     def get(self, request):
         page_name = "Company sing up"
-        template_name = "company\create_company.html"
+        template_name = "company/create_company.html"
         return render(request, template_name,{"page_name": page_name,})
     
     def post(self,request):
         #Obtener datos del formulario
-        name = request.POST["name"]
+        name = request.POST["Name"]
         nit  = request.POST["Nit"]
         address = request.POST["Adress"]
         phone = request.POST["Phone"]
-        logo = request.FILES.get["Logo"]
+        logo = request.FILES.get("Logo")
         
         company = Company.objects.create(
             name=name, 
@@ -409,7 +409,7 @@ class CompanyRegistration(View):
 
         company.save()
         #Redirigir a la ventana home
-        return redirect("")   
+        return redirect(reverse('home'))   
     
 class CompanyDetail(View):
     def get(self , request):
