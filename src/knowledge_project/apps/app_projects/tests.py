@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.db import IntegrityError
 from apps.app_projects.models import *
 from apps.app_users.models import *
-from datetime import datetime
+from datetime import *
 from decimal import Decimal
 import io
 from django.core.files.uploadedfile import SimpleUploadedFile
