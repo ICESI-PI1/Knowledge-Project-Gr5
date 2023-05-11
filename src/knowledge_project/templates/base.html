@@ -19,7 +19,8 @@
     <div class="wrapper">
       <nav>
         <!-- <a class="logout-btn" href="{% url 'logout' %}">Salir</a> -->
-
+        <div class="profile_pic" onclick="toggleMenu()"><div class="user_logo fa-solid fa-user"></div></div>
+        
         <input type="checkbox" id="check" />
         <label for="check" class="checkbtn">
           <i class="fas fa-bars"></i>
@@ -57,7 +58,7 @@
           {% endif %}
         </ul>
 
-        <img src="{% static 'img\nav-bar-icons\profile.png' %}" class="profile_pic" onclick="toggleMenu()">
+        
 
         <div class="sub_menu_wrap" id="subMenu">
           <div class="sub_menu">

@@ -1,3 +1,5 @@
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -171,23 +173,38 @@ nav ul li:hover {
 }
 
 .profile_pic{
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  text-align: center;
+  font-size: 25px;
+  color: #ff7733;
+  height: 40px;
   width: 40px;
   border-radius: 50%;
   cursor:pointer;
   margin-left: 30px;
-  /*float: right;
-  align-self: flex-end;*/
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  align-content: center;
+
+
+  position: relative;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  float: right;
 }
 
+
 .sub_menu_wrap{
+  
   position:absolute;
   top:100%;
-  right: 10%;
+  right: 0%;
   width: 320px;
   max-height: 0px;
   overflow: hidden;
   transition: max-height 0.5s;
+
 }
 
 .sub_menu_wrap.open-menu{
@@ -304,13 +321,13 @@ nav ul li:hover {
 
 .footer {
   background-color: #001011;
-  position: absolute;
+  position: relative; /* Cambiado a position: relative; */
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0;
   width: 100%;
   padding-top: 20px;
+  z-index: 1; 
 }
 
 .container {

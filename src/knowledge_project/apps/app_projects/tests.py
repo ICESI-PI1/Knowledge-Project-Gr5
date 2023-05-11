@@ -869,3 +869,354 @@ class DonationCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Donation.objects.count(), 0)
         self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
+
+class AnnouncementCategoriesListViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role=Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.category = Category.objects.create(name="Test Category")
+        self.announcement = Announcement.objects.create(init_date=datetime.now(),end_date=datetime.now()+timedelta(days=10), category=self.category)
+        self.client.force_login(self.user)
+
+        
+
+    def test_get(self):
+        # Realizar la solicitud GET a la vista de lista de categorías de anuncios
+        response = self.client.get(reverse("announcements-categories"))
+
+        # Verificar que la respuesta tenga un código de estado exitoso (200)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar que el template utilizado sea "projects/announcements/announcements_select_category.html"
+        self.assertTemplateUsed(response, "projects/announcements/announcements_select_category.html")
+
+        # Verificar que el contexto contenga una lista de anuncios
+        self.assertIn("announcements", response.context)
+
+        # Verificar que el contexto contenga el nombre de la página como "announcement"
+        self.assertEqual(response.context["page_name"], "announcement")
+
+        # Verificar que el contexto contenga el rol del usuario
+        self.assertIn("user_role", response.context)
+
+        # Verificar que el contexto contenga el nombre completo del usuario
+        self.assertIn("user_name", response.context)
+
+        # Verificar que el contexto contenga una lista de categorías de anuncios
+        self.assertIn("categories", response.context)
+
+    def test_get_context_data(self):
+        # Realizar la solicitud GET a la vista de lista de categorías de anuncios
+        response = self.client.get(reverse("announcements-categories"))
+
+        # Verificar que el contexto contenga una lista de categorías de anuncios
+        self.assertIn("categories", response.context)
+
+        # Verificar que la lista de categorías de anuncios en el contexto sea igual a todas las categorías en la base de datos
+        self.assertQuerysetEqual(response.context["categories"], Category.objects.all(), ordered=False)
+
+class AnnouncementCreateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.category=Category.objects.create(name="Test Category")
+        self.role = Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.client.force_login(self.user)
+
+    def test_get(self):
+        # Realizar la solicitud GET a la vista de creación de anuncios
+        response = self.client.get(reverse("announcements-create"))
+
+        # Verificar que la respuesta tenga un código de estado exitoso (200)
+        self.assertEqual(response.status_code, 200)
+
+    def test_post(self):
+        # Crear un diccionario con los datos del formulario de anuncio
+        form_data = {
+            "init_date": "2023-05-10",
+            "end_date": "2023-05-20",
+            "category": self.category,  # ID de la categoría del anuncio
+            # Agrega otros campos requeridos en el formulario de anuncio según sea necesario
+        }
+
+        # Realizar la solicitud POST a la vista de creación de anuncios
+        response = self.client.post(reverse("announcements-create"), data=form_data)
+
+        # Verificar que la respuesta redirija a la URL de éxito (announcements-list)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue(Announcement.objects.filter(category=self.category)!=None)
+
+
+
+    def test_get_context_data(self):
+        # Realizar la solicitud GET a la vista de creación de anuncios
+        response = self.client.get(reverse("announcements-create"))
+
+        # Verificar que el contexto contenga el nombre de la página como "announcement"
+        self.assertEqual(response.context["page_name"], "announcement")
+
+        # Verificar que el contexto contenga el rol del usuario
+        self.assertIn("user_role", response.context)
+    
+class AnnouncementUpdateViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+
+        self.category=Category.objects.create(name="Test Category")
+        self.role = Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.announcement = Announcement.objects.create(
+            init_date=datetime.now(),
+            end_date=datetime.now() + timedelta(days=10),
+            category=self.category
+        )
+        self.client.force_login(self.user)
+
+    def test_get(self):
+        # Realizar la solicitud GET a la vista de actualización de anuncios
+        response = self.client.get(reverse("announcements-update", args=[self.announcement.id_announ]))
+
+        # Verificar que la respuesta tenga un código de estado exitoso (200)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar que el template utilizado sea "projects/announcements/announcements_form.html"
+        self.assertTemplateUsed(response, "projects/announcements/announcements_form.html")
+
+        # Verificar que el contexto contenga el objeto de anuncio a actualizar
+        self.assertIn("object", response.context)
+
+        # Verificar que el contexto contenga el nombre de la página como "announcement"
+        self.assertEqual(response.context["page_name"], "announcement")
+
+        # Verificar que el contexto contenga el rol del usuario
+        self.assertIn("user_role", response.context)
+
+    def test_post(self):
+    # Crear un diccionario con los datos actualizados del formulario de anuncio
+        form_data = {
+            "init_date": (datetime.now() + timedelta(days=20)).strftime("%Y-%m-%d"),
+            "end_date": (datetime.now() + timedelta(days=40)).strftime("%Y-%m-%d"),
+            "category": self.category.id_category,
+        }
+
+        url = reverse("announcements-update", kwargs={"pk": self.announcement.id_announ})
+
+        response = self.client.post(url, data=form_data)
+        self.assertEqual(response.status_code, 302)
+        self.announcement.refresh_from_db()
+
+        # Verificar que los campos actualizados del anuncio sean correctos
+        self.assertEqual(self.announcement.init_date.strftime("%Y-%m-%d"), form_data["init_date"])
+        self.assertEqual(self.announcement.end_date.strftime("%Y-%m-%d"), form_data["end_date"])
+        self.assertEqual(self.announcement.category.id_category, form_data["category"])
+    
+class AnnouncementDeleteViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+
+        self.category=Category.objects.create(name="Test Category")
+        self.role = Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.announcement = Announcement.objects.create(
+            init_date=datetime.now(),
+            end_date=datetime.now() + timedelta(days=10),
+            category=self.category
+        )
+        self.client.force_login(self.user)
+
+    def test_get(self):
+        # Obtiene la URL para eliminar el anuncio
+        url = reverse("announcements-delete", kwargs={"pk": self.announcement.id_announ})
+
+        # Realiza una solicitud GET a la vista de eliminación de anuncios
+        response = self.client.get(url)
+
+        # Verifica que la respuesta sea exitosa y que el template correcto se esté utilizando
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "projects/announcements/announcements_confirm_delete.html")
+
+    def test_post(self):
+        # Obtiene la URL para eliminar el anuncio
+        url = reverse("announcements-delete", kwargs={"pk": self.announcement.id_announ})
+
+        # Realiza una solicitud POST a la vista de eliminación de anuncios
+        response = self.client.post(url)
+
+        # Verifica que la respuesta redirija a la URL de éxito (announcements-list)
+        self.assertRedirects(response, reverse("announcements-list"))
+
+        # Verifica que el anuncio haya sido eliminado de la base de datos
+        self.assertFalse(Announcement.objects.filter(id_announ=self.announcement.id_announ).exists())
+
+
+class AnnouncementListViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+
+        self.category=Category.objects.create(name="Test Category")
+        self.role = Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.announcement1 = Announcement.objects.create(
+            init_date=datetime.now(),
+            end_date=datetime.now() + timedelta(days=10),
+            category=self.category
+        )
+        self.category2=Category.objects.create(name="Test 2")
+        self.announcement2= Announcement.objects.create(
+            init_date=datetime.now(),
+            end_date=datetime.now() + timedelta(days=10),
+            category=self.category2
+        )
+        self.client.force_login(self.user)
+
+    def test_get(self):
+        # Obtiene la URL para ver la lista de anuncios
+        url = reverse("announcements-list")
+
+        # Realiza una solicitud GET a la vista de lista de anuncios
+        response = self.client.get(url)
+
+        # Verifica que la respuesta sea exitosa y que el template correcto se esté utilizando
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "projects/announcements/announcements_list.html")
+
+        # Verifica que los anuncios y las categorías estén presentes en el contexto
+        self.assertQuerysetEqual(response.context["categories"], [self.category, self.category2], ordered=False)
+
+    def test_get_filtered_by_category(self):
+        # Obtiene la URL para ver la lista de anuncios filtrada por categoría
+        url = reverse("announcements-list")
+        category_id = self.category.id_category
+        url += f"?category={category_id}"
+
+        # Realiza una solicitud GET a la vista de lista de anuncios filtrada por categoría
+        response = self.client.get(url)
+
+        # Verifica que la respuesta sea exitosa y que el template correcto se esté utilizando
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "projects/announcements/announcements_list.html")
+
+        # Verifica que solo los anuncios asociados a la categoría filtrada estén presentes en el contexto
+        self.assertQuerysetEqual(response.context["categories"], [self.category, self.category2], ordered=False)
+
+class AnnouncementProjectListViewTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.role = Role.objects.create(name="Role Test")
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
+        self.client.force_login(self.user)
+        self.category = Category.objects.create(name="Test Category")
+        self.announcement = Announcement.objects.create(
+            init_date=datetime.now(),
+            end_date=datetime.now()+ timedelta(days=10),
+            category=self.category,
+        )
+
+        self.company = Company.objects.create(
+            nit='1234567890',
+            phone='1234567890',
+            address='Test Address',
+            name='Test Company'
+        )
+        self.project1 = Project.objects.create(
+            title='Project 1',
+            objective='Test Objective',
+            results='Test Results',
+            reach='Test Reach',
+            company_nit=self.company,
+            category=self.category
+        )
+        self.project2 = Project.objects.create(
+            title='Project 2',
+            objective='Test Objective',
+            results='Test Results',
+            reach='Test Reach',
+            company_nit=self.company,
+            category=self.category
+        )
+
+        AnnouncementProject.objects.create(
+            announcement=self.announcement,
+            project=self.project1,
+        )
+        AnnouncementProject.objects.create(
+            announcement=self.announcement,
+            project=self.project2,
+        )
+
+    def test_get_queryset(self):
+        url = reverse(
+            "announcementProjects-list",
+            kwargs={"pk": self.announcement.id_announ},
+        )
+        response = self.client.get(url)
+
+        # Verificar que la respuesta tenga un código de estado 200 (éxito)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar la presencia de los proyectos en el contenido de la respuesta
+        self.assertContains(response, "Project 1")
+        self.assertContains(response, "Project 2")
+       
