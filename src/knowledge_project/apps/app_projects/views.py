@@ -412,9 +412,9 @@ class CompanyRegistration(View):
             company = company,
         )
         
-        get_object_or_404(UserRole, user=request.user).delete
+        get_object_or_404(UserRole, user=request.user).delete()
         
-        newRole = Role.objects.get(id_role=3)
+        newRole = Role.objects.get(name='company_user')
         UserRole.objects.create(
             user=request.user,
             role=newRole,
