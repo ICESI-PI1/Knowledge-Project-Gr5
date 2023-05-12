@@ -36,7 +36,7 @@ urlpatterns = [
     path('projects/user/detail/',login_required(UserDetail.as_view()),name = "user_detail"),
     path('projects/user/<int:pk>/update/',login_required(UserUpdateView.as_view()),name = "user-update"),
      #---------------- Donation --------------
-    #path('projects/donations/donations_list/', name='donations-list'),
+    path('projects/donations/<int:pk>/donations_list/', login_required(DonationListView.as_view()), name='donations-list'),
     path('projects/donations/<int:pk>/create_donation/', login_required(DonationCreateView.as_view()), name='donation-create'),
 ]
 

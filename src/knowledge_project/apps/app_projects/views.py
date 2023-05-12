@@ -538,8 +538,7 @@ class DonationCreateView(CreateView):
         return redirect(
             reverse("home")
         )
-
-
+        
     def form_valid(self, form):
         # Realizar las operaciones necesarias antes de guardar el objeto
         return super().form_valid(form)
@@ -553,6 +552,25 @@ class DonationCreateView(CreateView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         context['resources'] = resources
+        return context
+
+class DonationListView(ListView):
+    model = Donation
+    template_name = 'projects/donations/donations_list.html'
+    context_object_name = 'donations'
+
+    def get_queryset(self):
+        project_id = self.kwargs['pk'] 
+        donations = Donation.objects.filter(project_id=project_id)
+        return donations
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'donations'
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context['user_role'] = temp.role.name
+        context['project_id'] = self.kwargs.get('pk')
+
         return context
 
 class UserUpdateView(UpdateView):
