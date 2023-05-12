@@ -424,11 +424,9 @@ class CompanyRegistration(View):
             company = company,
         )
         
-        user_role = get_object_or_404(UserRole, user=request.user)
-        if user_role:
-            user_role.delete()
+        get_object_or_404(UserRole, user=request.user).delete()
         
-        newRole = Role.objects.get(id_role=3)
+        newRole = Role.objects.get(name='company_user')
         UserRole.objects.create(
             user=request.user,
             role=newRole,
@@ -440,7 +438,7 @@ class CompanyRegistration(View):
 class CompanyDetail(View):
     def get(self , request):
         page_name = "Company detail"
-        company = UserCompany.objects.get(user=request.user).company
+        company= get_object_or_404(UserCompany, user=request.user).company
         template_name = "company\detailCompany.html"
         return render(
             request,
@@ -496,7 +494,23 @@ class EditCompany(View):
 class CompanyDeleteView(DeleteView):
     model = Company
     template_name = "company/delete_company.html"
-    success_url = reverse_lazy("company_detail")
+    success_url = reverse_lazy("home")
+    
+    def post(self, request, pk):
+        userCompany = get_object_or_404(UserCompany, user=request.user)
+        company=userCompany.company
+        
+        get_object_or_404(UserRole, user=request.user).delete()
+        userCompany.delete()
+        company.delete()
+        
+        newRole = Role.objects.get(name='common_user')
+        UserRole.objects.create(
+            user=request.user,
+            role=newRole,
+        )
+        return redirect(reverse("home"))
+        
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -609,6 +623,47 @@ class UserUpdateView(UpdateView):
         user.save()
 
         return redirect(reverse_lazy('home'))
-
-
     
+#--------------- Binnacle --------------------
+
+class BinnacleCreateView(CreateView):
+    template_name = "projects/binnacle/binnacle_form.html"
+    form_class = BinnacleForm
+
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "create binnacle"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+class BinnacleUpdateView(UpdateView):
+    model = Binnacle
+    template_name = "projects/binnacle/binnacle_form.html"
+    form_class = BinnacleForm
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "Edit binnacle"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+class BinnacleDeleteView(DeleteView):
+    model = Binnacle
+    template_name = "projects/binnacle/binnacle_delete.html"
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "resources"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
