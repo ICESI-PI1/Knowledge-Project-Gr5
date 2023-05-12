@@ -671,3 +671,25 @@ class BinnacleDeleteView(DeleteView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         return context
+
+class CraeateAnnouncementProject(CreateView):
+    model = AnnouncementProject
+    template_name = 'projects/announcements/announcementProjects_list.html'
+    context_object_name = 'announcements'
+
+    def get_queryset(self):
+        project_id = self.kwargs['pk'] 
+        project = Project.objects.get(id_project=project_id) 
+        category= project.category
+        announcements = Announcement.objects.filter(category=category)
+        return projects
+    
+    def post(self, request, *args, **kwargs):
+        project_id = self.kwargs['pk']
+        project = Project.objects.get(id_project=project_id)
+        announcement_id = request.POST["announcement"]
+        announcement=Announcement.objects.get(id_announ=announcement_id)
+        AnnouncementProject.objects.create(announcement=announcement,project=project)
+
+
+    
