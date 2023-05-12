@@ -167,3 +167,9 @@ class Donation(models.Model):
 
     def __str__(self):
         return f" Donación de {self.company_nit.name} - {self.resource_id.name} ({self.amount})"
+    
+class Binnacle(models.Model):
+    id_binnacle = models.AutoField(primary_key=True)
+    id_project = models.ForeignKey(Project, on_delete=models.CASCADE, primary_key=True)
+    date = models.DateField()
+    description = models.TextField(blank=True)

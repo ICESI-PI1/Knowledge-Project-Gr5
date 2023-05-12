@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resource, Category, Donation, Announcement
+from .models import Resource, Category, Donation, Announcement, Binnacle
 from apps.app_users.models import User
 class ResourceForm(forms.ModelForm):
     class Meta:
@@ -48,4 +48,12 @@ class UserForm(forms.ModelForm):
         fields = ['user_cc', 'full_name', 'email', 'phone', 'birth_date', 'photo', 'is_staff', 'is_active']
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
+        }
+        
+class BinnacleForm(forms.ModelForm):
+    class Meta:
+        model = Binnacle
+        fields = ['date','description']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
         }

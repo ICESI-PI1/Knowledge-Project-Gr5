@@ -916,7 +916,68 @@ class DonationCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Donation.objects.count(), 0)
         self.assertEqual(self.resourceBag.amount, Decimal('0.0'))
+        
+class DonationListViewTestCase(TestCase):
 
+    def setUp(self):
+        self.client = Client()
+        self.user_cc = "1234567890"
+        self.password = "123"
+        self.user = User.objects.create_user(
+            user_cc=self.user_cc,
+            password=self.password,
+            full_name="John Doe",
+            email="johndoe@example.com",
+            phone="1234567890",
+            birth_date="1990-01-01",
+        )
+        self.category = Category.objects.create(
+            name="Test Category",
+            photo="path/to/photo.jpg"
+        )
+        self.company = Company.objects.create(
+            nit='1234567890',
+            phone='1234567890',
+            address='Test Address',
+            name='Test Company'
+        )
+        self.project = Project.objects.create(
+            title='Test Project',
+            objective='Test Objective',
+            results='Test Results',
+            reach='Test Reach',
+            company_nit=self.company,
+            category=self.category
+        )
+        self.resource = Resource.objects.create(name='Test Resource')
+        self.resourceBag = ResourcesBag.objects.create(project_id=self.project,
+                                                       resource_id=self.resource,
+                                                       amount=0.0)
+        self.resourceBag.save()
+        self.requirement = Requirement.objects.create(project_id=self.project,
+                                                      resource_id=self.resource,
+                                                      objective=10.0)
+        self.requirement.save()
+        self.role1 = Role.objects.create(name="admin")
+        self.user_role = UserRole.objects.create(
+            user=self.user, role=self.role1)
+        self.url = reverse('donation-create', args=[self.project.pk])
+        self.client.login(username=self.user_cc, password=self.password)
+        self.donation_1 = Donation.objects.create(
+            company_nit = self.company,
+            resource_id = self.resource,
+            amount = 20.0,
+            project_id = self.project,
+            description = 'Donation1',
+        )
+
+    def test_donation_list_view(self):
+        url = reverse('donations-list', kwargs={'pk': self.project.id_project})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response, 'projects/donations/donations_list.html')
 
 class AnnouncementCategoriesListViewTestCase(TestCase):
     def setUp(self):
@@ -1475,9 +1536,10 @@ class CompanyDeleteViewTestCase(TestCase):
 
         # Login the user
         self.client = Client()
+        self.user_company = UserCompany.objects.create(user=self.user, company=self.company)
+        self.role = Role.objects.create(name="common_user")
         self.role = Role.objects.create(name="company_user")
-        self.user_role = UserRole.objects.create(
-            user=self.user, role=self.role)
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
         self.client.force_login(self.user)
 
     def test_company_delete_view_get(self):
@@ -1489,10 +1551,10 @@ class CompanyDeleteViewTestCase(TestCase):
 
     def test_company_delete_view_post(self):
         response = self.client.post(
-            reverse('company_delete', kwargs={'pk': self.company.nit})
+            reverse('delete_company', kwargs={'pk': self.company.nit})
         )
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('company_detail'))
+        self.assertRedirects(response, reverse('home'))
         with self.assertRaises(ObjectDoesNotExist):
             Company.objects.get(pk=self.company.nit)
 
@@ -1545,3 +1607,4 @@ class ProjectCreateViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)  # Should redirect
         # Should create a new project
         
+     
