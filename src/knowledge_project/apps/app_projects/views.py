@@ -433,7 +433,44 @@ class CompanyDetail(View):
                 "company_nit":company.nit,
             },
         )
+
+class EditCompany(UpdateView):
+    model = Company
+    template_name = "company/edit_company.html"
+    form_class = CompanyForm
+    success_url = 'company_detail'
+    company = UserCompany.objects.get(user=request.user).company
+    
+    def get(self, request, *args, **kwargs):
+        page_name = "Edit company"
         
+        context = {
+            "page_name": page_name,
+            "company_logo":self.company.logo,
+            "company_name":self.company.name,
+            "company_address":self.company.address,
+            "company_phone":self.company.phone,
+            "company_nit":self.company.nit,
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwargs):
+        company = self.company
+        name = self.request.POST.get("Name")
+        nit  = self.request.POST.get("Nit")
+        address = self.request.POST.get("Adress")
+        phone = self.request.POST.get("Phone")
+        logo = self.request.POST.get("Logo")
+        
+        company.name = name
+        company.nit = nit
+        company.address = address
+        company.phone = phone
+        company.logo = logo
+        company.save()
+
+        return redirect(reverse_lazy('company_detail'))
+
 class EditCompany(View):
     def get(self , request):
         page_name = "Edit company"

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resource, Category, Donation, Announcement, Binnacle
+from .models import Resource, Category, Donation, Announcement, Binnacle, Company
 from apps.app_users.models import User
 class ResourceForm(forms.ModelForm):
     class Meta:
@@ -66,4 +66,12 @@ class BinnacleForm(forms.ModelForm):
         fields = ['date','description']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
+        }
+        
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'nit', 'address', 'phone', 'logo']
+        widgets = {
+            'logo': forms.FileInput(attrs={'accept': 'image/*', 'max_size': 10485760}),
         }

@@ -37,9 +37,9 @@
                       class="input"
                       placeholder="Ingresa el nombre de la compañia"
                       type="text"
-                      name="name"
-                      id="name"
-                      value={{company_name}}
+                      name="Name"
+                      id="Name"
+                      value="{{company_name}}"
                     />
                   </p>
                   <p>
@@ -50,7 +50,7 @@
                       type="text"
                       name="Nit"
                       id="Nit"
-                      value = {{company_nit}}
+                      value = "{{company_nit}}"
                     />
                   </p>
                   <p>
@@ -61,7 +61,7 @@
                       type="text"
                       name="Adress"
                       id="Adress"
-                      value = {{company_address}}
+                      value = "{{company_address}}"
                     />
                   </p>
                   <p>
@@ -72,10 +72,11 @@
                       type="text"
                       name="Phone"
                       id="Phone"
-                      value = {{company_phone}}
+                      value = "{{company_phone}}"
                     />
                   </p>
                   <p>
+                    <img src="{{ company_logo }}" alt="Profile Picture">
                     <label for="Logo">LOGO</label>
                     <input
                       class="input"
