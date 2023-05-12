@@ -1475,9 +1475,10 @@ class CompanyDeleteViewTestCase(TestCase):
 
         # Login the user
         self.client = Client()
+        self.user_company = UserCompany.objects.create(user=self.user, company=self.company)
+        self.role = Role.objects.create(name="common_user")
         self.role = Role.objects.create(name="company_user")
-        self.user_role = UserRole.objects.create(
-            user=self.user, role=self.role)
+        self.user_role = UserRole.objects.create(user=self.user, role=self.role)
         self.client.force_login(self.user)
 
     def test_company_delete_view_get(self):

@@ -497,8 +497,7 @@ class CompanyDeleteView(DeleteView):
     success_url = reverse_lazy("home")
     
     def post(self, request, pk):
-        user = request.user
-        userCompany = UserCompany.objects.get(user = user)
+        userCompany = get_object_or_404(UserCompany, user=request.user)
         company=userCompany.company
         
         get_object_or_404(UserRole, user=request.user).delete()
@@ -606,6 +605,47 @@ class UserUpdateView(UpdateView):
         user.save()
 
         return redirect(reverse_lazy('home'))
-
-
     
+#--------------- Binnacle --------------------
+
+class BinnacleCreateView(CreateView):
+    template_name = "projects/binnacle/binnacle_form.html"
+    form_class = BinnacleForm
+
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "create binnacle"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+class BinnacleUpdateView(UpdateView):
+    model = Binnacle
+    template_name = "projects/binnacle/binnacle_form.html"
+    form_class = BinnacleForm
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "Edit binnacle"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+class BinnacleDeleteView(DeleteView):
+    model = Binnacle
+    template_name = "projects/binnacle/binnacle_delete.html"
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "resources"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context

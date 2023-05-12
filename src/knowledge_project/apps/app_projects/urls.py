@@ -38,6 +38,10 @@ urlpatterns = [
      #---------------- Donation --------------
     #path('projects/donations/donations_list/', name='donations-list'),
     path('projects/donations/<int:pk>/create_donation/', login_required(DonationCreateView.as_view()), name='donation-create'),
+    #---------------- Binnacle -------------
+    path('projects/binnacle/create/', login_required(BinnacleCreateView.as_view()), name='binnacle-create'),
+    path('projects/binnacle/<int:pk>/update/', login_required(BinnacleUpdateView.as_view()), name='binnacle-update'),
+    path('projects/binnacle/<int:pk>/delete/', login_required(BinnacleDeleteView.as_view()), name='binnacle-delete'),
 ]
 
 
