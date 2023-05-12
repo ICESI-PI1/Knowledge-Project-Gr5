@@ -45,9 +45,19 @@ class DonationForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['user_cc', 'full_name', 'email', 'phone', 'birth_date', 'photo', 'is_staff', 'is_active']
+        fields = ['user_cc', 'full_name', 'email', 'phone', 'birth_date', 'photo']
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date','class':'margin-top-10'}),
+            'email':forms.EmailInput(attrs={'class':'margin-top-10'})
+        }
+        labels = {
+            'user_cc':'Número de identificación',
+            'full_name':'Nombre completo',
+            'email':'Correo electrónico',
+            'phone':'Número telefónico',
+            'birth_date':'Fecha de nacimiento',
+            'photo':'Foto de perfil',
+            
         }
         
 class BinnacleForm(forms.ModelForm):

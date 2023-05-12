@@ -31,25 +31,6 @@ class HomeView(View):
             },
         )
 
-class UserDetail(View):
-    def get(self , request):
-        page_name = "User detail"
-        user = request.user
-        template_name = "user\detailUser.html"
-        return render(
-            request,
-            template_name,
-            {
-                "page_name": page_name,
-                "profile_pic":user.photo,
-                "user_name":user.full_name,
-                "user_email":user.email,
-                "user_phone":user.phone,
-                "user_cc":user.user_cc,
-                "birth_date":user.birth_date,
-            },
-        )
-
 #--------------- Resources --------------------
 
 class ResourceListView(ListView):
@@ -568,6 +549,7 @@ class DonationCreateView(CreateView):
         context['resources'] = resources
         return context
 
+
 class DonationListView(ListView):
     model = Donation
     template_name = 'projects/donations/donations_list.html'
@@ -586,6 +568,8 @@ class DonationListView(ListView):
         context['project_id'] = self.kwargs.get('pk')
 
         return context
+
+#--------------- User --------------------
 
 class UserUpdateView(UpdateView):
     model = User
@@ -624,6 +608,26 @@ class UserUpdateView(UpdateView):
 
         return redirect(reverse_lazy('home'))
     
+
+class UserDetail(View):
+    def get(self , request):
+        page_name = "User detail"
+        user = request.user
+        template_name = "user\detailUser.html"
+        return render(
+            request,
+            template_name,
+            {
+                "page_name": page_name,
+                "profile_pic":user.photo,
+                "user_name":user.full_name,
+                "user_email":user.email,
+                "user_phone":user.phone,
+                "user_cc":user.user_cc,
+                "birth_date":user.birth_date,
+            },
+        )
+
 #--------------- Binnacle --------------------
 
 class BinnacleCreateView(CreateView):

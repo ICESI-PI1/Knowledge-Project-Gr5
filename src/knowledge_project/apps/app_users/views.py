@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, login, authenticate
-from .models import User
+from .models import User, UserRole
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.views import View
+from ..app_projects.forms import UserForm
 
 
 class LoginView(View):
@@ -79,4 +80,61 @@ class UserRegistration(CreateView):
         return redirect("login")
     
 
+    
+class UserListView(ListView):
+    model = User
+    template_name = 'user/users_list.html'
+    context_object_name = 'users'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "users"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
 
+        return context
+
+
+class UserCreateView(CreateView):
+    template_name = "user/users_form.html"
+    form_class = UserForm
+
+    success_url = reverse_lazy("users-list")
+
+    def form_valid(self, form):
+        # Realizar las operaciones necesarias antes de guardar el objeto
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "users"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+
+class UserUpdateView(UpdateView):
+    model = User
+    template_name = "user/users_form.html"
+    form_class = UserForm
+    success_url = reverse_lazy("users-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "users"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context
+
+
+class UserDeleteView(DeleteView):
+    model = User
+    template_name = "user/users_confirm_delete.html"
+    success_url = reverse_lazy("users-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "users"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        return context

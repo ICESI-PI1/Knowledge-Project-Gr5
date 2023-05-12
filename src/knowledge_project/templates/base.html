@@ -39,7 +39,7 @@
             
             {% else %}
               <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
-              <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="#">Usuarios</a></li>
+              <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="{% url 'users-list' %}">Usuarios</a></li>
               <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-categories' %}">Convocatorias</a></li>
               <li class="{% if page_name == 'companies' %}active{% endif %}"><a class="{% if page_name == 'companies' %}active{% endif %}" href="#">Empresas</a></li>
             {% endif %}

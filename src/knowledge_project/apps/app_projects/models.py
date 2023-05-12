@@ -170,6 +170,6 @@ class Donation(models.Model):
     
 class Binnacle(models.Model):
     id_binnacle = models.AutoField(primary_key=True)
-    id_project = models.ForeignKey(Project, on_delete=models.CASCADE, primary_key=True)
+    id_project = models.ForeignKey(Project, on_delete=models.CASCADE)
     date = models.DateField()
     description = models.TextField(blank=True)
