@@ -13,7 +13,7 @@
         {% block head %}
         <link
         rel="stylesheet"
-        href="{% static 'css/user/detailUser.css' %}"
+        href="{% static 'css/user/detailUserStyle.css' %}"
         />
         {% endblock %}
     </head>
@@ -26,7 +26,12 @@
         <div class="card">
           <div class="banner">
             <div class="circle">
+              {% if not profile_pic %}
               <div class="fa-solid fa-user"></div>
+              {% else %}
+              <img src="{{ profile_pic }}">
+              {% endif %}
+            
             </div>
           </div>
           <div class="menu">
@@ -48,8 +53,14 @@
            
             </div>
             <div class="edit-btn">
-              <button>Editar <i class="fa-solid fa-edit"></i></button>
+              <button onclick="goToEdit(this)" id_user="{{ user_cc }}">Editar <i class="fa-solid fa-edit"></i></button>
             </div>
+            <script>
+              function goToEdit(button) {
+                var id = button.getAttribute("id_user");
+                window.location.href = "/projects/user/"+id+"/update";
+              }
+              </script>
           </div>
         </div>
 

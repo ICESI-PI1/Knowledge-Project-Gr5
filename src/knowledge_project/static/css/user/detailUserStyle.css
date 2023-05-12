@@ -29,7 +29,7 @@ body {
   
 }
 .card .banner {
-  background-image: url("https://images.unsplash.com/photo-1522426266214-ec2d2abb9ce0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1474&q=80");
+  background-image: url("https://www.elcolombiano.com/binrepository/1200x900/0c136/1200d627/none/11101/PTOM/general-icesi-1_40027952_20220524095123.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -58,6 +58,14 @@ body {
 .card .banner .circle:hover {
   transform: translateY(50%) scale(1.3);
 }
+
+.card .banner .circle img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .card .menu {
   width: 100%;
   height: 4.5rem;
@@ -107,6 +115,12 @@ body {
   text-align: center;
   width: 100%;
   color: #404040;
+}
+
+.card .actions .edit-btn button a {
+  border: 1px solid #000;
+  width: 100%;
+  height: 100%;
 }
 
 .card .actions .edit-btn button {
@@ -192,4 +206,22 @@ body {
     margin-top: 40px;
     margin-bottom: 40px;
   }
+}
+
+.row-flex{
+  display: flex;
+}
+
+.card .actions .edit-btn .delete-btn {
+  color: #fff;
+  background: #ff351a;
+}
+
+.card .actions .edit-btn .delete-btn:hover {
+  background-color: #db2b14;
+  transform: scale(1.1);
+}
+.card .actions .edit-btn .delete-btn:active {
+  background-color: #921e0f;
+  transform: scale(1);
 }
