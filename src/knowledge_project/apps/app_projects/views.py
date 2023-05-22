@@ -363,12 +363,13 @@ class Requirements2ProjectView(View):
                 "resourses": resourses,
                 "requirements": requirements,
                 "project": project,
+                "editable": True,
             },
         )
 
     def post(self, request, project_id):
         project = get_object_or_404(Project, id_project=project_id)
-        print("XDDDDDDDDDDDDDDDDDDDDDDDDDDD")
+        print("POST DE CREAR")
         resourse = get_object_or_404(Resource, id_resource=request.POST["format"])
         objective = request.POST["objective"]
 
@@ -405,6 +406,7 @@ def requitements_delete(request, project_id, resource_id):
 
 class RequirementsEditView(View):
     def get(self, request, project_id, resource_id):
+        print("GET DE EDITAR")
         page_name = "requirements_edit"
         temp_user = get_object_or_404(UserRole, user=request.user)
         user_role = temp_user.role.name
@@ -436,8 +438,9 @@ class RequirementsEditView(View):
         )
 
     def post(self, request, project_id, resource_id):
+        print("POST DE EDITAR")
         project = get_object_or_404(Project, id_project=project_id)
-        resource = get_object_or_404(Resource, id_resource=request.POST["format"])
+        resource = get_object_or_404(Resource, id_resource=resource_id)
         objective = request.POST["objective"]
         requirement = Requirement.objects.get(project_id=project, resource_id=resource)
         requirement.objetive = objective

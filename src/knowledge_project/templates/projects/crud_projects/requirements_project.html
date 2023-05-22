@@ -122,7 +122,11 @@
                   miFormulario.submit();
                 });
               </script>
-              <button id="cancelar" {% if page_name == "requirements_edit" %} onclick="window.location.href={% url 'project-create-requirements' project_id=project.pk %}" {% endif %} class="btn btn-finish">Terminar</button>
+              <button id="cancelar" class="btn btn-finish"
+              {% if page_name == "requirements_edit" %}
+              type="submit"
+              {% endif %}
+              >Terminar</button>
               {% if  not page_name == "requirements_edit"%}
               <script>
                 document
@@ -130,6 +134,15 @@
                   .addEventListener("click", function () {
                     window.location.href = "/";
                   });
+              </script>
+              {% else %}
+              <script>
+                var btnTerminar = document.getElementById("cancelar");
+                var miFormulario = document.getElementById("formulario");
+
+                btnTerminar.addEventListener("click", function () {
+                  miFormulario.submit();
+                });
               </script>
               {% endif %}
             </div>
