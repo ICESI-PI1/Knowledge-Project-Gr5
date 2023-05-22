@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link
       rel="stylesheet"
-      href="{% static 'css/projects/requirements_project_style.css' %}"
+      href="{% static 'css/projects/requirements_project.css' %}"
     />
     {% endblock %}
   </head>
@@ -38,7 +38,11 @@
                   <h4>{{requirement.resource_id.name}}</h4>
                   <p>{{requirement.objective}}</p>
                   <div class="options">
-                    <i class="fa-solid fa-pen-to-square" id="edit"></i>
+                    <a
+                      href="{% url 'project-edit-requirements' project_id=project.pk resource_id=requirement.resource_id.pk %}"
+                    >
+                      <i class="fa-solid fa-pen-to-square" id="edit"></i>
+                    </a>
                     <a
                       href="{% url 'project-delete-requirements' project_id=project.pk resource_id=requirement.resource_id.pk %}"
                     >
@@ -63,9 +67,25 @@
               {% csrf_token %}
               <label for="format">RECURSO</label>
               <div class="select">
-                <select name="format" id="format" required>
+                <select
+                  name="format"
+                  id="format"
+                  required
+                  {% if not editable %}
+                  disabled
+                  {% endif %}
+                >
+                  {% if editable %}
                   <option selected disabled>Selecciona un recurso</option>
-                  {% for resourse in resourses %}
+                  {% else %}
+                  <option
+                    selected
+                    disabledname="resourse"
+                    value="{{resourse.id_resource}}"
+                  >
+                    {{resourse_2_edit.name}}
+                  </option>
+                  {% endif %} {% for resourse in resourses %}
                   <option name="resourse" value="{{resourse.id_resource}}">
                     {{resourse.name}}
                   </option>
@@ -87,7 +107,11 @@
               </p>
             </form>
             <div class="options">
-              <button id="terminar" type="submit" class="btn btn-add">
+              <button id="terminar" type="submit" class="btn btn-add"
+              {% if page_name == "requirements_edit" %}
+              disabled
+              {% endif %}
+              >
                 Agregar
               </button>
               <script>
@@ -98,7 +122,8 @@
                   miFormulario.submit();
                 });
               </script>
-              <button id="cancelar" class="btn btn-finish">Terminar</button>
+              <button id="cancelar" {% if page_name == "requirements_edit" %} onclick="window.location.href={% url 'project-create-requirements' project_id=project.pk %}" {% endif %} class="btn btn-finish">Terminar</button>
+              {% if  not page_name == "requirements_edit"%}
               <script>
                 document
                   .getElementById("cancelar")
@@ -106,6 +131,7 @@
                     window.location.href = "/";
                   });
               </script>
+              {% endif %}
             </div>
           </div>
           <div class="resourses-list-responsive">
@@ -117,7 +143,11 @@
                   <h4>{{requirement.resource_id.name}}</h4>
                   <p>{{requirement.objective}}</p>
                   <div class="options">
-                    <i class="fa-solid fa-pen-to-square" id="edit"></i>
+                    <a
+                      href="{% url 'project-edit-requirements' project_id=project.pk resource_id=requirement.resource_id.pk %}"
+                    >
+                      <i class="fa-solid fa-pen-to-square" id="edit"></i>
+                    </a>
                     <a
                       href="{% url 'project-delete-requirements' project_id=project.pk resource_id=requirement.resource_id.pk %}"
                     >

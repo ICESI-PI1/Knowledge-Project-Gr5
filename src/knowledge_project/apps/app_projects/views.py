@@ -1,4 +1,10 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    DetailView,
+)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
@@ -9,6 +15,7 @@ from .models import *
 from .forms import *
 from decimal import Decimal
 from datetime import datetime
+
 
 def signout(request):
     logout(request)
@@ -31,7 +38,9 @@ class HomeView(View):
             },
         )
 
-#--------------- Resources --------------------
+
+# --------------- Resources --------------------
+
 
 class ResourceListView(ListView):
     model = Resource
@@ -90,7 +99,9 @@ class ResourceDeleteView(DeleteView):
         context["user_role"] = temp.role.name
         return context
 
-#--------------- Categories --------------------
+
+# --------------- Categories --------------------
+
 
 class CategoryListView(ListView):
     model = Category
@@ -149,22 +160,24 @@ class CategoryDeleteView(DeleteView):
         context["user_role"] = temp.role.name
         return context
 
-#--------------- Announcements --------------------
+
+# --------------- Announcements --------------------
+
 
 class AnnouncementCategoriesListView(ListView):
     model = Announcement
     template_name = "projects/announcements/announcements_select_category.html"
     context_object_name = "announcements"
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_name'] = 'announcement'
+        context["page_name"] = "announcement"
         temp = UserRole.objects.filter(user=self.request.user).first()
-        context['user_role'] = temp.role.name
+        context["user_role"] = temp.role.name
         context["user_name"] = temp.user.full_name
-        context['categories'] = Category.objects.all()
+        context["categories"] = Category.objects.all()
         return context
+
 
 class AnnouncementCreateView(CreateView):
     template_name = "projects/announcements/announcements_form.html"
@@ -182,7 +195,8 @@ class AnnouncementCreateView(CreateView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         return context
-    
+
+
 class AnnouncementUpdateView(UpdateView):
     model = Announcement
     template_name = "projects/announcements/announcements_form.html"
@@ -209,6 +223,7 @@ class AnnouncementDeleteView(DeleteView):
         context["user_role"] = temp.role.name
         return context
 
+
 class AnnouncementListView(ListView):
     model = Announcement
     template_name = "projects/announcements/announcements_list.html"
@@ -216,19 +231,19 @@ class AnnouncementListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        category_id = self.request.GET.get('category', None)
+        category_id = self.request.GET.get("category", None)
         if category_id:
             queryset = queryset.filter(category__id_category=category_id)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_name'] = 'announcement'
+        context["page_name"] = "announcement"
         temp = UserRole.objects.filter(user=self.request.user).first()
-        context['user_role'] = temp.role.name
-        context['categories'] = Category.objects.all()
+        context["user_role"] = temp.role.name
+        context["categories"] = Category.objects.all()
 
-        category_id = self.request.GET.get('category', None)
+        category_id = self.request.GET.get("category", None)
         category_name = None
         categ = None
         if category_id:
@@ -238,30 +253,32 @@ class AnnouncementListView(ListView):
                 category_name = category.name
             except Category.DoesNotExist:
                 pass
-        context['current_category_name'] = category_name
-        context['category'] = categ
+        context["current_category_name"] = category_name
+        context["category"] = categ
         return context
 
 
 class AnnouncementProjectListView(ListView):
     model = AnnouncementProject
-    template_name = 'projects/announcements/announcementProjects_list.html'
-    context_object_name = 'projects'
+    template_name = "projects/announcements/announcementProjects_list.html"
+    context_object_name = "projects"
 
     def get_queryset(self):
-        announcement_id = self.kwargs['pk'] 
-        announcement = Announcement.objects.get(id_announ=announcement_id) 
-        announcement_projects = AnnouncementProject.objects.filter(announcement=announcement) 
-        projects = [ap.project for ap in announcement_projects] 
+        announcement_id = self.kwargs["pk"]
+        announcement = Announcement.objects.get(id_announ=announcement_id)
+        announcement_projects = AnnouncementProject.objects.filter(
+            announcement=announcement
+        )
+        projects = [ap.project for ap in announcement_projects]
         return projects
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_name"] = "announcement"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
 
-        announcement_id = self.kwargs['pk']
+        announcement_id = self.kwargs["pk"]
         category_name = None
 
         if announcement_id:
@@ -271,13 +288,14 @@ class AnnouncementProjectListView(ListView):
                 category_name = category.name
             except Category.DoesNotExist:
                 pass
-            
+
         context["current_category_name"] = category_name
 
         return context
 
 
-#--------------- Projects --------------------
+# --------------- Projects --------------------
+
 
 class ProjectCreateView(View):
     def get(self, request):
@@ -319,7 +337,9 @@ class ProjectCreateView(View):
             reverse("project-create-requirements", args=[project.id_project])
         )
 
-#--------------- Requeriements --------------------
+
+# --------------- Requeriements --------------------
+
 
 class Requirements2ProjectView(View):
     def get(self, request, project_id):
@@ -347,16 +367,23 @@ class Requirements2ProjectView(View):
         )
 
     def post(self, request, project_id):
-
         project = get_object_or_404(Project, id_project=project_id)
-        resourse = get_object_or_404(Resource, id_resource=request.POST['format'])
-        objective = request.POST['objective']
+        print("XDDDDDDDDDDDDDDDDDDDDDDDDDDD")
+        resourse = get_object_or_404(Resource, id_resource=request.POST["format"])
+        objective = request.POST["objective"]
 
         try:
-            Requirement.objects.create(project_id=project, resource_id=resourse, objective=objective)
-            ResourcesBag.objects.create(project_id=project, resource_id=resourse, amount=0)
+            Requirement.objects.create(
+                project_id=project, resource_id=resourse, objective=objective
+            )
+            ResourcesBag.objects.create(
+                project_id=project, resource_id=resourse, amount=0
+            )
         except IntegrityError as e:
-            if 'unique constraint' in str(e).lower() and 'resourcesbag_project_id_resource_id' in str(e).lower():
+            if (
+                "unique constraint" in str(e).lower()
+                and "resourcesbag_project_id_resource_id" in str(e).lower()
+            ):
                 print("El recurso ya ha sido asignado al proyecto.")
             else:
                 print(f"Error: {e}")
@@ -365,7 +392,6 @@ class Requirements2ProjectView(View):
 
 
 def requitements_delete(request, project_id, resource_id):
-
     project = get_object_or_404(Project, id_project=project_id)
     resource = get_object_or_404(Resource, id_resource=resource_id)
 
@@ -376,92 +402,141 @@ def requitements_delete(request, project_id, resource_id):
 
     return redirect(reverse("project-create-requirements", args=[project_id]))
 
-#--------------- Companies --------------------
+
+class RequirementsEditView(View):
+    def get(self, request, project_id, resource_id):
+        page_name = "requirements_edit"
+        temp_user = get_object_or_404(UserRole, user=request.user)
+        user_role = temp_user.role.name
+
+        resourses = Resource.objects.all()
+
+        project = get_object_or_404(Project, id_project=project_id)
+
+        requirements = Requirement.objects.filter(project_id=project)
+
+        template_name = "projects/crud_projects/requirements_project.html"
+
+
+        resource = get_object_or_404(Resource, id_resource=resource_id)
+
+
+        return render(
+            request,
+            template_name,
+            {
+                "user_role": user_role,
+                "page_name": page_name,
+                "resourses": resourses,
+                "requirements": requirements,
+                "project": project,
+                "resourse_2_edit":resource,
+                "editable":False,
+            },
+        )
+
+    def post(self, request, project_id, resource_id):
+        project = get_object_or_404(Project, id_project=project_id)
+        resource = get_object_or_404(Resource, id_resource=request.POST["format"])
+        objective = request.POST["objective"]
+        requirement = Requirement.objects.get(project_id=project, resource_id=resource)
+        requirement.objetive = objective
+        requirement.save()
+        return redirect(reverse("project-create-requirements", args=[project_id]))
+
+# --------------- Companies --------------------
+
 
 class CompanyRegistration(View):
     def get(self, request):
         page_name = "Company sing up"
         template_name = "company/create_company.html"
-        return render(request, template_name,{"page_name": page_name,})
-    
-    def post(self,request):
-        #Obtener datos del formulario
+        return render(
+            request,
+            template_name,
+            {
+                "page_name": page_name,
+            },
+        )
+
+    def post(self, request):
+        # Obtener datos del formulario
         name = request.POST["Name"]
-        nit  = request.POST["Nit"]
+        nit = request.POST["Nit"]
         address = request.POST["Adress"]
         phone = request.POST["Phone"]
         logo = request.FILES.get("Logo")
-        
+
         company = Company.objects.create(
-            name=name, 
+            name=name,
             nit=nit,
-            address = address,
-            phone = phone,
-            logo = logo,
+            address=address,
+            phone=phone,
+            logo=logo,
         )
         company.save()
         UserCompany.objects.create(
-            user = request.user,
-            company = company,
+            user=request.user,
+            company=company,
         )
-        
+
         get_object_or_404(UserRole, user=request.user).delete()
-        
-        newRole = Role.objects.get(name='company_user')
+
+        newRole = Role.objects.get(name="company_user")
         UserRole.objects.create(
             user=request.user,
             role=newRole,
         )
-        
-        #Redirigir a la ventana home
-        return redirect(reverse('home'))   
-    
+
+        # Redirigir a la ventana home
+        return redirect(reverse("home"))
+
+
 class CompanyDetail(View):
-    def get(self , request):
+    def get(self, request):
         page_name = "Company detail"
-        company= get_object_or_404(UserCompany, user=request.user).company
+        company = get_object_or_404(UserCompany, user=request.user).company
         template_name = "company\detailCompany.html"
         return render(
             request,
             template_name,
             {
                 "page_name": page_name,
-                "company_logo":company.logo.url,
-                "company_name":company.name,
-                "company_address":company.address,
-                "company_phone":company.phone,
-                "company_nit":company.nit,
+                "company_logo": company.logo.url,
+                "company_name": company.name,
+                "company_address": company.address,
+                "company_phone": company.phone,
+                "company_nit": company.nit,
             },
         )
+
 
 class EditCompany(UpdateView):
     model = Company
     template_name = "company/edit_company.html"
     form_class = CompanyForm
-    success_url = 'company_detail'
-    company = UserCompany.objects.get(user=request.user).company
-    
+    success_url = "company_detail"
+
     def get(self, request, *args, **kwargs):
         page_name = "Edit company"
-        
         context = {
             "page_name": page_name,
-            "company_logo":self.company.logo,
-            "company_name":self.company.name,
-            "company_address":self.company.address,
-            "company_phone":self.company.phone,
-            "company_nit":self.company.nit,
+            "company_logo": self.company.logo,
+            "company_name": self.company.name,
+            "company_address": self.company.address,
+            "company_phone": self.company.phone,
+            "company_nit": self.company.nit,
         }
         return render(request, self.template_name, context)
-    
+
     def post(self, request, *args, **kwargs):
-        company = self.company
+        company = UserCompany.objects.get(user=request.user).company
         name = self.request.POST.get("Name")
-        nit  = self.request.POST.get("Nit")
+        nit = self.request.POST.get("Nit")
         address = self.request.POST.get("Adress")
         phone = self.request.POST.get("Phone")
         logo = self.request.POST.get("Logo")
-        
+
         company.name = name
         company.nit = nit
         company.address = address
@@ -469,10 +544,11 @@ class EditCompany(UpdateView):
         company.logo = logo
         company.save()
 
-        return redirect(reverse_lazy('company_detail'))
+        return redirect(reverse_lazy("company_detail"))
+
 
 class EditCompany(View):
-    def get(self , request):
+    def get(self, request):
         page_name = "Edit company"
         company = UserCompany.objects.get(user=request.user).company
         template_name = "user\detailUser.html"
@@ -481,66 +557,68 @@ class EditCompany(View):
             template_name,
             {
                 "page_name": page_name,
-                "company_logo":company.logo.url,
-                "company_name":company.name,
-                "company_address":company.address,
-                "company_phone":company.phone,
-                "company_nit":company.nit,
+                "company_logo": company.logo.url,
+                "company_name": company.name,
+                "company_address": company.address,
+                "company_phone": company.phone,
+                "company_nit": company.nit,
             },
         )
-    
-    def post(self , request):
+
+    def post(self, request):
         name = request.POST["name"]
         Nit = request.POST["Nit"]
         Adress = request.POST["Adress"]
         Phone = request.POST["Phone"]
         Logo = request.FILES.get("Logo")
-        
+
         company = UserCompany.objects.get(user=request.user).company
-        
+
         company.name = name
         company.nit = Nit
         company.address = Adress
         company.phone = Phone
-        if (Logo != None):
+        if Logo != None:
             company.logo = Logo
-        
+
         company.save()
-        
+
         return redirect("company_detail")
-    
+
+
 class CompanyDeleteView(DeleteView):
     model = Company
     template_name = "company/delete_company.html"
     success_url = reverse_lazy("home")
-    
+
     def post(self, request, pk):
         userCompany = get_object_or_404(UserCompany, user=request.user)
-        company=userCompany.company
-        
+        company = userCompany.company
+
         get_object_or_404(UserRole, user=request.user).delete()
         userCompany.delete()
         company.delete()
-        
-        newRole = Role.objects.get(name='common_user')
+
+        newRole = Role.objects.get(name="common_user")
         UserRole.objects.create(
             user=request.user,
             role=newRole,
         )
         return redirect(reverse("home"))
-        
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_name"] = "categories"
         return context
 
-#--------------- Donations --------------------
+
+# --------------- Donations --------------------
+
 
 class DonationCreateView(CreateView):
     template_name = "projects/donations/create_donation.html"
     form_class = DonationForm
-    context_object_name = 'resources'
+    context_object_name = "resources"
     success_url = reverse_lazy("home")
 
     def post(self, request, pk):
@@ -551,68 +629,71 @@ class DonationCreateView(CreateView):
 
         project = Project.objects.get(id_project=pk)
 
-        donation = Donation.objects.create(company_nit=project.company_nit,
-                                           resource_id=Resource.objects.get(id_resource=recurso[0]),
-                                           amount=amountDonated,
-                                           project_id=project,
-                                           description=descriptionAs)
+        donation = Donation.objects.create(
+            company_nit=project.company_nit,
+            resource_id=Resource.objects.get(id_resource=recurso[0]),
+            amount=amountDonated,
+            project_id=project,
+            description=descriptionAs,
+        )
 
         try:
             Donation.full_clean(donation)
-            resourceBag = ResourcesBag.objects.get(project_id=pk, resource_id=recurso[0])
-            cant_total = resourceBag.amount+amountDonated
-            resourceBag.amount=cant_total
+            resourceBag = ResourcesBag.objects.get(
+                project_id=pk, resource_id=recurso[0]
+            )
+            cant_total = resourceBag.amount + amountDonated
+            resourceBag.amount = cant_total
             resourceBag.save()
         except ValidationError:
             donation.delete()
 
+        return redirect(reverse("home"))
 
-        return redirect(
-            reverse("home")
-        )
-        
     def form_valid(self, form):
         # Realizar las operaciones necesarias antes de guardar el objeto
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        project_pk = self.kwargs['pk']
+        project_pk = self.kwargs["pk"]
         requirements = Requirement.objects.filter(project_id=project_pk)
         resources = [res.resource_id for res in requirements]
         context["page_name"] = "resources"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
-        context['resources'] = resources
+        context["resources"] = resources
         return context
 
 
 class DonationListView(ListView):
     model = Donation
-    template_name = 'projects/donations/donations_list.html'
-    context_object_name = 'donations'
+    template_name = "projects/donations/donations_list.html"
+    context_object_name = "donations"
 
     def get_queryset(self):
-        project_id = self.kwargs['pk'] 
+        project_id = self.kwargs["pk"]
         donations = Donation.objects.filter(project_id=project_id)
         return donations
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_name'] = 'donations'
+        context["page_name"] = "donations"
         temp = UserRole.objects.filter(user=self.request.user).first()
-        context['user_role'] = temp.role.name
-        context['project_id'] = self.kwargs.get('pk')
+        context["user_role"] = temp.role.name
+        context["project_id"] = self.kwargs.get("pk")
 
         return context
 
-#--------------- User --------------------
+
+# --------------- User --------------------
+
 
 class UserUpdateView(UpdateView):
     model = User
     form_class = UserForm
-    template_name = 'user/UpdateUser.html'
-    success_url = 'home'
+    template_name = "user/UpdateUser.html"
+    success_url = "home"
 
     def get(self, request, *args, **kwargs):
         page_name = "User detail"
@@ -639,15 +720,15 @@ class UserUpdateView(UpdateView):
         user.profile_pic = profile_pic
         user.email = email
         user.phone = phone
-        if birth_date!="":
+        if birth_date != "":
             user.birth_date = birth_date
         user.save()
 
-        return redirect(reverse_lazy('home'))
-    
+        return redirect(reverse_lazy("home"))
+
 
 class UserDetail(View):
-    def get(self , request):
+    def get(self, request):
         page_name = "User detail"
         user = request.user
         template_name = "user\detailUser.html"
@@ -656,16 +737,18 @@ class UserDetail(View):
             template_name,
             {
                 "page_name": page_name,
-                "profile_pic":user.photo,
-                "user_name":user.full_name,
-                "user_email":user.email,
-                "user_phone":user.phone,
-                "user_cc":user.user_cc,
-                "birth_date":user.birth_date,
+                "profile_pic": user.photo,
+                "user_name": user.full_name,
+                "user_email": user.email,
+                "user_phone": user.phone,
+                "user_cc": user.user_cc,
+                "birth_date": user.birth_date,
             },
         )
 
-#--------------- Binnacle --------------------
+
+# --------------- Binnacle --------------------
+
 
 class BinnacleCreateView(CreateView):
     template_name = "projects/binnacle/binnacle_form.html"
@@ -684,6 +767,7 @@ class BinnacleCreateView(CreateView):
         context["user_role"] = temp.role.name
         return context
 
+
 class BinnacleUpdateView(UpdateView):
     model = Binnacle
     template_name = "projects/binnacle/binnacle_form.html"
@@ -697,6 +781,7 @@ class BinnacleUpdateView(UpdateView):
         context["user_role"] = temp.role.name
         return context
 
+
 class BinnacleDeleteView(DeleteView):
     model = Binnacle
     template_name = "projects/binnacle/binnacle_delete.html"
@@ -709,24 +794,22 @@ class BinnacleDeleteView(DeleteView):
         context["user_role"] = temp.role.name
         return context
 
+
 class CraeateAnnouncementProject(CreateView):
     model = AnnouncementProject
-    template_name = 'projects/announcements/announcementProjects_list.html'
-    context_object_name = 'announcements'
+    template_name = "projects/announcements/announcementProjects_list.html"
+    context_object_name = "announcements"
 
     def get_queryset(self):
-        project_id = self.kwargs['pk'] 
-        project = Project.objects.get(id_project=project_id) 
-        category= project.category
+        project_id = self.kwargs["pk"]
+        project = Project.objects.get(id_project=project_id)
+        category = project.category
         announcements = Announcement.objects.filter(category=category)
         return projects
-    
+
     def post(self, request, *args, **kwargs):
-        project_id = self.kwargs['pk']
+        project_id = self.kwargs["pk"]
         project = Project.objects.get(id_project=project_id)
         announcement_id = request.POST["announcement"]
-        announcement=Announcement.objects.get(id_announ=announcement_id)
-        AnnouncementProject.objects.create(announcement=announcement,project=project)
-
-
-    
+        announcement = Announcement.objects.get(id_announ=announcement_id)
+        AnnouncementProject.objects.create(announcement=announcement, project=project)
