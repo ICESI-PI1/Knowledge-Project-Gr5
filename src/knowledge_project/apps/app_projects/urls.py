@@ -43,6 +43,8 @@ urlpatterns = [
     path('projects/binnacle/create/', login_required(BinnacleCreateView.as_view()), name='binnacle-create'),
     path('projects/binnacle/<int:pk>/update/', login_required(BinnacleUpdateView.as_view()), name='binnacle-update'),
     path('projects/binnacle/<int:pk>/delete/', login_required(BinnacleDeleteView.as_view()), name='binnacle-delete'),
+    #---------------- Report -------------
+    path('projects/<int:pk>/donations/report/', login_required(DonacionesProjectReport.as_view()), name='report-generate'),
 ]
 
 

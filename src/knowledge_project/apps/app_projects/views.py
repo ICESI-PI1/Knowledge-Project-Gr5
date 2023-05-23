@@ -15,7 +15,10 @@ from .models import *
 from .forms import *
 from decimal import Decimal
 from datetime import datetime
-
+from xhtml2pdf import pisa
+from django.http import HttpResponse
+from django.template.loader import get_template
+from io import BytesIO
 
 def signout(request):
     logout(request)
@@ -816,3 +819,28 @@ class CraeateAnnouncementProject(CreateView):
         announcement_id = request.POST["announcement"]
         announcement = Announcement.objects.get(id_announ=announcement_id)
         AnnouncementProject.objects.create(announcement=announcement, project=project)
+
+def render_to_pdf(template_src,context_dict={}):
+    template=get_template(template_src)
+    html=template.render(context_dict)
+    result=BytesIO()
+    pdf=pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")),result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(),content_type="application/pdf")
+    return None
+
+class DonacionesProjectReport(View):
+    def get(self, request, *args, **kwargs):
+        template_name="reports/ReporteDonaciones.html"
+        project_id = self.kwargs["pk"]
+        donations=Donation.objects.filter(project_id=project_id)
+        project= Project.objects.get(id_project=project_id)
+        data={
+            "donations":donations,
+            "project":project,
+            "date":datetime.now()
+        }
+
+        pdf=render_to_pdf(template_name,data)
+        return HttpResponse(pdf,content_type="application/pdf")
+
