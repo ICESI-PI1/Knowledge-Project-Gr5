@@ -20,7 +20,6 @@
       <nav>
         <!-- <a class="logout-btn" href="{% url 'logout' %}">Salir</a> -->
         <div class="profile_pic" onclick="toggleMenu()"><div class="user_logo fa-solid fa-user"></div></div>
-        
         <input type="checkbox" id="check" />
         <label for="check" class="checkbtn">
           <i class="fas fa-bars"></i>
@@ -36,7 +35,6 @@
               {% if page_name == 'categories' %}
                 <li class="active"><a class="active" href="#">Gestionar Categorias</a></li>
               {% endif %}
-            
             {% else %}
               <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
               <li class="{% if page_name == 'users' %}active{% endif %}"><a class="{% if page_name == 'users' %}active{% endif %}" href="{% url 'users-list' %}">Usuarios</a></li>
@@ -46,13 +44,12 @@
           {% elif user_role ==  'common_user' %}
             <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
             <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-categories' %}">Convocatorias</a></li>
-            <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
+            <li class="{% if page_name == 'project' %}active{% endif %}"><a class="{% if page_name == 'project' %}active{% endif %}" href="{% url 'project-create' %}">Proyectos</a></li>
             <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="{% url 'register_company' %}">Empresa</a></li>
-          
           {% elif user_role ==  'company_user' %}
             <li class="{% if page_name == 'home' %}active{% endif %}"><a class="{% if page_name == 'home' %}active{% endif %}" href="/">Home</a></li>
             <li class="{% if page_name == 'announcement' %}active{% endif %}"><a class="{% if page_name == 'announcement' %}active{% endif %}" href="{% url 'announcements-categories' %}">Convocatorias</a></li>
-            <li class="{% if page_name == 'donnations' %}active{% endif %}"><a class="{% if page_name == 'donnations' %}active{% endif %}" href="#">Donaciones</a></li>
+            <li class="{% if page_name == 'project' %}active{% endif %}"><a class="{% if page_name == 'project' %}active{% endif %}" href="{% url 'project-create' %}">Proyectos</a></li>
             <li class="{% if page_name == 'company' %}active{% endif %}"><a class="{% if page_name == 'company' %}active{% endif %}" href="{% url 'company_detail' %}">Empresa</a></li>
 
           {% endif %}
