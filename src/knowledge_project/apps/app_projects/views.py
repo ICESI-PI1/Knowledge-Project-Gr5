@@ -290,6 +290,7 @@ class AnnouncementProjectListView(ListView):
                 category = announcement.category
                 category_name = category.name
             except Category.DoesNotExist:
+                #Alert*
                 pass
 
         context["current_category_name"] = category_name
@@ -388,8 +389,10 @@ class Requirements2ProjectView(View):
                 "unique constraint" in str(e).lower()
                 and "resourcesbag_project_id_resource_id" in str(e).lower()
             ):
+                #Alert*
                 print("El recurso ya ha sido asignado al proyecto.")
             else:
+                #Alert*
                 print(f"Error: {e}")
 
         return redirect(reverse("project-create-requirements", args=[project_id]))
@@ -653,7 +656,7 @@ class DonationCreateView(CreateView):
             resourceBag.save()
         except ValidationError:
             donation.delete()
-
+            #Alert*
         return redirect(reverse("home"))
 
     def form_valid(self, form):
@@ -811,7 +814,7 @@ class CraeateAnnouncementProject(CreateView):
         project = Project.objects.get(id_project=project_id)
         category = project.category
         announcements = Announcement.objects.filter(category=category)
-        return projects
+        return project
 
     def post(self, request, *args, **kwargs):
         project_id = self.kwargs["pk"]
