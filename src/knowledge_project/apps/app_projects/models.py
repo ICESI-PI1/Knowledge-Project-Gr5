@@ -28,7 +28,7 @@ class Company(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} - NIT:  {self.nit}"
-    
+
 
 class UserCompany(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

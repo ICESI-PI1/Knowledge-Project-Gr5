@@ -62,7 +62,6 @@
               id="formulario"
               class="form"
               method="POST"
-              action="{% url 'project-create-requirements' project.id_project %}"
             >
               {% csrf_token %}
               <label for="format">RECURSO</label>
@@ -125,6 +124,7 @@
               <button id="cancelar" class="btn btn-finish"
               {% if page_name == "requirements_edit" %}
               type="submit"
+              method="POST"
               {% endif %}
               >Terminar</button>
               {% if  not page_name == "requirements_edit"%}

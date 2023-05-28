@@ -448,8 +448,12 @@ class RequirementsEditView(View):
         project = get_object_or_404(Project, id_project=project_id)
         resource = get_object_or_404(Resource, id_resource=resource_id)
         objective = request.POST["objective"]
+        print(f"Objetivo del post:\n{objective}")
         requirement = Requirement.objects.get(project_id=project, resource_id=resource)
-        requirement.objetive = objective
+        print(f"Requirement :)=\n{requirement}")
+        print(f"Requirement.objetivo :)=\n{requirement.objective}")
+        requirement.objective = objective
+        print(f"Requirement.objetivo :)=\n{requirement.objective}")
         requirement.save()
         return redirect(reverse("project-create-requirements", args=[project_id]))
 
