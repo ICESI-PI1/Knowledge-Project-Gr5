@@ -29,4 +29,6 @@ jobs:
     - name: Run Tests
       working-directory: src/knowledge_project
       run: |
+        python manage.py makemigrations
+        python manage.py migrate
         python manage.py test apps
