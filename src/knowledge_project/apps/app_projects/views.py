@@ -5,6 +5,8 @@ from django.views.generic import (
     DeleteView,
     DetailView,
 )
+from django.contrib.sessions.backends.db import SessionStore
+from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
@@ -16,6 +18,7 @@ from .forms import *
 from decimal import Decimal
 from datetime import datetime
 from xhtml2pdf import pisa
+import json
 from django.http import HttpResponse
 from django.template.loader import get_template
 from io import BytesIO
@@ -173,13 +176,42 @@ class AnnouncementCategoriesListView(ListView):
     context_object_name = "announcements"
 
     def get_context_data(self, **kwargs):
+        session = SessionStore(session_key=self.request.session.session_key)
+        self.categories = session.get('categories', None)
+        if self.categories:
+            self.categories = self.deserialize_categories(self.categories)
+
         context = super().get_context_data(**kwargs)
         context["page_name"] = "announcement"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         context["user_name"] = temp.user.full_name
-        context["categories"] = Category.objects.all()
+
+        if self.categories is None:
+            context["categories"] = Category.objects.all()
+        else:
+            context["categories"] = self.categories
+
         return context
+
+    def post(self, request):
+        search_query = request.POST.get('search', '')
+        categories_json = Category.objects.filter(name__icontains=search_query)
+        categories_json = self.serialize_categories(categories_json)
+        session = SessionStore(session_key=request.session.session_key)
+        session['categories'] = categories_json
+        session.save()
+        return redirect(reverse("announcements-categories"))
+
+    def serialize_categories(self, categories):
+        categories_json = serialize('json', categories)
+        return categories_json
+
+    def deserialize_categories(self, categories_json):
+        categories = json.loads(categories_json)
+        categories_ids = [category['pk'] for category in categories]
+        categories_objects = list(Category.objects.filter(id_category__in=categories_ids))
+        return categories_objects
 
 
 class AnnouncementCreateView(CreateView):

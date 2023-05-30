@@ -12,17 +12,22 @@
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/projects/announcement_style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/projects/announcement_categories_style.css' %}"/>
     {% endblock %}
   </head>
   <body>
-    
+
     <div class="content">
       <div class="search-bar">
-        <input type="text" placeholder="Buscar la categoría" />
-        <div class="btn">
-          <i class="fa fa-search"></i>
-        </div>
+        <form method="post" action="{% url 'announcements-categories' %}">
+          {% csrf_token %}
+          <input type="text" name="search" placeholder="Buscar la categoría" />
+          <div class="btn">
+            <button type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </form>
       </div>
       <div class="main-title">
           <h1>Categorías de Convocatorias</h1>
@@ -45,7 +50,6 @@
               window.location.href = url;
             });
           });
-          
           </script>
 
       </div>
