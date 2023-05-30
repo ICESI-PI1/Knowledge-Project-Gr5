@@ -777,7 +777,7 @@ class UserDetail(View):
     def get(self, request):
         page_name = "User detail"
         user = request.user
-        template_name = "user\detailUser.html"
+        template_name = "user/detailUser.html"
         return render(
             request,
             template_name,
