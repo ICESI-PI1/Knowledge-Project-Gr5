@@ -518,7 +518,7 @@ class UserDetailViewTestCase(TestCase):
         # Verificar que se pueda acceder correctamente a la vista
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'user\detailUser.html')
+        self.assertTemplateUsed(response, 'user/detailUser.html')
 
         # Verificar que los datos del usuario se muestren correctamente en la vista
         self.assertContains(response, self.user.full_name)
