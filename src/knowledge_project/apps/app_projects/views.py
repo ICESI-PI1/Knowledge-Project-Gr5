@@ -197,6 +197,7 @@ class AnnouncementCategoriesListView(ListView):
     def post(self, request):
         search_query = request.POST.get('search', '')
         categories_json = Category.objects.filter(name__icontains=search_query)
+        #Agregar mensaje de que no se encontraron categorías con el nombre "resultado del input"
         categories_json = self.serialize_categories(categories_json)
         session = SessionStore(session_key=request.session.session_key)
         session['categories'] = categories_json
