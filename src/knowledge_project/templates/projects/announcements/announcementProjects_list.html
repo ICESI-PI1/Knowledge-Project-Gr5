@@ -19,9 +19,8 @@
     <div class="main-title float-left">
       <h1>Proyectos - {{ current_category_name }}</h1>
     </div>
-
-    
     <div class="slider">
+      <h3>{{ error }}</h3>
       {% for project in projects %}
       <input type="radio" name="slider" title="slide{{ forloop.counter }}" {% if forloop.first %}checked="checked"{% endif %} class="slider__nav" data-number="{{ forloop.counter|add:'-1' }}"/>
       {% endfor %}
@@ -29,7 +28,6 @@
         <script>
           const sliderNavs = document.querySelectorAll('.slider__nav');
           const sliderInner = document.querySelector('.slider__inner');
-  
           sliderNavs.forEach(nav => {
             nav.addEventListener('change', () => {
               const btnNumber = nav.getAttribute('data-number');

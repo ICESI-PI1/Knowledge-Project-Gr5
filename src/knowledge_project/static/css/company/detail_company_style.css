@@ -1,9 +1,13 @@
+*{
+    text-decoration: none;
+}
+
 
 body{
     margin-top:20px;
     color: #1a202c;
     text-align: center;
-    background-color: #001011;    
+    background-color: #001011;
 }
 
 .main-body {

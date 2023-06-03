@@ -25,6 +25,7 @@ urlpatterns = [
     path('projects/announcements/<int:pk>/projects/', login_required(AnnouncementProjectListView.as_view()), name='announcementProjects-list'),
     #---------------- Projects -------------
     path('projects/project/create/', login_required(ProjectCreateView.as_view()), name='project-create'),
+    path('projects/project/list',login_required(ProjectListView.as_view()), name='projects_list'),
     path("projects/project/create/<int:project_id>/requirements",login_required(Requirements2ProjectView.as_view()),name="project-create-requirements"),
     path("projects/project/create/<int:project_id>/<int:resource_id>/requirements/delete",login_required(requitements_delete),name="project-delete-requirements"),
     path("projects/project/create/<int:project_id>/<int:resource_id>/requirements/edit",login_required(RequirementsEditView.as_view()),name="project-edit-requirements"),

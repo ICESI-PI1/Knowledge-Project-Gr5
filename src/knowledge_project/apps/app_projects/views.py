@@ -3,7 +3,6 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
-    DetailView,
 )
 from django.contrib.sessions.backends.db import SessionStore
 from django.core.serializers import serialize
@@ -22,6 +21,7 @@ import json
 from django.http import HttpResponse
 from django.template.loader import get_template
 from io import BytesIO
+
 
 def signout(request):
     logout(request)
@@ -177,7 +177,7 @@ class AnnouncementCategoriesListView(ListView):
 
     def get_context_data(self, **kwargs):
         session = SessionStore(session_key=self.request.session.session_key)
-        self.categories = session.get('categories', None)
+        self.categories = session.get("categories", None)
         if self.categories:
             self.categories = self.deserialize_categories(self.categories)
 
@@ -191,27 +191,31 @@ class AnnouncementCategoriesListView(ListView):
             context["categories"] = Category.objects.all()
         else:
             context["categories"] = self.categories
+            if len(self.categories) < 1:
+                context["error"] = "No se encontraron convocatorias"
 
         return context
 
     def post(self, request):
-        search_query = request.POST.get('search', '')
+        search_query = request.POST.get("search", "")
         categories_json = Category.objects.filter(name__icontains=search_query)
-        #Agregar mensaje de que no se encontraron categorías con el nombre "resultado del input"
+        # Agregar mensaje de que no se encontraron categorías con el nombre "resultado del input"
         categories_json = self.serialize_categories(categories_json)
         session = SessionStore(session_key=request.session.session_key)
-        session['categories'] = categories_json
+        session["categories"] = categories_json
         session.save()
         return redirect(reverse("announcements-categories"))
 
     def serialize_categories(self, categories):
-        categories_json = serialize('json', categories)
+        categories_json = serialize("json", categories)
         return categories_json
 
     def deserialize_categories(self, categories_json):
         categories = json.loads(categories_json)
-        categories_ids = [category['pk'] for category in categories]
-        categories_objects = list(Category.objects.filter(id_category__in=categories_ids))
+        categories_ids = [category["pk"] for category in categories]
+        categories_objects = list(
+            Category.objects.filter(id_category__in=categories_ids)
+        )
         return categories_objects
 
 
@@ -323,7 +327,7 @@ class AnnouncementProjectListView(ListView):
                 category = announcement.category
                 category_name = category.name
             except Category.DoesNotExist:
-                #Alert*
+                context["error"] = "Categoría no encontrada"
                 pass
 
         context["current_category_name"] = category_name
@@ -375,6 +379,22 @@ class ProjectCreateView(View):
         )
 
 
+class ProjectListView(ListView):
+    model = AnnouncementProject
+    template_name = "projects/crud_projects/projects_list.html"
+    context_object_name = "projects"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "project"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        context["projects"] = Project.objects.filter(
+            company_nit=UserCompany.objects.get(user=self.request.user).company
+        )
+        return context
+
+
 # --------------- Requeriements --------------------
 
 
@@ -406,7 +426,6 @@ class Requirements2ProjectView(View):
 
     def post(self, request, project_id):
         project = get_object_or_404(Project, id_project=project_id)
-        print("POST DE CREAR")
         resourse = get_object_or_404(Resource, id_resource=request.POST["format"])
         objective = request.POST["objective"]
 
@@ -422,12 +441,11 @@ class Requirements2ProjectView(View):
                 "unique constraint" in str(e).lower()
                 and "resourcesbag_project_id_resource_id" in str(e).lower()
             ):
-                #Alert*
-                print("El recurso ya ha sido asignado al proyecto.")
+                # Alert*
+                pass
             else:
-                #Alert*
-                print(f"Error: {e}")
-
+                # Alert*
+                pass
         return redirect(reverse("project-create-requirements", args=[project_id]))
 
 
@@ -445,7 +463,6 @@ def requitements_delete(request, project_id, resource_id):
 
 class RequirementsEditView(View):
     def get(self, request, project_id, resource_id):
-        print("GET DE EDITAR")
         page_name = "requirements_edit"
         temp_user = get_object_or_404(UserRole, user=request.user)
         user_role = temp_user.role.name
@@ -458,9 +475,7 @@ class RequirementsEditView(View):
 
         template_name = "projects/crud_projects/requirements_project.html"
 
-
         resource = get_object_or_404(Resource, id_resource=resource_id)
-
 
         return render(
             request,
@@ -471,24 +486,20 @@ class RequirementsEditView(View):
                 "resourses": resourses,
                 "requirements": requirements,
                 "project": project,
-                "resourse_2_edit":resource,
-                "editable":False,
+                "resourse_2_edit": resource,
+                "editable": False,
             },
         )
 
     def post(self, request, project_id, resource_id):
-        print("POST DE EDITAR")
         project = get_object_or_404(Project, id_project=project_id)
         resource = get_object_or_404(Resource, id_resource=resource_id)
         objective = request.POST["objective"]
-        print(f"Objetivo del post:\n{objective}")
         requirement = Requirement.objects.get(project_id=project, resource_id=resource)
-        print(f"Requirement :)=\n{requirement}")
-        print(f"Requirement.objetivo :)=\n{requirement.objective}")
         requirement.objective = objective
-        print(f"Requirement.objetivo :)=\n{requirement.objective}")
         requirement.save()
         return redirect(reverse("project-create-requirements", args=[project_id]))
+
 
 # --------------- Companies --------------------
 
@@ -693,7 +704,7 @@ class DonationCreateView(CreateView):
             resourceBag.save()
         except ValidationError:
             donation.delete()
-            #Alert*
+            # Alert*
         return redirect(reverse("home"))
 
     def form_valid(self, form):
@@ -860,27 +871,24 @@ class CraeateAnnouncementProject(CreateView):
         announcement = Announcement.objects.get(id_announ=announcement_id)
         AnnouncementProject.objects.create(announcement=announcement, project=project)
 
-def render_to_pdf(template_src,context_dict={}):
-    template=get_template(template_src)
-    html=template.render(context_dict)
-    result=BytesIO()
-    pdf=pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")),result)
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
     if not pdf.err:
-        return HttpResponse(result.getvalue(),content_type="application/pdf")
+        return HttpResponse(result.getvalue(), content_type="application/pdf")
     return None
+
 
 class DonacionesProjectReport(View):
     def get(self, request, *args, **kwargs):
-        template_name="reports/ReporteDonaciones.html"
+        template_name = "reports/ReporteDonaciones.html"
         project_id = self.kwargs["pk"]
-        donations=Donation.objects.filter(project_id=project_id)
-        project= Project.objects.get(id_project=project_id)
-        data={
-            "donations":donations,
-            "project":project,
-            "date":datetime.now()
-        }
+        donations = Donation.objects.filter(project_id=project_id)
+        project = Project.objects.get(id_project=project_id)
+        data = {"donations": donations, "project": project, "date": datetime.now()}
 
-        pdf=render_to_pdf(template_name,data)
-        return HttpResponse(pdf,content_type="application/pdf")
-
+        pdf = render_to_pdf(template_name, data)
+        return HttpResponse(pdf, content_type="application/pdf")

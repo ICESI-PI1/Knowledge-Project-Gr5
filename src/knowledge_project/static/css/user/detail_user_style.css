@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
 
+*{
+  text-decoration: none;
+}
+
 body {
   height: 100%;
   font-size: 16px;
@@ -26,7 +30,6 @@ body {
   overflow: hidden;
   border-radius: 2rem;
   box-shadow: 0px 1rem 1.5rem rgba(0,0,0,0.5);
-  
 }
 .card .banner {
   background-image: url("https://www.elcolombiano.com/binrepository/1200x900/0c136/1200d627/none/11101/PTOM/general-icesi-1_40027952_20220524095123.jpg");
@@ -152,11 +155,7 @@ body {
 
 
 .back-btn {
-  z-index: 10;
-  position: absolute;
   height: 15%;
-  min-width: 15%;
-  display: flex;
   padding-left: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
