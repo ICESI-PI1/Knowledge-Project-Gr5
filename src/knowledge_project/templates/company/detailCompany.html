@@ -13,7 +13,7 @@
         {% block head %}
         <link
         rel="stylesheet"
-        href="{% static 'css/user/detailUserStyle.css' %}"
+        href="{% static 'css/user/detail_user_style.css' %}"
         />
         {% endblock %}
     </head>
@@ -21,7 +21,6 @@
       <div class="back-btn">
         <a href="{% url 'home' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
       </div>
-    
       <div class="card">
         <div class="banner">
           <div class="circle">
@@ -33,18 +32,15 @@
           </div>
         </div>
         <div class="menu">
-          
         </div>
         <h2 class="name">{{company_name}}</h2>
         <div class="title">{{company_address}}</div>
         <div class="actions">
           <div class="user-info">
-            
               <div class="row">
                 <h2>Teléfono:</h2>
                 <p>{{company_phone}}</p>
               </div>
-        
           </div>
           <div class="edit-btn row-flex">
             <button>Editar <i class="fa-solid fa-edit"></i></button>
@@ -89,7 +85,6 @@
           </div>
         </div>
         <hr>
-        
     </div>
 
     </body>

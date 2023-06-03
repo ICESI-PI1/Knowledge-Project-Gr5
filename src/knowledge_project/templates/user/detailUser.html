@@ -13,16 +13,14 @@
         {% block head %}
         <link
         rel="stylesheet"
-        href="{% static 'css/user/detailUserStyle.css' %}"
+        href="{% static 'css/user/detail_user_style.css' %}"
         />
         {% endblock %}
     </head>
     <body>
-
         <div class="back-btn">
             <a href="{% url 'home' %}"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
         </div>
-       
         <div class="card">
           <div class="banner">
             <div class="circle">
@@ -31,17 +29,14 @@
               {% else %}
               <img src="{{ profile_pic }}">
               {% endif %}
-            
             </div>
           </div>
           <div class="menu">
-            
           </div>
           <h2 class="name">{{user_name}}</h2>
           <div class="title">{{user_email}}</div>
           <div class="actions">
             <div class="user-info">
-              
                 <div class="row">
                   <h2>CC:</h2>
                   <p>{{user_cc}}</p>
@@ -50,7 +45,6 @@
                   <h2>Teléfono:</h2>
                   <p>{{user_phone}}</p>
                 </div>
-           
             </div>
             <div class="edit-btn">
               <button onclick="goToEdit(this)" id_user="{{ user_cc }}">Editar <i class="fa-solid fa-edit"></i></button>
@@ -63,7 +57,6 @@
               </script>
           </div>
         </div>
-
         <div class="info">
           <div class="row">
             <div class="col-sm-3">

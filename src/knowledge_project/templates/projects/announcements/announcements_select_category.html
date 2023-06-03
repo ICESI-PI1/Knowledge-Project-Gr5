@@ -12,7 +12,7 @@
     <title>{% block title %}Título de la página{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/projects/announcement_categories_style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/projects/announcement_categories.css' %}"/>
     {% endblock %}
   </head>
   <body>
@@ -31,9 +31,9 @@
       </div>
       <div class="main-title">
           <h1>Categorías de Convocatorias</h1>
-        </div>
+      </div>
+      <h2>{{ error }}</h2>
       <div class="grid">
-
         {% for category in categories %}
         <div class="category-item category-btn" id="category-btn-{{ category.id_category }}">
           <img class="img" src="../../../{{ category.photo }}" alt="{{ category.name }}">
