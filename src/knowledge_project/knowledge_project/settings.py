@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "apps.app_users",
 ]
 
+NAME_OF_YOUR_PROJECT = 'Knowledge projects'
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
