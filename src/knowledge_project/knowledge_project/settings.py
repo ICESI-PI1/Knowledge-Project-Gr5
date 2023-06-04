@@ -90,7 +90,8 @@ DATABASES = {
 #    },
 
     'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost/postgres',
+        default='postgres://knowledge_projectsdb_user:TpRe6nzEi7bfgsNoq3OZtNt95EP6xeVT@dpg-chtthqndvk4olitu5vsg-a.oregon-postgres.render.com/knowledge_projectsdb',
+        
         conn_max_age=600
     ),
     "test": {
