@@ -389,6 +389,7 @@ class ProjectListView(ListView):
         context["page_name"] = "project"
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["company_name"] = UserCompany.objects.get(user=self.request.user).company.name
         context["projects"] = Project.objects.filter(
             company_nit=UserCompany.objects.get(user=self.request.user).company
         )
@@ -553,7 +554,7 @@ class CompanyDetail(View):
     def get(self, request):
         page_name = "Company detail"
         company = get_object_or_404(UserCompany, user=request.user).company
-        template_name = "company\detailCompany.html"
+        template_name = "company/detailCompany.html"
         return render(
             request,
             template_name,
@@ -794,7 +795,7 @@ class UserDetail(View):
             template_name,
             {
                 "page_name": page_name,
-                "profile_pic": user.photo,
+                "profile_pic": user.photo.url,
                 "user_name": user.full_name,
                 "user_email": user.email,
                 "user_phone": user.phone,
