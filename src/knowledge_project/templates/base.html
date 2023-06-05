@@ -95,21 +95,22 @@
         </div>
 
       </nav>
-
-      <div class="content">
-        {% if not page_name == 'home' %}
-        <div class="back-btn">
-          <a onclick="goBack()"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+      <div class="main-container-base">
+        <div class="content">
+          {% if not page_name == 'home' %}
+          <div class="back-btn">
+            <a onclick="goBack()"><i class="fa-sharp fa-solid fa-caret-left"></i></a>
+          </div>
+      
+          <script>
+            function goBack() {
+              window.history.back();
+            }
+            </script>
+          {% endif %}
+          {% block content %}{% endblock %}
         </div>
-    
-        <script>
-          function goBack() {
-            window.history.back();
-          }
-          </script>
-        {% endif %}
-        {% block content %}{% endblock %}
-      </div>
+      
 
       <footer class="footer">
         <div class="container">
@@ -158,6 +159,7 @@
           </div>
         </div>
       </footer>
+    </div>
     </div>
 
     <script>
