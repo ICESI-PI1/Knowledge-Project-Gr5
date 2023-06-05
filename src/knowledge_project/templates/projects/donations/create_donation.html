@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link
       rel="stylesheet"
-      href="{% static 'css/projects/create_donation_style.css' %}"
+      href="{% static 'css/projects/create_donation.css' %}"
     />
     {% endblock %}
   </head>
@@ -29,6 +29,28 @@
           <div class="message">
             <h2>Dona recursos</h2>
             <p>Elige qué y cuánto quieres donar.</p>
+            <div class="resourses-list">
+              <h3>Bolsa de recursos:</h3>
+              <ul>
+                {% for item in combined_data %} {% with requirement=item.0 resources_bag=item.1  percentage=item.2 %}
+                <li>
+                  <div class="resourse-item">
+                    <div class="labels">
+                      <h4>{{ requirement.resource_id.name }}</h4>
+                      <div class="amount">
+                        <p>{{ resources_bag.amount }}</p>
+                        /
+                        <p>{{ requirement.objective }}</p>
+                      </div>
+                    </div>
+                    <div class="barra">
+                      <div class="progreso" style="--w:{{percentage}}%"></div>
+                    </div>
+                  </div>
+                </li>
+                {% endwith %} {% endfor %}
+              </ul>
+            </div>
           </div>
         </div>
         <div class="form-container">
@@ -74,27 +96,26 @@
             </form>
           </div>
           <div class="resourses-list-responsive">
-            <h3>Tus recursos:</h3>
-            <ul>
-              <li>
-                <div class="resourse-item">
-                  <h4>Dinero</h4>
-                  <p>5000000</p>
-                  <div class="options">
-                    <i class="fa-solid fa-pen-to-square" id="edit"></i>
-                    <i class="fa-sharp fa-solid fa-trash" id="delete"></i>
+            <h3>Bolsa de recursos:</h3>
+              <ul>
+                {% for item in combined_data %} {% with requirement=item.0 resources_bag=item.1  percentage=item.2 %}
+                <li>
+                  <div class="resourse-item">
+                    <div class="labels">
+                      <h4>{{ requirement.resource_id.name }}</h4>
+                      <div class="amount">
+                        <p>{{ resources_bag.amount }}</p>
+                        /
+                        <p>{{ requirement.objective }}</p>
+                      </div>
+                    </div>
+                    <div class="barra">
+                      <div class="progreso" style="--w:{{ percentaje }}%"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="resourse-item">
-                  <h4>Computadoras</h4>
-                  <p>4</p>
-                  <div class="options">
-                    <i class="fa-solid fa-pen-to-square" id="edit"></i>
-                    <i class="fa-sharp fa-solid fa-trash" id="delete"></i>
-                  </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+                {% endwith %} {% endfor %}
+              </ul>
           </div>
         </div>
       </div>

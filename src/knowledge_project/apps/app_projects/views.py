@@ -14,6 +14,7 @@ from django.urls import reverse_lazy, reverse
 from apps.app_users.models import User, UserRole, Role
 from .models import *
 from .forms import *
+from itertools import chain
 from decimal import Decimal
 from datetime import datetime
 from xhtml2pdf import pisa
@@ -706,7 +707,7 @@ class DonationCreateView(CreateView):
         except ValidationError:
             donation.delete()
             # Alert*
-        return redirect(reverse("home"))
+        return redirect(reverse("donation-create", args=[project.pk]))
 
     def form_valid(self, form):
         # Realizar las operaciones necesarias antes de guardar el objeto
@@ -716,12 +717,22 @@ class DonationCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         project_pk = self.kwargs["pk"]
         requirements = Requirement.objects.filter(project_id=project_pk)
+        resources_bag = ResourcesBag.objects.filter(project_id=project_pk)
         resources = [res.resource_id for res in requirements]
-        context["page_name"] = "resources"
+
+        combined_data = list(zip(requirements, resources_bag))
+
+        percentages = [int((res_bag.amount / req.objective) * 100 ) for req, res_bag in combined_data]
+
+        combined_data = list(zip(requirements, resources_bag, percentages))
+
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
+        context["page_name"] = "resources"
         context["resources"] = resources
+        context["combined_data"] = combined_data
         return context
+
 
 
 class DonationListView(ListView):
