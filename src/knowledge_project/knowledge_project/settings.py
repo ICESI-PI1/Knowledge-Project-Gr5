@@ -86,15 +86,10 @@ WSGI_APPLICATION = "knowledge_project.wsgi.application"
 
 DATABASES = {
 
-#   "default": {
-#      "ENGINE": "django.db.backends.sqlite3",
-#        "NAME": BASE_DIR / "Knowledge_Projects.db",
-#   },
-    'default': dj_database_url.config(
-        default='postgres://knowledge_projectsdb_user:TpRe6nzEi7bfgsNoq3OZtNt95EP6xeVT@dpg-chtthqndvk4olitu5vsg-a.oregon-postgres.render.com/knowledge_projectsdb',
-        
-        conn_max_age=600
-    ),
+   "default": {
+      "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "Knowledge_Projects.db",
+   },
     "test": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "Knowledge_Projects.db",

@@ -23,6 +23,7 @@ urlpatterns = [
     path('projects/announcements/<int:pk>/update/', login_required(AnnouncementUpdateView.as_view()), name='announcements-update'),
     path('projects/announcements/<int:pk>/delete/', login_required(AnnouncementDeleteView.as_view()), name='announcements-delete'),
     path('projects/announcements/<int:pk>/projects/', login_required(AnnouncementProjectListView.as_view()), name='announcementProjects-list'),
+     path('projects/announcements/<int:pk>/apply/', login_required(CraeateAnnouncementProject.as_view()), name='announcementProjects-apply'),
     #---------------- Projects -------------
     path('projects/project/create/', login_required(ProjectCreateView.as_view()), name='project-create'),
     path('projects/project/list',login_required(ProjectListView.as_view()), name='projects_list'),
