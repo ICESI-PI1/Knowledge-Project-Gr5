@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link
       rel="stylesheet"
-      href="{% static 'css/projects/projects_list_style.css' %}"
+      href="{% static 'css/projects/projects_list.css' %}"
     />
     {% endblock %}
   </head>
@@ -24,8 +24,8 @@
     <div class="main-title">
       <h1>Proyectos de {{ company_name }} </h1>
     </div>
-    <div class="main-container">
-      <div class="content">
+    <div >
+      <div >
         <div class="projcard-container">
           {% for p in projects %}
           <div class="projcard projcard-blue">
@@ -60,6 +60,7 @@
           {% endfor %}
         </div>
       </div>
+        <h1 id="altura-pagina"></h1>
       
         <a id="scroll-link" class="fixed-link slide__text-link"  href="{% url 'project-create' %}"> Nuevo proyecto  <i class="fa-solid fa-plus"></i></a>
         
@@ -71,7 +72,7 @@
             var bottomThreshold = pageHeight - scrollPosition; // ajusta la altura de scroll a partir de la cual se cambia la posición
             console.log(pageHeight);
           
-            if (bottomThreshold < (0.805 * pageHeight)) {
+            if (bottomThreshold <= (pageHeight*0.52)) {
               scrollLink.classList.add('relative-link');
               previousScrollPosition = scrollPosition;
             } else if (scrollPosition < previousScrollPosition) {
