@@ -855,22 +855,29 @@ class BinnacleDeleteView(DeleteView):
 
 class CraeateAnnouncementProject(CreateView):
     model = AnnouncementProject
-    template_name = "projects/announcements/announcementProjects_list.html"
+    template_name = "projects/announcements/announcements_list_apply.html"
     context_object_name = "announcements"
+    form_class=AnnouncementForm
 
-    def get_queryset(self):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
         project_id = self.kwargs["pk"]
         project = Project.objects.get(id_project=project_id)
         category = project.category
         announcements = Announcement.objects.filter(category=category)
-        return project
+        context["announcements"]=announcements
+        return context
 
     def post(self, request, *args, **kwargs):
         project_id = self.kwargs["pk"]
         project = Project.objects.get(id_project=project_id)
         announcement_id = request.POST["announcement"]
+        print("____________")
+        print(announcement_id)
+        print("____________")
         announcement = Announcement.objects.get(id_announ=announcement_id)
         AnnouncementProject.objects.create(announcement=announcement, project=project)
+        return redirect(reverse_lazy("home")) 
 
 
 def render_to_pdf(template_src, context_dict={}):

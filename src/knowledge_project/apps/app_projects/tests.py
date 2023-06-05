@@ -52,7 +52,7 @@ class CompanyModelTestCase(TestCase):
         # Test invalid phone number with less than 8 digits
         with self.assertRaises(ValidationError):
             Company.full_clean(Company.objects.create(
-                nit='12345678899',
+                nit='1234567891',
                 name='Test Company',
                 address='ddf',
                 phone='1234567'
@@ -61,7 +61,7 @@ class CompanyModelTestCase(TestCase):
         # Test invalid phone number with more than 10 digits
         with self.assertRaises(ValidationError):
             Company.full_clean(Company.objects.create(
-                nit='12345678891',
+                nit='1234567892',
                 name='Test Company',
                 address='ddf',
                 phone='1234567891011'
