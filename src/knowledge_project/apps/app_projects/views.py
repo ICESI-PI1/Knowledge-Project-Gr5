@@ -392,9 +392,18 @@ class ProjectListView(ListView):
         temp = UserRole.objects.filter(user=self.request.user).first()
         context["user_role"] = temp.role.name
         context["company_name"] = UserCompany.objects.get(user=self.request.user).company.name
-        context["projects"] = Project.objects.filter(
-            company_nit=UserCompany.objects.get(user=self.request.user).company
+        company_projects = Project.objects.filter(
+            company_nit = UserCompany.objects.get(user=self.request.user).company
         )
+        applied = []
+        for project in company_projects:
+            is_in_announcements = AnnouncementProject.objects.filter(project=project).exists()
+            applied.append(is_in_announcements)
+
+        context["projects"] = company_projects
+        context["applied_array"] = applied
+        project_dict = dict(zip(company_projects, applied))
+        context["project_dict"] = project_dict
         return context
     
 class ProjectSelectView(ListView):

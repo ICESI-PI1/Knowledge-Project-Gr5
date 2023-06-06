@@ -27,28 +27,30 @@
     <div >
       <div >
         <div class="projcard-container">
-          {% for p in projects %}
+          {% for project, applied in project_dict.items %}
+           
           <div class="projcard projcard-blue">
             <div class="projcard-innerbox">
               <img
                 class="projcard-img {% if forloop.counter|divisibleby:2 %} dark {% else %} light {% endif %}"
-                src="{{ p.category.photo.url }}"
-                alt="{{ p.category }}"
+                src="{{ project.category.photo.url }}"
+                alt="{{ project.category }}"
               />
               <div class="projcard-textbox">
-                <div class="projcard-title">{{ p.title }}</div>
+                <div class="projcard-title">{{ project.title }}</div>
                 <div class="projcard-subtitle">
-                  {{ p.objective }}
+                  {{ project.objective }}
                 </div>
                 <div class="projcard-bar"></div>
                 <div class="projcard-description">
-                  {{ p.results }}
-                  {{ p.reach }}
+                  {{ project.results }}
+                  {{ project.reach }}
+                  
                 </div>
                 <div class="projcard-tagbox">
-                  <a href="{% url 'donations-list' p.id_project %}" class="projcard-tag">DONACIONES</a>
-                  <a href="{% url 'announcementProjects-apply' p.id_project %}" class="projcard-tag">APLICAR A CONVOCATORIA</a>
-                  <a href="#" class="projcard-tag">DELETE</a>
+                  <a href="{% url 'donations-list' project.id_project %}" class="projcard-tag">DONACIONES</a>
+                  <a href="{% url 'announcementProjects-apply' project.id_project %}" class="projcard-tag {% if applied %} hide {% else %} show {% endif %}">APLICAR A CONVOCATORIA</a>
+                  <a href="#" class="projcard-tag"></a>
                 </div>
               </div>
             </div>

@@ -370,3 +370,12 @@
   bottom: 270px;
   position: absolute;
 }
+
+.show {
+  pointer-events: auto;
+}
+
+.hide {
+  opacity: 0.5;
+  pointer-events: none;
+}
