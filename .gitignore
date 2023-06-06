@@ -4,4 +4,4 @@ src/knowledge_project/apps/app_users/__pycache__/
 src/knowledge_project/apps/app_projects/__pycache__/
 # src/knowledge_project/apps/app_users/migrations/
 # src/knowledge_project/apps/app_projects/migrations/
-knowledge_project.db 
+# knowledge_project.db 
