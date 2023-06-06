@@ -24,6 +24,9 @@
     <a class="btn new-item" href="{% url 'donation-create' pk=project_id %}">Realizar donación
       <img src="{% static 'img/plus.png' %}" class="plus-symbol">
     </a>
+    <a class="btn new-item" href="{% url 'report-generate' pk=project_id %}">Generar reporte
+      <img src="{% static 'img/plus.png' %}" class="plus-symbol">
+    </a>
     <table>
       <thead>
         <tr>

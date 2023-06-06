@@ -47,6 +47,7 @@
                 </div>
                 <div class="projcard-tagbox">
                   <a href="{% url 'donations-list' p.id_project %}" class="projcard-tag">DONACIONES</a>
+                  <a href="{% url 'announcementProjects-apply' p.id_project %}" class="projcard-tag">APLICAR A CONVOCATORIA</a>
                   <a href="#" class="projcard-tag">DELETE</a>
                 </div>
               </div>
@@ -55,7 +56,7 @@
           {% empty %}
                 <h1 class="no-projects-message">No hay ningún proyecto registrado</h1>
                 <div class="img"> 
-                  <img src="{% static 'img/company/empty-projects.jpg' %}" >
+                  <img src="{% static 'img/company/empty-projects2.png' %}" >
                 </div>
           {% endfor %}
         </div>
