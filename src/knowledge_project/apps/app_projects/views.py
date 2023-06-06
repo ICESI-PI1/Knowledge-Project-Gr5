@@ -710,12 +710,11 @@ class DonationCreateView(CreateView):
         amountDonated = Decimal(request.POST["amount"])
         descriptionAs = request.POST["description"]
         user = request.user
-
+        recurso_datos=recurso.split(".")
         project = Project.objects.get(id_project=pk)
-
         donation = Donation.objects.create(
             company_nit=project.company_nit,
-            resource_id=Resource.objects.get(id_resource=recurso[0]),
+            resource_id=Resource.objects.get(id_resource=recurso_datos[0]),
             amount=amountDonated,
             project_id=project,
             description=descriptionAs,
@@ -724,7 +723,7 @@ class DonationCreateView(CreateView):
         try:
             Donation.full_clean(donation)
             resourceBag = ResourcesBag.objects.get(
-                project_id=pk, resource_id=recurso[0]
+                project_id=pk, resource_id=recurso_datos[0]
             )
             cant_total = resourceBag.amount + amountDonated
             resourceBag.amount = cant_total
