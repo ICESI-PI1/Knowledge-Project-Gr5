@@ -9,6 +9,7 @@ from django.core.serializers import serialize
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from django.contrib.auth import logout
+from django.db.models import Subquery
 from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from apps.app_users.models import User, UserRole, Role
@@ -395,9 +396,24 @@ class ProjectListView(ListView):
             company_nit=UserCompany.objects.get(user=self.request.user).company
         )
         return context
+    
+class ProjectSelectView(ListView):
+    model = AnnouncementProject
+    template_name = "projects/announcements/announcements_select_project.html"
+    context_object_name = "projects"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_name"] = "project"
+        temp = UserRole.objects.filter(user=self.request.user).first()
+        context["user_role"] = temp.role.name
+        context["company_name"] = UserCompany.objects.get(user=self.request.user).company.name
+        announcement_projects = AnnouncementProject.objects.values("project_id")
+        context["projects"] = Project.objects.exclude(id_project__in = Subquery(announcement_projects))
+        return context
 
 
-# --------------- Requeriements --------------------
+# --------------- Requeriments --------------------
 
 
 class Requirements2ProjectView(View):
@@ -864,11 +880,11 @@ class BinnacleDeleteView(DeleteView):
         return context
 
 
-class CraeateAnnouncementProject(CreateView):
+class CreateAnnouncementProject(CreateView):
     model = AnnouncementProject
     template_name = "projects/announcements/announcements_list_apply.html"
     context_object_name = "announcements"
-    form_class=AnnouncementForm
+    form_class = AnnouncementForm
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -877,6 +893,7 @@ class CraeateAnnouncementProject(CreateView):
         category = project.category
         announcements = Announcement.objects.filter(category=category)
         context["announcements"]=announcements
+        context["current_category_name"]=category.name
         return context
 
     def post(self, request, *args, **kwargs):

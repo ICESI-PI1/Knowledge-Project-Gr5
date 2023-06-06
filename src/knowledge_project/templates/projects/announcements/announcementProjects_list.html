@@ -12,7 +12,7 @@
     {% block head %}
     <link rel="stylesheet" href="{% static 'css/base_style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/projects/crud.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/projects/carousel.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/projects/carousel_style.css' %}?v=1" />
     {% endblock %}
   </head>
   <body>
@@ -45,7 +45,7 @@
             <p class="slider__txt"><b>Resultados: </b>{{ project.results }}</p>
             <p class="slider__txt"><b>Alcance: </b>{{ project.reach }}</p>
           </div>
-          <a class="slide__text-link">Aportar</a>
+          <a class="slide__text-link" href="{% url 'donation-create' project.id_project %}" >Aportar</a>
         </div>
         {% empty %}
         <div class="slider__contents">

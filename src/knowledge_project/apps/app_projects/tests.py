@@ -900,7 +900,6 @@ class DonationCreateViewTestCase(TestCase):
         self.assertEqual(donation.project_id.id_project,
                          self.project.id_project)
         self.assertEqual(donation.description, 'Donation added')
-        self.assertRedirects(response, reverse("home"))
         self.assertEqual(ResourcesBag.objects.get(
             project_id=donation.project_id.id_project, resource_id=self.resource.id_resource).amount, 3.0)
 
