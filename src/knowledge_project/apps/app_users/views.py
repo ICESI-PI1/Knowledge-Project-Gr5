@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.views import View
 from ..app_projects.forms import UserForm
-
+from apps.app_users.models import *
 
 class LoginView(View):
     template_name = "registration/login.html"
@@ -52,7 +52,7 @@ class UserRegistration(CreateView):
         birthdate = request.POST["birthdate"]
         password1 = request.POST["password"]
         password2 = request.POST["confirm_password"]
-        role = '2'
+        role = Role.objects.get(name="common_user")
 
         # Validar los datos del formulario
         if password1 != password2:
@@ -67,7 +67,7 @@ class UserRegistration(CreateView):
         user = User.objects.create_user(
             user_cc=user_cc,
             password = password1,
-            role=role,
+            role=role.id_role,
             phone=phone,
             email=email,
             birth_date=birthdate,
