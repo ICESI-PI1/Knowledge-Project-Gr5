@@ -46,8 +46,8 @@
                   {{ p.reach }}
                 </div>
                 <div class="projcard-tagbox">
-                  <span class="projcard-tag">EDIT</span>
-                  <span class="projcard-tag">DELETE</span>
+                  <a href="{% url 'donations-list' p.id_project %}" class="projcard-tag">DONACIONES</a>
+                  <a href="#" class="projcard-tag">DELETE</a>
                 </div>
               </div>
             </div>
@@ -60,23 +60,19 @@
           {% endfor %}
         </div>
       </div>
-        <h1 id="altura-pagina"></h1>
       
-        <a id="scroll-link" class="fixed-link slide__text-link"  href="{% url 'project-create' %}"> Nuevo proyecto  <i class="fa-solid fa-plus"></i></a>
+        <a id="fixed-link" class="fixed-link slide__text-link"  href="{% url 'project-create' %}"> Nuevo proyecto  <i class="fa-solid fa-plus"></i></a>
         
         <script>
           window.addEventListener('scroll', function() {
-            var pageHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.documentElement.clientHeight);
-            var scrollLink = document.getElementById('scroll-link');
-            var scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-            var bottomThreshold = pageHeight - scrollPosition; // ajusta la altura de scroll a partir de la cual se cambia la posición
-            console.log(pageHeight);
+            var link = document.getElementById('fixed-link');
+            var footer = document.querySelector('footer');
+            var footerRect = footer.getBoundingClientRect();
           
-            if (bottomThreshold <= (pageHeight*0.52)) {
-              scrollLink.classList.add('relative-link');
-              previousScrollPosition = scrollPosition;
-            } else if (scrollPosition < previousScrollPosition) {
-              scrollLink.classList.remove('relative-link');
+            if (footerRect.top <= window.innerHeight) {
+              link.style.bottom = window.innerHeight - footerRect.top + 80 + 'px';
+            } else {
+              link.style.bottom = '50px';
             }
           });
         </script>

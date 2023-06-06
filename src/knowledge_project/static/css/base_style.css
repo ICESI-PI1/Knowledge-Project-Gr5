@@ -33,6 +33,7 @@ body {
 
 .content {
   top: 85px;
+  min-height: 100vh;
   width: 100%;
   height: 100%;
   margin-bottom: 223px;

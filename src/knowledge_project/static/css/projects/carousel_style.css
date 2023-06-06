@@ -17,13 +17,15 @@ body {
 }
 
 .slider {
-  margin: auto;
+  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
   width: 80%;
   border-bottom: 10px solid #ff7733;
   border-top: 10px solid #ff7733;
   border-radius: 20px;
   margin-top: 100px;
-  min-height: 80%;
+  height: 80vh;
   position: relative;
   overflow: hidden;
   display: -webkit-box;
@@ -43,6 +45,7 @@ body {
   justify-content: center;
 }
 .slider__nav {
+  z-index: 100;
   width: 12px;
   height: 12px;
   margin: 1rem 12px;

@@ -21,6 +21,7 @@
     <div class="main-title">
       <h1>Convocatorias de {{ current_category_name }}</h1>
     </div>
+    <p>Solo puedes aplicar a convocatorias de tu categoría &lpar; {{ current_category_name }} &rpar;</p>
     <ul class="announcements-list">
       {% for announcement in announcements %}
         <a href="{% url 'announcementProjects-apply' announcement.id_announ %}">
@@ -29,7 +30,7 @@
             <form method="POST">
               {% csrf_token %}
               <input type="hidden" name="announcement" value="{{ announcement.id_announ }}">
-              <button type="submit">Aplicar</button>
+              <button type="submit" class="" >Aplicar</button>
             </form>
           </li>
         </a>

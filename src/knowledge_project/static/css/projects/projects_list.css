@@ -251,7 +251,6 @@
   font-size: 14px;
   cursor: default;
   user-select: none;
-  pointer-events: none;
 }
 .projcard-tag {
   display: inline-block;
@@ -262,7 +261,7 @@
   padding: 0 10px 0 23px;
   position: relative;
   margin-right: 20px;
-  cursor: default;
+  cursor: pointer;
   user-select: none;
   transition: color 0.2s;
 }
@@ -323,7 +322,7 @@
 }
 
 .fixed-link {
-  transition: ease-in all .5s;
+  transition: .4s;
   position: fixed;
   bottom: 50px; /* ajusta la distancia desde la parte inferior */
   right: 50px; /* ajusta la distancia desde el lado derecho */

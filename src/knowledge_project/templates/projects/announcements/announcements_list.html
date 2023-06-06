@@ -78,8 +78,24 @@
         {% endfor %}
 
       </ul>
-
+      <a id="fixed-link" class="fixed-link slide__text-link"  href="{% url 'select-project' %}"> Postular un proyecto  <i class="fa-solid fa-plus"></i></a>
+        
+        <script>
+          window.addEventListener('scroll', function() {
+            var link = document.getElementById('fixed-link');
+            var footer = document.querySelector('footer');
+            var footerRect = footer.getBoundingClientRect();
+          
+            if (footerRect.top <= window.innerHeight) {
+              link.style.bottom = window.innerHeight - footerRect.top + 80 + 'px';
+            } else {
+              link.style.bottom = '50px';
+            }
+          });
+        </script>
     {% endif %}
+
+    
     
   </body>
 </html>
