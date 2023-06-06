@@ -39,6 +39,10 @@
           <img class="img" src="../../../{{ category.photo }}" alt="{{ category.name }}">
           <h4>{{ category.name }}</h4>
         </div>
+        {% empty %}
+        <a href="{% url 'categories-create' %}" >
+          <button>NUEVA CATEGORIA</button>
+        </a>
         {% endfor %}
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js">//Library importation</script>
